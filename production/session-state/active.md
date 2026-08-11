@@ -27,4 +27,6 @@
 - Tech debt logged: None
 - Next recommended: Sprint 2 smoke check and QA hand-off
 
+<!-- QA RUN: 2026-08-11 | Sprint: sprint-002 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-002-2026-08-11.md -->
+
 <!-- QA-PLAN: 2026-08-11 | System: sprint-002 | Plan written: production/qa/qa-plan-sprint-002-2026-08-11.md -->

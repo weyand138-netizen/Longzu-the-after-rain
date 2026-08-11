@@ -2,6 +2,9 @@
 
 **Story**: S1-04 — Day 1 asset admission records  
 **Recorded**: 2026-08-10  
+**Hash reconciliation**: 2026-08-11; the code-defined UI source hash was
+updated after the Day 3 focus-treatment revision and rechecked against the
+current inventory and legal register.
 **Verdict**: **PASS**
 
 ## Scope
@@ -16,7 +19,7 @@ Grep-first review of `game/chapters/day1.rpy`, `game/00_resources.rpy`,
 |---|---|
 | Actual Day 1 scene reference | `bg warm_room` only; it is registered as the code-defined `Solid("#4a3840")` primitive. |
 | Actual file assets | `game/assets/fonts/SourceHanSansLite.ttf` only; its SHA-256 is `b2aaf73b7acc23d746b110f1caeaecc93d4292824979af44e96000200591b2a7`. |
-| Code-defined hashes | `game/00_resources.rpy`: `4333d936fbe481f61c4cb828e43e17057133ae5af99b79cdf76e76545ee49801`; `game/screens.rpy`: `094cdd02273dd8c88f6a0f1eb6feebde3cf44ef56d2a0347ebc951406fab8e9d`. Both match both registers. |
+| Code-defined hashes | `game/00_resources.rpy`: `4333d936fbe481f61c4cb828e43e17057133ae5af99b79cdf76e76545ee49801`; `game/screens.rpy`: `019041a6ae96cb28e88a45547e385b014217e3c612a1bb2215ec0dc77835757c`. Both match both registers. |
 | Legal/admission join | The inventory and legal register contain the same three admitted IDs: `FONT-SOURCEHAN-LITE-P0`, `RUNTIME-SOLID-DAY1-WARM-ROOM`, and `RUNTIME-UI-DAY1-CHOICE-SURFACE`. Each has provenance/licence, SHA-256, runtime path, and `a11y.day1.*` semantic binding. |
 | Nonexistent planned files | Station-platform, ticket-gate, train-window, wish-paper, receipt, and focus-frame files are all marked not present and not admitted. No document claims that they exist. |
 
