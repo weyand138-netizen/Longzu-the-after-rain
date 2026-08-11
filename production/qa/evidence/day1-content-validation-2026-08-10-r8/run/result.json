@@ -1,0 +1,23 @@
+﻿{
+    "engine":  "Ren\u0027Py 8.5.3.26051504",
+    "host":  "Microsoft Windows NT 10.0.22631.0",
+    "python":  "E:\\Longzu\\.tools\\renpy-8.5.3-sdk\\lib\\py3-windows-x86_64\\python.exe",
+    "fixture":  "E:\\Longzu\\.",
+    "arguments":  [
+                      "E:\\Longzu\\.tools\\renpy-8.5.3-sdk\\renpy.py",
+                      "E:\\Longzu\\.",
+                      "test",
+                      "global",
+                      "--savedir",
+                      "E:\\Longzu\\production\\qa\\evidence\\day1-content-validation-2026-08-10-r8\\run\\saves",
+                      "--report-detailed",
+                      "--overwrite-screenshots"
+                  ],
+    "started_utc":  "2026-08-10T10:49:49.6615717Z",
+    "finished_utc":  "2026-08-10T10:49:57.3381742Z",
+    "duration_ms":  7677,
+    "exit_code":  -1,
+    "status_line":  "[rpytest] Status: PASSED ",
+    "stdout_sha256":  "2d5fe0ba766881b258c274efc9b3e024866d9242a0f54a6b42becb4fb7e2a0ad",
+    "stderr_sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

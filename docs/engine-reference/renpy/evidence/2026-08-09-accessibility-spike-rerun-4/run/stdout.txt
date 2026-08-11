@@ -1,0 +1,156 @@
+
+[rpytest] Starting test run
+[rpytest] Platform:      Windows-11-10.0.22631-SP0
+[rpytest] Python:        3.12.7
+[rpytest] Ren'Py:        Ren'Py 8.5.3.26051504
+[rpytest] Game Version:  a11y-spike-2026-08-09
+
+[rpytest] [exc] + global
+[rpytest] [exc]   - focus_viewport_and_reading_order
+File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 7, in global::focus_viewport_and_reading_order
+AssertionError: assert eval focused_name() == "first_action"
+
+Full traceback:
+  File "renpy/test/testexecution.py", line 549, in update
+    node_executor.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "renpy/test/testexecution.py", line 471, in execute
+    self.node_state = self.node.execute(self.node_state, elapsed)
+                      ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/test/testast.py", line 1458, in execute
+    renpy.test.testreporter.reporter.log_assert(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "renpy/test/testreporter.py", line 888, in log_assert
+    raise RenpyTestAssertionError(f"{status.value}: {assert_node}")
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:7)>
+
+While running game code:
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:7)>
+File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\script.rpy", line 106, in script
+  call screen a11y_spike(scale=1.0, voicing=False)
+
+During testcase execution:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\.", line 0, in None
+    
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 1, in testsuite global
+    testcase focus_viewport_and_reading_order:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 7, in testcase focus_viewport_and_reading_order
+    assert eval focused_name() == "first_action"
+
+====================
+[rpytest] [exc]   - focus_viewport_and_reading_order (0.171 s)
+[rpytest] [exc]   - focus_viewport_and_reading_order (0.171 s)
+[rpytest] [exc]   - font_scale_1_5_layout
+
+Full traceback:
+  File "renpy/test/testexecution.py", line 549, in update
+    node_executor.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "renpy/test/testexecution.py", line 471, in execute
+    self.node_state = self.node.execute(self.node_state, elapsed)
+                      ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/test/testast.py", line 1458, in execute
+    renpy.test.testreporter.reporter.log_assert(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "renpy/test/testreporter.py", line 888, in log_assert
+    raise RenpyTestAssertionError(f"{status.value}: {assert_node}")
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:28)>
+
+While running game code:
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:28)>
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\script.rpy", line 110, in script
+    call screen a11y_spike(scale=1.5, voicing=False)
+
+During testcase execution:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\.", line 0, in None
+    
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 22, in testsuite global
+    testcase font_scale_1_5_layout:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 28, in testcase font_scale_1_5_layout
+    assert eval focused_name() == "first_action"
+
+====================
+[rpytest] [exc]   - font_scale_1_5_layout (0.182 s)
+[rpytest] [exc]   - font_scale_1_5_layout (0.182 s)
+[rpytest] [exc]   - viewport_auto_scroll_current_engine
+
+Full traceback:
+  File "renpy/test/testexecution.py", line 549, in update
+    node_executor.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "renpy/test/testexecution.py", line 471, in execute
+    self.node_state = self.node.execute(self.node_state, elapsed)
+                      ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/test/testast.py", line 1458, in execute
+    renpy.test.testreporter.reporter.log_assert(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "renpy/test/testreporter.py", line 888, in log_assert
+    raise RenpyTestAssertionError(f"{status.value}: {assert_node}")
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:43)>
+
+While running game code:
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:43)>
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\script.rpy", line 106, in script
+    call screen a11y_spike(scale=1.0, voicing=False)
+
+During testcase execution:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\.", line 0, in None
+    
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 34, in testsuite global
+    testcase viewport_auto_scroll_current_engine:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 43, in testcase viewport_auto_scroll_current_engine
+    assert eval viewport_value() > 0 and a11y_focus_graph.is_fully_visible("deep_action") and deep_action_count == 0
+
+====================
+[rpytest] [exc]   - viewport_auto_scroll_current_engine (0.373 s)
+[rpytest] [exc]   - viewport_auto_scroll_current_engine (0.373 s)
+[rpytest] [exc]   - debug_self_voicing_transcript
+
+Full traceback:
+  File "renpy/test/testexecution.py", line 549, in update
+    node_executor.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "renpy/test/testexecution.py", line 471, in execute
+    self.node_state = self.node.execute(self.node_state, elapsed)
+                      ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/test/testast.py", line 1458, in execute
+    renpy.test.testreporter.reporter.log_assert(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "renpy/test/testreporter.py", line 888, in log_assert
+    raise RenpyTestAssertionError(f"{status.value}: {assert_node}")
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:55)>
+
+While running game code:
+renpy.test.types.RenpyTestAssertionError: failed: <Assert (game/testcases.rpy:55)>
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\script.rpy", line 114, in script
+    call screen a11y_spike(scale=1.0, voicing=True)
+
+During testcase execution:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\.", line 0, in None
+    
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 48, in testsuite global
+    testcase debug_self_voicing_transcript:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 55, in testcase debug_self_voicing_transcript
+    assert eval "第一操作" in renpy.display.tts.last
+
+====================
+[rpytest] [exc]   - debug_self_voicing_transcript (0.177 s)
+[rpytest] [exc]   - debug_self_voicing_transcript (0.177 s)
+
+[rpytest] Test outcomes (Detailed)
+[rpytest] FAILED  global               - (1.251 s)
+[rpytest]   FAILED  focus_viewport_and_reading_order - (0.171 s)
+[rpytest]   FAILED  font_scale_1_5_layout - (0.182 s)
+[rpytest]   FAILED  viewport_auto_scroll_current_engine - (0.373 s)
+[rpytest]   FAILED  debug_self_voicing_transcript - (0.177 s)
+
+====================
+
+[rpytest] Test outcomes (Summary)
+[rpytest] Test suites:     1 |     0 passed |     0 xfailed |     1 failed |     0 xpassed |     0 skipped |     0 not run
+[rpytest] Test cases :     4 |     0 passed |     0 xfailed |     4 failed |     0 xpassed |     0 skipped |     0 not run
+[rpytest] Test hooks :     0 |     0 passed |     0 xfailed |     0 failed |     0 xpassed |     0 skipped |     0 not run
+[rpytest] Assertions :     8 |     4 passed |     0 xfailed |     4 failed |     0 xpassed | 
+
+[rpytest] Time: 1.252 s
+[rpytest] Status: FAILED 

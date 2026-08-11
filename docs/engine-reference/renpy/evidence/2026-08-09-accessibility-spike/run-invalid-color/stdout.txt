@@ -1,0 +1,319 @@
+
+[rpytest] Starting test run
+[rpytest] Platform:      Windows-11-10.0.22631-SP0
+[rpytest] Python:        3.12.7
+[rpytest] Ren'Py:        Ren'Py 8.5.3.26051504
+[rpytest] Game Version:  a11y-spike-2026-08-09
+
+[rpytest] [exc] + global
+[rpytest] [exc]   - focus_viewport_and_reading_order
+
+Full traceback:
+  File "game/script.rpy", line 47, in script
+    pause
+  File "renpy/ast.py", line 2251, in execute
+    self.call("execute")
+    ~~~~~~~~~^^^^^^^^^^^
+  File "renpy/ast.py", line 2205, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/statements.py", line 381, in call
+    return method(parsed, *args, **kwargs)
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/common/000statements.rpy", line 488, in execute_pause
+    renpy.pause()
+    ~~~~~~~~~~~^^
+  File "renpy/exports/statementexports.py", line 191, in pause
+    rv = renpy.ui.interact(mouse="pause", type="pause", roll_forward=roll_forward, pause=delay, pause_modal=modal)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/ui.py", line 306, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/core.py", line 2163, in interact
+    repeat, rv = self.interact_core(
+                 ~~~~~~~~~~~~~~~~~~^
+        preloads=preloads,
+        ^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "renpy/display/core.py", line 2709, in interact_core
+    root_widget.visit_all(lambda d: d.per_interact())
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/screen.py", line 508, in visit_all
+    self.child.visit_all(callback, seen=None)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 462, in visit_all
+    callback(self)
+    ~~~~~~~~^^^^^^
+  File "renpy/display/core.py", line 2709, in <lambda>
+    root_widget.visit_all(lambda d: d.per_interact())
+                                    ~~~~~~~~~~~~~~^^ 
+  File "renpy/text/text.py", line 2392, in per_interact
+    if self.style.slow_abortable:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^ 
+  File "tmp/gen3-static/styleclass.pxi", line 621, in renpy.styledata.styleclass.Style.slow_abortable.__get__
+  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
+  File "renpy/style.pyx", line 717, in renpy.style.build_style
+  File "renpy/style.pyx", line 714, in renpy.style.build_style
+  File "tmp/gen3-static/style_functions.pyx", line 336, in style_functions.color_property
+  File "renpy/color.py", line 204, in __new__
+    raise Exception(f"Color string {color!r} must be 3, 4, 6, or 8 hex digits long.")
+Exception: Color string '#8d cbd6' must be 3, 4, 6, or 8 hex digits long.
+
+While processing the color property of anonymous style:
+  File "game/script.rpy", line 47, in script
+    pause
+  File "tmp/gen3-static/styleclass.pxi", line 621, in renpy.styledata.styleclass.Style.slow_abortable.__get__
+  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
+  File "renpy/style.pyx", line 717, in renpy.style.build_style
+  File "renpy/style.pyx", line 714, in renpy.style.build_style
+  File "tmp/gen3-static/style_functions.pyx", line 336, in style_functions.color_property
+Exception: Color string '#8d cbd6' must be 3, 4, 6, or 8 hex digits long.
+File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\script.rpy", line 47, in script
+  pause
+
+During testcase execution:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\.", line 0, in None
+    
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 1, in testsuite global
+    testcase focus_viewport_and_reading_order:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 5, in testcase focus_viewport_and_reading_order
+    advance
+
+====================
+[rpytest] [exc]   - focus_viewport_and_reading_order (0.537 s)
+[rpytest] [exc]   - focus_viewport_and_reading_order (0.537 s)
+[rpytest] [exc]   - font_scale_1_5_layout
+
+Full traceback:
+  File "game/script.rpy", line 47, in script
+    pause
+  File "renpy/ast.py", line 2251, in execute
+    self.call("execute")
+    ~~~~~~~~~^^^^^^^^^^^
+  File "renpy/ast.py", line 2205, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/statements.py", line 381, in call
+    return method(parsed, *args, **kwargs)
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/common/000statements.rpy", line 488, in execute_pause
+    renpy.pause()
+    ~~~~~~~~~~~^^
+  File "renpy/exports/statementexports.py", line 191, in pause
+    rv = renpy.ui.interact(mouse="pause", type="pause", roll_forward=roll_forward, pause=delay, pause_modal=modal)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/ui.py", line 306, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/core.py", line 2163, in interact
+    repeat, rv = self.interact_core(
+                 ~~~~~~~~~~~~~~~~~~^
+        preloads=preloads,
+        ^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "renpy/display/core.py", line 2709, in interact_core
+    root_widget.visit_all(lambda d: d.per_interact())
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/screen.py", line 508, in visit_all
+    self.child.visit_all(callback, seen=None)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 462, in visit_all
+    callback(self)
+    ~~~~~~~~^^^^^^
+  File "renpy/display/core.py", line 2709, in <lambda>
+    root_widget.visit_all(lambda d: d.per_interact())
+                                    ~~~~~~~~~~~~~~^^ 
+  File "renpy/text/text.py", line 2392, in per_interact
+    if self.style.slow_abortable:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^ 
+  File "tmp/gen3-static/styleclass.pxi", line 621, in renpy.styledata.styleclass.Style.slow_abortable.__get__
+  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
+  File "renpy/style.pyx", line 717, in renpy.style.build_style
+  File "renpy/style.pyx", line 714, in renpy.style.build_style
+  File "tmp/gen3-static/style_functions.pyx", line 336, in style_functions.color_property
+  File "renpy/color.py", line 204, in __new__
+    raise Exception(f"Color string {color!r} must be 3, 4, 6, or 8 hex digits long.")
+Exception: Color string '#8d cbd6' must be 3, 4, 6, or 8 hex digits long.
+
+While processing the color property of anonymous style:
+  File "game/script.rpy", line 47, in script
+    pause
+  File "tmp/gen3-static/styleclass.pxi", line 621, in renpy.styledata.styleclass.Style.slow_abortable.__get__
+  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
+  File "renpy/style.pyx", line 717, in renpy.style.build_style
+  File "renpy/style.pyx", line 714, in renpy.style.build_style
+  File "tmp/gen3-static/style_functions.pyx", line 336, in style_functions.color_property
+Exception: Color string '#8d cbd6' must be 3, 4, 6, or 8 hex digits long.
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\script.rpy", line 47, in script
+    pause
+
+During testcase execution:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\.", line 0, in None
+    
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 26, in testsuite global
+    testcase font_scale_1_5_layout:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 30, in testcase font_scale_1_5_layout
+    advance
+
+====================
+[rpytest] [exc]   - font_scale_1_5_layout (9.312 s)
+[rpytest] [exc]   - font_scale_1_5_layout (9.312 s)
+[rpytest] [exc]   - debug_self_voicing_transcript
+
+Full traceback:
+  File "game/script.rpy", line 47, in script
+    pause
+  File "renpy/ast.py", line 2251, in execute
+    self.call("execute")
+    ~~~~~~~~~^^^^^^^^^^^
+  File "renpy/ast.py", line 2205, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/statements.py", line 381, in call
+    return method(parsed, *args, **kwargs)
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/common/000statements.rpy", line 488, in execute_pause
+    renpy.pause()
+    ~~~~~~~~~~~^^
+  File "renpy/exports/statementexports.py", line 191, in pause
+    rv = renpy.ui.interact(mouse="pause", type="pause", roll_forward=roll_forward, pause=delay, pause_modal=modal)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/ui.py", line 306, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/core.py", line 2163, in interact
+    repeat, rv = self.interact_core(
+                 ~~~~~~~~~~~~~~~~~~^
+        preloads=preloads,
+        ^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "renpy/display/core.py", line 2709, in interact_core
+    root_widget.visit_all(lambda d: d.per_interact())
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/screen.py", line 508, in visit_all
+    self.child.visit_all(callback, seen=None)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 460, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 462, in visit_all
+    callback(self)
+    ~~~~~~~~^^^^^^
+  File "renpy/display/core.py", line 2709, in <lambda>
+    root_widget.visit_all(lambda d: d.per_interact())
+                                    ~~~~~~~~~~~~~~^^ 
+  File "renpy/text/text.py", line 2392, in per_interact
+    if self.style.slow_abortable:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^ 
+  File "tmp/gen3-static/styleclass.pxi", line 621, in renpy.styledata.styleclass.Style.slow_abortable.__get__
+  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
+  File "renpy/style.pyx", line 717, in renpy.style.build_style
+  File "renpy/style.pyx", line 714, in renpy.style.build_style
+  File "tmp/gen3-static/style_functions.pyx", line 336, in style_functions.color_property
+  File "renpy/color.py", line 204, in __new__
+    raise Exception(f"Color string {color!r} must be 3, 4, 6, or 8 hex digits long.")
+Exception: Color string '#8d cbd6' must be 3, 4, 6, or 8 hex digits long.
+
+While processing the color property of anonymous style:
+  File "game/script.rpy", line 47, in script
+    pause
+  File "tmp/gen3-static/styleclass.pxi", line 621, in renpy.styledata.styleclass.Style.slow_abortable.__get__
+  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
+  File "renpy/style.pyx", line 717, in renpy.style.build_style
+  File "renpy/style.pyx", line 714, in renpy.style.build_style
+  File "tmp/gen3-static/style_functions.pyx", line 336, in style_functions.color_property
+Exception: Color string '#8d cbd6' must be 3, 4, 6, or 8 hex digits long.
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\script.rpy", line 47, in script
+    pause
+
+During testcase execution:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\.", line 0, in None
+    
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 43, in testsuite global
+    testcase debug_self_voicing_transcript:
+  File "E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-accessibility-spike\fixture\game\testcases.rpy", line 47, in testcase debug_self_voicing_transcript
+    advance
+
+====================
+[rpytest] [exc]   - debug_self_voicing_transcript (9.346 s)
+[rpytest] [exc]   - debug_self_voicing_transcript (9.346 s)
+
+[rpytest] Test outcomes (Detailed)
+[rpytest] FAILED  global               - (19.589 s)
+[rpytest]   FAILED  focus_viewport_and_reading_order - (0.537 s)
+[rpytest]   FAILED  font_scale_1_5_layout - (9.312 s)
+[rpytest]   FAILED  debug_self_voicing_transcript - (9.346 s)
+
+====================
+
+[rpytest] Test outcomes (Summary)
+[rpytest] Test suites:     1 |     0 passed |     0 xfailed |     1 failed |     0 xpassed |     0 skipped |     0 not run
+[rpytest] Test cases :     3 |     0 passed |     0 xfailed |     3 failed |     0 xpassed |     0 skipped |     0 not run
+[rpytest] Test hooks :     0 |     0 passed |     0 xfailed |     0 failed |     0 xpassed |     0 skipped |     0 not run
+[rpytest] Assertions :     0 |     0 passed |     0 xfailed |     0 failed |     0 xpassed | 
+
+[rpytest] Time: 19.590 s
+[rpytest] Status: FAILED 

@@ -1,0 +1,11 @@
+﻿{
+    "checked_utc":  "2026-08-10T10:46:01.1476277Z",
+    "com_object_created":  true,
+    "voice_count":  3,
+    "voice_descriptions":  [
+                               "Microsoft Hazel Desktop - English (Great Britain)",
+                               "Microsoft Zira Desktop - English (United States)",
+                               "Microsoft Huihui Desktop - Chinese (Simplified)"
+                           ],
+    "note":  "Capability enumeration only; no human listening PASS is inferred."
+}

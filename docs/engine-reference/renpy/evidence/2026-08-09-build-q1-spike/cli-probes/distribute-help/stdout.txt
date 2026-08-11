@@ -1,0 +1,67 @@
+usage: renpy.py [--savedir DIRECTORY] [--trace LEVEL] [--version] [--compile]
+                [--compile-python] [--keep-orphan-rpyc] [--errors-in-editor]
+                [--safe-mode] [--warp WARP] [--json-dump FILE]
+                [--json-dump-private] [--json-dump-common] [-h]
+                [--destination DESTINATION] [--packagedest PACKAGEDEST]
+                [--no-update] [--package PACKAGE] [--no-archive]
+                [--macapp MACAPP] [--format FORMAT]
+                basedir command project
+
+The Ren'Py visual novel engine.
+
+positional arguments:
+  basedir               The base directory containing of the project to run.
+                        This defaults to the directory containing the Ren'Py
+                        executable.
+  command               The command to execute. Available commands are:
+                        add_from, android_build, compile, dialogue, director,
+                        distribute, extract_strings, generate_gui,
+                        get_projects_directory, gui_images, ios_create,
+                        ios_populate, lint, merge_strings, quit, rmpersistent,
+                        run, set_project, set_projects_directory, test,
+                        translate, update, update_old_game, web_build.
+                        Defaults to 'run'.
+
+options:
+  --savedir DIRECTORY   The directory where saves and persistent data are
+                        placed.
+  --trace LEVEL         The level of trace Ren'Py will log to trace.txt.
+                        (1=per-call, 2=per-line)
+  --version             Displays the version of Ren'Py in use.
+  --compile             Forces all .rpy scripts to be recompiled before
+                        proceeding.
+  --compile-python      Forces all Python to be recompiled, rather than read
+                        from game/cache/bytecode-*.rpyb.
+  --keep-orphan-rpyc    Prevents the compile command from deleting orphan rpyc
+                        files.
+  --errors-in-editor    Causes errors to open in a text editor.
+  --safe-mode           Forces Ren'Py to start in safe mode, allowing the
+                        player to configure graphics.
+  --warp WARP           This takes as an argument a filename:linenumber pair,
+                        and tries to warp to the statement before that line
+                        number. It is only valid in conjuction with the run
+                        command.
+  -h, --help            Displays this help message, then exits.
+
+JSON dump arguments:
+  Ren'Py can dump information about the game to a JSON file. These options
+  let you select the file, and choose what is dumped.
+
+  --json-dump FILE      The name of the JSON file.
+  --json-dump-private   Include private names. (Names beginning with _.)
+  --json-dump-common    Include names defined in the common directory.
+
+distribute command arguments:
+  --destination DESTINATION, --dest DESTINATION
+                        The directory where the packaged files should be
+                        placed.
+  --packagedest PACKAGEDEST
+                        If given, gives the full path to the package file,
+                        without extensions.
+  --no-update           Prevents updates from being built.
+  --package PACKAGE     If given, a package to build. Defaults to building all
+                        packages.
+  --no-archive          If given, files will not be added to archives.
+  --macapp MACAPP       If given, the path to a signed and notarized mac app.
+  --format FORMAT       The format of package to build.
+  project               The path to the project directory.

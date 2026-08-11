@@ -1,0 +1,97 @@
+[
+  {
+    "focus": "first_action",
+    "semantic_id": "first_action",
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false
+  },
+  {
+    "focus": "second_action",
+    "semantic_id": "second_action",
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false
+  },
+  {
+    "focus": "deep_action",
+    "semantic_id": "deep_action",
+    "viewport_y": 221.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      679.0,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": true
+  },
+  {
+    "focus": "first_action",
+    "semantic_id": "first_action",
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false
+  },
+  {
+    "focus": "second_action",
+    "semantic_id": "second_action",
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false
+  }
+]

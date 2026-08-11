@@ -1,0 +1,4669 @@
+version: 2
+
+entries:
+  - name: state_schema_version
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 2
+    unit: schema_version
+    referenced_by:
+      - SYS-STATE
+      - SYS-SAVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: state_schema_sentinel
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: "semantic_state:v2"
+    default_value: null
+    initialization: explicit_new_game_only
+    referenced_by:
+      - SYS-STATE
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: semantic_state_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - schema_version
+      - axes
+      - choice_history
+    container: exact_renpy_run_map
+    nested_containers:
+      axes: exact_renpy_run_map
+      choice_history: exact_renpy_run_list
+    referenced_by:
+      - SYS-STATE
+      - SYS-SAVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: major_choice_metadata_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    choice_side_contract_status: frozen_2026-07-27
+    production_content_status: provisional_pending_SYS_NARRATIVE
+    value:
+      - choice_id
+      - axis_deltas
+      - next_node_ids
+      - risk_vector
+      - resource_costs
+      - character_costs
+      - unique_value_tags
+      - counterevidence_effect
+      - immediate_reaction_id
+      - payoff_ids
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: player_facing_choice_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    choice_side_contract_status: frozen_2026-07-27
+    production_content_status: provisional_pending_SYS_NARRATIVE
+    value:
+      - choice_id
+      - choice_node_id
+      - choice_class
+      - immediate_reaction_id
+      - payoff_ids
+      - owner_system
+    allowed_choice_classes:
+      - semantic_major
+      - narrative_only
+    coverage: all_production_player_facing_narrative_options_timed_outcomes_and_accessibility_equivalents
+    semantic_major_link: exactly_one_major_choice_metadata_record
+    narrative_only_axis_and_counterevidence_effect: forbidden
+    narrative_only_history_commit: required_via_apply_choice_with_empty_RunMap
+    history_owner: SYS-STATE
+    commit_timing: after_player_confirmation_before_immediate_reaction
+    rollback_save_load: same_semantic_state_envelope
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: non_narrative_interaction_allowlist_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    choice_side_contract_status: frozen_2026-07-27
+    production_content_status: provisional_pending_production_source_scan
+    value:
+      - interaction_id
+      - source_path
+      - source_line
+      - interaction_kind
+      - rationale
+      - owner_system
+    allowed_interaction_kinds:
+      - main_menu
+      - settings
+      - save_load
+      - accessibility
+      - exit
+      - development_tool
+    chapter_narrative_interaction: forbidden
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: choice_reaction_binding_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    status: provisional_downstream_gate
+    choice_side_contract_status: frozen_2026-07-27
+    production_content_status: provisional_pending_SYS_NARRATIVE
+    owners: [SYS-CHOICE, SYS-NARRATIVE]
+    excluded_from_SYS_STATE_approval: true
+    value:
+      - reaction_binding_id
+      - choice_id
+      - choice_node_id
+      - reaction_id
+      - reaction_event_id
+      - reaction_node_id
+      - owner_system
+    timing: postdominates_choice_commit_before_any_next_control_transfer
+    reverse_event_binding: required
+    reverse_event_metadata_fields:
+      - choice_id
+      - reaction_binding_id
+    cardinality_contract: choice_reaction_join_cardinality
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: choice_payoff_binding_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    status: provisional_downstream_gate
+    choice_side_contract_status: frozen_2026-07-27
+    production_content_status: provisional_pending_SYS_NARRATIVE
+    owners: [SYS-CHOICE, SYS-NARRATIVE]
+    excluded_from_SYS_STATE_approval: true
+    value:
+      - causal_binding_id
+      - choice_id
+      - payoff_id
+      - payoff_event_id
+      - proof_kind
+      - guard_reference_id_or_none
+      - counterfactual_witness_id_or_none
+      - outcome_reference_ids
+      - owner_system
+    allowed_proof_kinds:
+      - history_guard
+      - counterfactual_outcome
+    reverse_event_binding: required
+    generic_unrelated_event: forbidden
+    cardinality_contract: choice_payoff_join_cardinality
+    proof_kind_nullability_contract: choice_proof_kind_nullability_matrix
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: choice_payoff_witness_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    status: provisional_downstream_gate
+    choice_side_contract_status: frozen_2026-07-27
+    production_content_status: provisional_pending_SYS_NARRATIVE
+    owners: [SYS-CHOICE, SYS-NARRATIVE]
+    excluded_from_SYS_STATE_approval: true
+    value:
+      - witness_id
+      - choice_id
+      - prehistory_id
+      - continuation_id
+      - continuation_choice_ids
+      - payoff_id
+      - payoff_node_id
+      - payoff_event_id
+      - causal_binding_id
+      - timing_kind
+      - owner_system
+    allowed_timing_kinds:
+      - later_node
+      - chapter_terminal
+    owner_system: SYS-NARRATIVE
+    prehistory_identity: sha256_of_canonical_prehistory_v1_node_and_full_prior_history
+    continuation_identity: sha256_of_canonical_continuation_v1_choice_prehistory_and_full_terminal_suffix
+    coverage: every_choice_every_reachable_prehistory_every_legal_terminal_continuation
+    declared_payoff_coverage: every_declared_payoff_used_by_at_least_one_valid_witness
+    causal_binding: required_bidirectional_history_guard_or_counterfactual_outcome
+    temporal_rule: payoff_node_strictly_later_than_choice_node
+    immediate_or_same_node_payoff: forbidden
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: counterevidence_domains
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value:
+      - understanding
+      - autonomy
+      - truth
+      - preparation
+      - sacrifice
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: max_counterevidence_tokens_total
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 10
+    unit: revoke_token_definitions
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: max_counterevidence_tokens_per_domain
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 2
+    unit: revoke_token_definitions
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: repair_target_count
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 1
+    unit: revoke_tokens_per_repair
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: counterevidence_resolution_modes
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value:
+      - repairable
+      - irreversible
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: counterevidence_token_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    choice_side_contract_status: schema_and_single_effect_binding_frozen_2026-07-27
+    production_content_status: design_catalog_revised_in_narrative_content_baseline_v1_2_independent_rereview_pending
+    common_fields:
+      - kind
+      - token_id
+      - domain
+      - pillar_id
+      - behavior_summary
+      - consequence_id
+      - resolution_mode
+    fixed_kind: revoke
+    conditional_fields:
+      repairable:
+        - repair_choice_ids
+      irreversible:
+        - irreversible_approval_id
+        - irreversible_path_witness_ids
+        - ending_payoff_ids
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: counterevidence_repair_effect_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - kind
+      - domain
+      - target_token_id
+      - repair_payoff_id
+      - repair_cost_tag
+    fixed_kind: repair
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: irreversible_approval_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - approval_id
+      - token_id
+      - owner_system
+      - author_id
+      - reviewer_role
+      - reviewer_id
+      - review_date
+      - severity_class
+      - severity_evidence_id
+      - criterion_results
+      - rationale
+      - status
+    fixed_owner_system: SYS-NARRATIVE
+    required_reviewer_role: Creative Director
+    fixed_severity_class: route_critical
+    criterion_keys:
+      - pillar_violation
+      - remaining_time_unrepairable
+      - scene_demonstrates_permanence
+      - not_content_cost_shortcut
+    criterion_required_value: pass
+    required_status: accepted
+    reviewer_must_differ_from_author: true
+    identity_reference_schema: review_identity_entry_fields
+    comparison_key: canonical_person_id
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: irreversible_path_witness_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - witness_id
+      - token_id
+      - prehistory_id
+      - continuation_ids
+      - later_major_choice_node_ids
+      - shortest_later_choice_count
+      - agency_witness_node_id
+      - agency_effect_kind
+      - agency_branch_outcomes
+      - ending_payoff_id
+    allowed_agency_effect_kinds:
+      - ending_selection
+      - character_fate
+      - cost_bearer
+      - tragedy_closure
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: agency_branch_outcome_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - branch_choice_id
+      - outcome_reference_ids
+    container: exact_tuple
+    coverage: all_direct_player_branches_at_agency_witness_node
+    minimum_distinct_branch_choices: 2
+    minimum_distinct_outcome_reference_sets: 2
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: outcome_reference_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - outcome_reference_id
+      - outcome_kind
+      - subject_entity_id
+      - outcome_state_id
+      - source_event_ids
+      - owner_system
+    fixed_owner_system: SYS-NARRATIVE
+    allowed_outcome_kinds:
+      - ending_selection
+      - character_fate
+      - cost_bearer
+      - tragedy_closure
+    global_id_uniqueness: required
+    reference_integrity: subject_state_and_all_source_events_must_exist
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: review_identity_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - identity_id
+      - canonical_person_id
+      - display_name
+      - role_ids
+      - aliases
+      - status
+      - registry_owner
+    fixed_registry_owner: PROJECT
+    required_status: active
+    alias_uniqueness: global
+    author_reviewer_comparison_key: canonical_person_id
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: irreversible_min_later_choice_nodes
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 2
+    unit: stable_major_choice_nodes_before_ending_entry
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: sparse_cost_missing_value
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 0
+    unit: cost
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: dominance_token_prefix_relation
+    kind: predicate
+    source: design/gdd/five-axis-state.md
+    expression: "after proving L_A(h) subseteq L_B(h), every aligned continuation prefix k satisfies U_B(h,s,k) subseteq U_A(h,s,k); incomparable sets are unordered"
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: dominance_continuation_language
+    kind: predicate
+    source: design/gdd/five-axis-state.md
+    expression: "for every reachable prehistory h at a node, every finite legal choice-ID suffix accepted after A is accepted in the same order after B"
+    variables:
+      - finite_choice_dag
+      - prehistory_id
+      - option_a
+      - option_b
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: semantic_validation_precedence
+    kind: validation_contract
+    source: design/gdd/five-axis-state.md
+    apply_choice_order:
+      - global_state_and_payload_exact_type_sweep
+      - state_value_shape
+      - choice_id_value
+      - delta_value_shape_count
+      - duplicate_noop_check
+      - atomic_candidate_commit
+    resolver_runtime_order:
+      - snapshot_builtin_type_sweep
+      - snapshot_value_shape
+      - history_catalog_coverage_and_axis_semantic_replay
+      - token_fold_legality
+      - route_fact_fold_legality
+      - qualification_derivation
+      - priority_predicate_evaluation
+      - cause_extraction_from_frozen_evaluation
+      - immutable_resolution_record_construction
+    catalog_import_order:
+      - choice_id_and_effect_schema
+      - token_caps_domains_modes
+      - repair_references
+      - freeze_mapping_proxy
+    traversal_scope: schema_known_slots_only
+    unknown_value_policy: no_getitem_or_protocol_access
+    referenced_by:
+      - SYS-STATE
+      - SYS-SAVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: semantic_known_value_read_trace_fields
+    kind: test_evidence_schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - container_path
+      - known_key
+    production_trace_value: null
+    unknown_key_getitem_reads: 0
+    unknown_value_protocol_calls: 0
+    exact_container_checks_may_not_be_bypassed: true
+    referenced_by:
+      - SYS-STATE
+      - SYS-SAVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: state_component_evidence_types
+    kind: test_evidence_taxonomy
+    source: design/gdd/five-axis-state.md
+    value:
+      - UT_ENGINE
+      - UT_PURE
+      - INSTR
+      - STATIC
+      - BRANCH
+    canonical_spelling: underscore_machine_enum
+    hyphenated_aliases: forbidden
+    exhaustive_component_mapping: STATE_COMP_000_through_STATE_COMP_023
+    referenced_by:
+      - SYS-STATE
+      - SYS-TEST
+
+  - name: snapshot_builder_production_callsite_allowlist
+    kind: architecture_contract
+    source: design/gdd/five-axis-state.md
+    private_symbol: _build_detached_ending_snapshot
+    production_source_roots:
+      - game/**/*.rpy
+      - game/**/*.py
+    test_only_roots:
+      - game/testcases.rpy
+      - tests/**
+    allowed_production_callsites:
+      - game/10_state.rpy::current_ending_snapshot
+    allowed_production_call_count: 1
+    required_reference_closure:
+      - direct_name
+      - import_alias
+      - module_attribute_alias
+      - assignment
+      - argument_passing
+      - return
+      - closure_capture
+      - container_storage
+      - wrapper_export
+      - getattr
+      - dynamic_import
+      - string_lookup
+      - reflection
+    symbol_escape: build_failure
+    unresolved_reference: build_failure
+    production_to_test_only_dependency: build_failure
+    allowed_callsite_cfg_requirement: active_validation_dominates_all_paths
+    referenced_by:
+      - SYS-STATE
+      - SYS-TEST
+
+  - name: semantic_known_traversal_slots
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - lifecycle_sentinel
+      - state_root_and_all_keys
+      - known_schema_version
+      - known_axes_container_all_keys_and_five_values
+      - known_history_container_and_one_level_items
+      - payload_choice_id
+      - delta_root_all_keys_and_five_known_values
+    recursion: forbidden
+    unknown_key_value_read: forbidden
+    referenced_by:
+      - SYS-STATE
+      - SYS-SAVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: ending_transition_owner
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: SYS-ENDING
+    transition: "Active -> Ended"
+    trigger: enter_valid_resolved_ending_label
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_flow_lifecycle
+    kind: lifecycle_contract
+    source: design/gdd/deterministic-ending-resolution.md
+    sentinel_name: ending_flow_sentinel
+    sentinel_default: null
+    sentinel_value: "ending_flow:v1"
+    state_name: ending_flow_state
+    state_default: null
+    allowed_states: [Active, Ended]
+    pending_name: pending_ending_id
+    pending_default: null
+    initialization: explicit_new_game_with_semantic_state
+    resolve_entry: day7_resolve_ending
+    commit_entry: commit_ending_entry
+    completion_owner: SYS-ENDING
+    completion_call: commit_ending_completion
+    completion_callsite: six_ending_labels_terminal_completion_node_after_final_player_visible_closure
+    completion_before_exit_or_return: true
+    completion_callsite_count: 6
+    referenced_by:
+      - SYS-ENDING
+      - SYS-SAVE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_completion_event_record
+    kind: schema
+    source: design/gdd/deterministic-ending-resolution.md
+    owner_system: SYS-ENDING
+    value:
+      - ending_id
+      - completed_event_id
+      - checkpoint_id
+      - checkpoint_occurrence_id
+      - collection_epoch_id
+      - catalog_generation_id
+      - stable_completion_boundary
+      - owner_system
+    completed_event_id_pattern: "ending_completed:{ending_id}"
+    stable_completion_boundary: true
+    persistence: rollback_owned_event_and_checkpoint_input_only
+    persistent_root_membership_after_success: ending_ids
+    pre_completion_persistent_request_count: 0
+    rollback_after_success_preserves_persistent_membership: true
+    replay_existing_membership_result: DUPLICATE_NOOP
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: ending_causality_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - causality_record_id
+      - ending_id
+      - witness_path_id
+      - matched_cause_ids
+      - higher_priority_exclusions
+      - terminal_outcome_signature
+      - payoff_scene_id
+      - payoff_id
+      - player_facing_summary_id
+    higher_priority_coverage: exact
+    raw_threshold_references: forbidden
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_predicate_clause_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - ending_id
+      - clause_id
+      - clause_order
+      - clause_kind
+      - operand_clause_ids
+      - source_kind
+      - source_reference_ids
+      - comparator
+      - expected_int
+      - required_truth_value
+      - match_cause_template_id
+      - failure_cause_template_id
+    allowed_clause_kinds:
+      - group_all
+      - group_any
+      - atomic
+    allowed_source_kinds:
+      - axis_value
+      - history_choice
+      - unresolved_token
+      - completed_event
+      - resource_possession
+      - route_qualification
+      - constant
+    allowed_comparators:
+      - at_least
+      - present
+      - absent
+      - always_true
+    legal_atomic_domains:
+      axis_value:
+        comparators: [at_least]
+        expected_int: [1, 2, 3]
+        required_truth_value: true
+      history_choice: {comparators: [present, absent], expected_int: null, required_truth_value: true}
+      unresolved_token: {comparators: [present, absent], expected_int: null, required_truth_value: true}
+      completed_event: {comparators: [present, absent], expected_int: null, required_truth_value: true}
+      resource_possession: {comparators: [present, absent], expected_int: null, required_truth_value: true}
+      route_qualification: {comparators: [present, absent], expected_int: null, required_truth_value: true}
+      constant: {comparators: [always_true], expected_int: null, required_truth_value: true, ending_id: unsent_postcard}
+    clause_order:
+      exact_type: int
+      per_ending_domain: contiguous_zero_to_n_minus_one
+      unique_per_ending: true
+      root_order: 0
+    operands: same_ending_only_sorted_by_clause_order
+    graph_shape: exactly_one_root_acyclic_tree_no_shared_children
+    all_required_truth_value: true
+    group_evaluation: complete_all_children_without_short_circuit
+    contributor_rule: complete_true_support_for_match_complete_false_support_for_exclusion
+    fallback_root: unsent_postcard_constant_always_true
+    fallback_cause_template_id: cause_unsent_postcard_fallback
+    evaluation_order: ending_priority_then_clause_order
+    short_circuit: forbidden
+    cause_extraction: actual_path_source_specific
+    invalid_catalogs: fail_before_frozen_index
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_cause_template_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - cause_template_id
+      - ending_id_or_none
+      - clause_id_or_none
+      - token_id_or_none
+      - polarity
+      - cause_kind
+      - source_kind
+      - player_summary_id
+    allowed_polarities:
+      - match
+      - failure
+      - audit
+    identity_scope: authoring_template_only
+    concrete_type:
+      module: ending_rules
+      qualname: EndingCauseTemplateRecord
+    clause_lineage_key: [ending_id, clause_id, polarity]
+    audit_lineage_key: [token_id, audit]
+    clause_template_token_id: null
+    audit_template_ending_and_clause: null
+    unresolved_audit_coverage: exactly_one_template_per_token
+    audit_runtime_ending: selected_ending_id
+    audit_runtime_source_reference_prefix: token_id
+    fallback_template_id: cause_unsent_postcard_fallback
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_cause_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - cause_id
+      - cause_kind
+      - cause_template_id
+      - ending_id
+      - clause_id
+      - polarity
+      - source_kind
+      - source_reference_ids
+      - observed_value
+      - required_value
+      - anchor_bucket
+      - history_anchor_start
+      - history_anchor_end
+      - cause_template_id_or_none
+      - polarity_or_none
+      - cause_kind_or_none
+      - source_kind_or_none
+    allowed_cause_kinds:
+      - matched_evidence
+      - unresolved_counterevidence
+      - exclusion_evidence
+      - evidence_shortfall
+      - fallback
+    concrete_type:
+      module: ending_rules
+      qualname: EndingCauseRecord
+    payload_population:
+      axis_match: earliest_required_count_actual_increment_choices
+      axis_shortfall: all_actual_increment_choices
+      history_choice: semantic_choice_id_and_actual_membership
+      unresolved_token: token_revoke_and_optional_repair_lineage
+      completed_event: event_and_first_completing_choice
+      resource_possession: resource_and_last_effective_choice
+      route_qualification: qualification_and_frozen_decision_contributors
+      constant: empty_references_true_true_fallback_bucket
+      unresolved_audit: token_and_revoke_choice_selected_ending
+    runtime_cause_id_pattern: "^cause_[0-9a-f]{64}$"
+    cause_identity: lowercase_full_sha256_of_cause_payload_v1_canonical_bytes
+    canonical_encoding:
+      none: "n;"
+      false: "b:0;"
+      true: "b:1;"
+      integer: "i:<canonical-base10>;"
+      string: "s:<utf8-byte-count>:<utf8-bytes>;"
+      tuple: "t:<element-count>:[<encoded-elements>];"
+    payload_field_order:
+      - cause_payload_v1
+      - ending_id
+      - clause_id_or_none
+      - polarity
+      - cause_kind
+      - cause_template_id
+      - source_kind
+      - source_reference_ids
+      - observed_value
+      - required_value
+    golden_hashes:
+      unsent_postcard_fallback: f57b3ae4a102befa05f8e5a51b1be688338ad1daf3708963d676cb12c7ecac8b
+      rain_understanding_axis: 640f8e05affdf6805530156ad232d2849830f9197c872ad010421db05439f9be
+    hash_native_leafs:
+      - _hashlib.openssl_sha256
+      - _hashlib.HASH.hexdigest
+    template_id_is_runtime_id: false
+    unequal_payload_hash_collision: build_failure
+    anchor_buckets:
+      history_derived: 0
+      no_history_shortfall_or_absence: 1
+      unconditional_fallback: 2
+    total_order_key:
+      - anchor_bucket
+      - history_anchor_start
+      - history_anchor_end
+      - cause_kind_rank
+      - source_kind_rank
+      - cause_id
+    multi_source_anchor: min_and_max_history_index
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: cause_digest_bijection_validation_contract
+    kind: validation_contract
+    source: design/gdd/five-axis-state.md
+    production_input: exact_tuple_of_payload_bytes_digest_hex_pairs
+    invariant:
+      - one_payload_maps_to_one_digest
+      - one_digest_maps_to_one_payload
+    synthetic_collision_fixture: test_only_equal_digest_unequal_payload
+    production_hash_replacement_seam: forbidden
+    resolver_import_of_checker_or_fixture: forbidden
+    referenced_by:
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: clause_evaluation_trace_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - ending_id
+      - clause_id
+      - clause_order
+      - clause_kind
+      - comparator_result
+      - satisfaction_result
+      - contributing_clause_ids
+      - source_reference_ids
+      - observed_value
+      - required_value
+      - anchor_bucket
+      - history_anchor_start
+      - history_anchor_end
+    concrete_type:
+      module: ending_rules
+      qualname: ClauseEvaluationTraceEntry
+    record_container: exact_immutable_named_tuple
+    field_types:
+      ending_id: exact_string
+      clause_id: exact_string
+      clause_order: nonnegative_exact_int
+      clause_kind: exact_string
+      comparator_result: exact_bool_for_atomic_exact_none_for_group
+      satisfaction_result: exact_bool
+      contributing_clause_ids: exact_tuple_of_exact_strings
+      source_reference_ids: exact_tuple_of_exact_strings
+      observed_value: exact_canonical_scalar_or_none
+      required_value: exact_canonical_scalar_or_none
+      anchor_bucket: nonnegative_exact_int_or_none
+      history_anchor_start: nonnegative_exact_int_or_none
+      history_anchor_end: nonnegative_exact_int_or_none
+      cause_template_id_or_none: exact_string_for_atomic_exact_none_for_group
+      polarity_or_none: exact_string_for_atomic_exact_none_for_group
+      cause_kind_or_none: exact_string_for_atomic_exact_none_for_group
+      source_kind_or_none: exact_string_for_atomic_exact_none_for_group
+    atomic_cause_ready_fields: copied_from_payload_population_matrix
+    group_cause_ready_fields: empty_tuple_and_exact_none
+    ordering: ending_priority_then_clause_order
+    occurrence: exactly_once_per_evaluated_clause
+    coverage: evaluated_endings_through_selected_ending_inclusive
+    referenced_by:
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: unresolved_audit_fact_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - cause_template_id
+      - token_id
+      - polarity
+      - cause_kind
+      - source_kind
+      - source_reference_ids
+      - observed_value
+      - required_value
+      - anchor_bucket
+      - history_anchor_start
+      - history_anchor_end
+    concrete_type:
+      module: ending_rules
+      qualname: UnresolvedAuditFact
+    fixed_identity_values:
+      polarity: audit
+      cause_kind: unresolved_counterevidence
+      source_kind: unresolved_token
+    generated_by: token_fold
+    referenced_by:
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: frozen_resolution_evaluation_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - selected_ending_id
+      - clause_evaluation_trace
+      - unresolved_audit_facts
+    concrete_type:
+      module: ending_rules
+      qualname: FrozenResolutionEvaluation
+    sole_consumer: cause_extraction
+    cause_extraction_other_inputs: forbidden
+    referenced_by:
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: higher_priority_exclusion_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - ending_id
+      - causes
+    record_container: exact_immutable_named_tuple
+    concrete_type:
+      module: ending_rules
+      qualname: HigherPriorityExclusionEntry
+    ending_id_type: exact_string
+    causes_container: nonempty_exact_tuple_of_ending_cause_record
+    ordering: ending_priority
+    cause_ordering: ending_cause_total_order_key
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_resolution_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - ending_id
+      - unresolved_token_ids
+      - unresolved_token_causes
+      - completed_event_ids
+      - resource_possession_ids
+      - qualification_ids
+      - clause_evaluation_trace
+      - matched_causes
+      - higher_priority_exclusions
+      - display_cause_ids
+    record_container: exact_immutable_named_tuple
+    concrete_type:
+      module: ending_rules
+      qualname: EndingResolutionRecord
+    nested_containers: exact_tuple_or_exact_immutable_named_tuple_only
+    id_fields: exact_string_or_exact_tuple_of_exact_strings
+    cause_fields: exact_tuple_of_ending_cause_record
+    trace_field: exact_tuple_of_clause_evaluation_trace_entry
+    exclusions_field: exact_tuple_of_higher_priority_exclusion_entry
+    unresolved_ordering: revoke_history_index_then_stable_id
+    unresolved_cause_coverage: exactly_one_per_unresolved_token
+    fact_id_ordering: utf8_bytes_lexicographic
+    cause_ordering: ending_cause_total_order_key
+    display_cause_resolution: exactly_once_in_matched_unresolved_exclusion_union
+    canonical_entrypoint: resolve_ending_record
+    compatibility_wrapper: resolve_ending_calls_canonical_once_and_reads_ending_id_only
+    single_evaluation_pass: required
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: resolver_trusted_leaf_policy
+    kind: architecture_contract
+    source: design/gdd/five-axis-state.md
+    version: 2
+    allowed_exact_targets:
+      - builtins.len
+      - builtins.range
+      - builtins.enumerate
+      - builtins.zip
+      - builtins.all
+      - builtins.any
+      - builtins.min
+      - builtins.max
+      - builtins.sorted
+      - builtins.tuple
+      - builtins.list
+      - builtins.dict
+      - builtins.set
+      - builtins.frozenset
+      - builtins.type
+      - builtins.isinstance
+      - builtins.str.encode
+      - builtins.bytes.join
+      - builtins.list.append
+      - builtins.set.add
+      - builtins.set.remove
+      - builtins.set.discard
+      - builtins.dict.get
+      - builtins.dict.items
+      - builtins.dict.__setitem__
+      - types.MappingProxyType.__getitem__
+      - types.MappingProxyType.get
+      - types.MappingProxyType.items
+      - schema_expanded_exact_NamedTuple_module_qualname_field_descriptors
+      - _hashlib.openssl_sha256
+      - _hashlib.HASH.hexdigest
+    implicit_opcode_policy:
+      compare_or_identity: exact_bool_int_str_bytes_tuple_or_none
+      contains: exact_scalar_in_exact_builtin_container
+      subscript: exact_builtin_or_mappingproxy_with_exact_int_or_string_key
+      binary_op: exact_int_add_sub_or_same_type_str_bytes_tuple_concat
+      iteration: exact_tuple_list_range_or_sorted_exact_unordered_container
+      build_and_store: call_local_exact_builtin_only
+      truth_branch: exact_bool_only
+    allowed_record_constructors:
+      - ending_rules.EndingCauseRecord
+      - ending_rules.ClauseEvaluationTraceEntry
+      - ending_rules.HigherPriorityExclusionEntry
+      - ending_rules.EndingResolutionRecord
+      - ending_rules.UnresolvedAuditFact
+      - ending_rules.FrozenResolutionEvaluation
+    record_constructor_expansion:
+      - exact_generated___new__
+      - builtins.tuple.__new__
+    allowed_exception_constructors:
+      - builtins.TypeError
+      - builtins.ValueError
+    exception_argument: one_frozen_error_code_exact_string
+    unlisted_builtin_stdlib_extension_or_native_target: fail_closed
+    named_tuple_descriptor_wildcards: forbidden
+    custom_protocol_or_native_dispatch: fail_before_dispatch
+    pinned_runtime:
+      renpy: 8.5.3.26051504
+      python: 3.12.7
+      implementation: cpython
+      cache_tag: cpython-312
+      windows_sdk_interpreter_sha256: 7c220ddbc41821a2c15199449fed09c0717e928f1d31abf0af7011c211d153a0
+    runtime_change: regenerate_report_and_independent_review
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: resolver_observation_record_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - entrypoint_id
+      - result_or_exception_signature
+      - stage_entry_counts
+      - clause_evaluation_counts
+      - canonical_call_count
+      - wrapper_field_read_names
+      - production_source_sha256
+    concrete_type:
+      module: tests.resolver_observation
+      qualname: ResolverObservationRecord
+    host: test_only_ast_instrumentation_build
+    production_import: forbidden
+    ast_equivalence: production_expressions_and_cfg_plus_callbacks_only
+    stage_order_count: 9
+    referenced_by:
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: resolver_purity_closure
+    kind: architecture_contract
+    source: design/gdd/five-axis-state.md
+    entrypoints:
+      - resolve_ending_record
+      - resolve_ending
+    required_evidence:
+      - UT_PURE
+      - INSTR
+      - STATIC
+      - BRANCH
+    allowed_dependencies:
+      - detached_snapshot_argument
+      - local_values
+      - build_validated_frozen_immutable_catalogs
+      - resolver_trusted_leaf_policy_v2_exact_and_implicit_targets
+    forbidden_dependencies:
+      - renpy_store_persistent_or_config
+      - chapter_event_or_inventory_state
+      - file_network_environment_time_or_random
+      - mutable_module_globals_or_caches
+      - service_locators_threads_or_processes
+      - reflection_or_unresolved_call_edges
+      - non_allowlisted_builtin_stdlib_extension_or_native_target
+      - non_allowlisted_opcode_operand_pair
+      - non_allowlisted_record_or_exception_constructor
+    report_artifacts:
+      - production_source_manifest
+      - transitive_callgraph
+      - global_import_call_classification
+      - branch_coverage
+      - dynamic_dependency_trace
+      - exact_violation_locations
+      - allowlist_version_and_hash
+      - exact_module_qualname_and_native_classification
+      - pinned_runtime_manifest
+      - opcode_policy_hash
+      - constructor_expansion_report
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: resolver_complexity_contract
+    kind: performance_contract
+    source: design/gdd/five-axis-state.md
+    time: "O(H + P + Q + C + B + L·R log R + L·F log F + K log K)"
+    space: "O(H + P + Q + C + B + R + F + K)"
+    variables:
+      H: history_items
+      P: applied_projection_effects
+      Q: qualification_source_inspections_and_frozen_contributors
+      C: evaluated_clauses
+      B: canonical_encoding_and_hash_bytes
+      L: maximum_UTF8_byte_length_among_sorted_source_and_fact_stable_IDs
+      R: cause_ready_source_references_and_qualification_contributor_references
+      F: output_fact_ids
+      K: emitted_causes
+    linear_order_generation_claim: forbidden
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: terminal_cause_equivalence_class_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - terminal_cause_class_id
+      - ending_id
+      - matched_cause_ids
+      - higher_priority_exclusions
+      - unresolved_token_ids
+      - terminal_outcome_signature
+      - witness_path_ids
+      - payoff_scene_ids
+      - player_facing_summary_id
+      - display_cause_ids
+    matched_cause_ordering: ending_cause_total_order_key
+    exclusion_cause_ordering: ending_cause_total_order_key
+    unresolved_token_ordering: history_first_then_stable_id
+    terminal_outcome_list_ordering: stable_sorted_ids
+    matched_cause_selection: exhaustive_evaluation_trace_not_author_subset
+    display_cause_count: [1, 3]
+    display_requires_current_ending_matched_cause: true
+    canonical_witness_only: false
+    downstream_gate_status: provisional_until_SYS_ENDING_and_SYS_NARRATIVE_GDDs
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: terminal_outcome_signature_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - ending_selection_id
+      - character_fate_outcome_ids
+      - cost_bearer_outcome_ids
+      - tragedy_closure_outcome_ids
+    list_ordering: stable_sorted_ids
+    class_identity_input: required
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: achievement_condition_entry_fields
+    kind: schema
+    source: design/gdd/local-achievements.md
+    value:
+      - achievement_id
+      - condition_event_ids
+      - condition_operator
+      - zero_delta_witness_path_ids
+      - non_best_ending_witness_path_ids
+      - reveal_policy
+      - display_order_group
+      - owner_system
+    fixed_owner_system: SYS-ACHIEVE
+    allowed_condition_operators:
+      - all
+    allowed_reveal_policies:
+      - ON_UNLOCK
+    forbidden_condition_inputs:
+      - semantic_axes
+      - counterevidence_tokens
+      - ending_thresholds
+      - resolver_predicates
+    gate_status: approved_v2_producer_rereview_waived
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: counterevidence_catalog_storage
+    kind: architecture_contract
+    source: design/gdd/five-axis-state.md
+    authoring_records: exact_tuple_of_immutable_named_tuples
+    runtime_index: types.MappingProxyType
+    validation_lifecycle: import_build_time_before_freeze
+    runtime_resolver_revalidates_schema: false
+    invalid_fixture_entrypoint: pure_private_validator_or_isolated_module_initialization
+    resolver_injection_seam: forbidden
+    nested_mutable_values: forbidden
+    runtime_mutation_api: forbidden
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: route_qualification_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    choice_interface_status: frozen_2026-07-27
+    production_source_binding_status: exact_positive_bindings_revised_in_narrative_content_baseline_v1_2_validator_evidence_pending
+    value:
+      - qualification_id
+      - qualification_kind
+      - source_choice_ids
+      - source_event_ids
+      - source_resource_ids
+      - derivation_operator
+      - owner_system
+    fixed_owner_system: SYS-ENDING
+    allowed_qualification_kinds:
+      - route_membership
+      - exclusive_commitment
+      - resource_possession
+    allowed_derivation_operators:
+      - all
+      - any
+    source_union_nonempty: required
+    dynamic_state_input: ordered_choice_history_only
+    derived_event_resource_source: frozen_route_fact_projection_index
+    external_live_state_reads: forbidden
+    persisted_boolean_state: forbidden
+    axis_or_counterevidence_proxy_sources: forbidden
+    rain_stops_predicate_input: forbidden
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: rain_stops_positive_predicate
+    kind: predicate
+    source: design/gdd/five-axis-state.md
+    expression: "all five semantic axes are exact int 3 and unresolved_counterevidence is empty"
+    forbidden_additional_inputs:
+      - route_qualifications
+      - completed_events
+      - resource_possession
+      - persistent_unlocks
+      - external_live_state
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: choice_semantic_projection_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    choice_side_contract_status: frozen_2026-07-27
+    production_content_status: provisional_pending_SYS_NARRATIVE
+    value:
+      - choice_id
+      - axis_deltas
+      - completed_event_ids
+      - resource_effects
+    record_container: exact_immutable_tuple
+    index_storage: private_types_MappingProxyType
+    choice_coverage: exactly_one_projection_per_catalog_choice
+    axis_delta_contract: exact_canonical_tuple_each_delta_one_max_two_axes
+    replayed_axes_must_equal_snapshot: true
+    event_resource_reference_integrity: required
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: route_resource_effect_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - resource_id
+      - operation
+    allowed_operations:
+      - acquire
+      - consume
+    duplicate_resource_in_projection: forbidden
+    path_legality: acquire_only_when_absent_and_consume_only_when_present
+    runtime_duplicate_acquire: route_fact_fold_ValueError
+    runtime_absent_consume: route_fact_fold_ValueError
+    later_stage_call_count_after_runtime_error: 0
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: semantic_value_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - value_id
+      - category
+      - description
+      - evidence_reference
+      - owner
+    allowed_categories:
+      - information
+      - item
+      - time
+      - autonomy
+      - route
+      - concrete_payoff
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: repair_cost_entry_fields
+    kind: schema
+    source: design/gdd/five-axis-state.md
+    value:
+      - cost_id
+      - category
+      - description
+      - evidence_reference
+      - owner
+    allowed_categories:
+      - resource_loss
+      - character_burden
+      - route_opportunity_loss
+      - concrete_compensation
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: semantic_axes
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value:
+      - understanding
+      - autonomy
+      - truth
+      - preparation
+      - sacrifice
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: axis_max
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 3
+    unit: evidence
+    referenced_by:
+      - SYS-STATE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: max_affected_axes_per_choice
+    kind: constant
+    source: design/gdd/five-axis-state.md
+    value: 2
+    unit: axes
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: choice_novelty
+    kind: formula
+    source: design/gdd/five-axis-state.md
+    expression: "N(c, H) = 1 if c not in H else 0"
+    variables:
+      - choice_id
+      - choice_history
+    output_range: [0, 1]
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-TEST
+
+  - name: axis_update
+    kind: formula
+    source: design/gdd/five-axis-state.md
+    expression: "axis_next(a) = min(AXIS_MAX, axis_current(a) + N(c, H) * delta(a))"
+    variables:
+      - axis_current
+      - axis_max
+      - choice_novelty
+      - axis_delta
+    output_range: [0, 3]
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-TEST
+
+  - name: affected_axis_count
+    kind: formula
+    source: design/gdd/five-axis-state.md
+    expression: "affected_axis_count = sum(delta(a) for a in AXES)"
+    variables:
+      - semantic_axes
+      - axis_delta
+    output_range: [0, 5]
+    valid_submission_range: [0, 2]
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: unresolved_counterevidence
+    kind: formula
+    source: design/gdd/five-axis-state.md
+    expression: "fold(history): revoke(t) adds t; build-validated repair(t) removes t only if currently unresolved; absent/already-resolved runtime target raises ValueError; unknown/wrong-domain/mode/irreversible references fail before freeze"
+    variables:
+      - choice_history
+      - counterevidence_catalog
+    output_range: [0, 10]
+    referenced_by:
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: independent_scoring_opportunity
+    kind: predicate
+    source: design/gdd/five-axis-state.md
+    expression: "distinct node/choice IDs and replacing earlier score leaves later opportunities reachable with unchanged deltas and no automatic token change"
+    variables:
+      - branch_graph
+      - axis_delta
+      - counterevidence_effect
+    referenced_by:
+      - SYS-STATE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: evidence_opportunities_per_axis
+    kind: tuning_knob
+    source: design/gdd/five-axis-state.md
+    target_range: [4, 5]
+    safe_range: [4, 6]
+    unit: opportunities_offered_per_true_ending_recovery_route
+    enforcement: hard_minimum_for_true_ending_witness
+    referenced_by:
+      - SYS-STATE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: same_axis_opportunities_per_chapter
+    kind: tuning_knob
+    source: design/gdd/five-axis-state.md
+    target_range: [0, 1]
+    safe_range: [0, 1]
+    unit: opportunities_per_reachable_path_per_chapter
+    referenced_by:
+      - SYS-STATE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: zero_delta_major_choice_ratio
+    kind: tuning_knob
+    source: design/gdd/five-axis-state.md
+    target_range_percent: [45, 65]
+    safe_range_percent: [35, 70]
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: irreversible_token_definition_count
+    kind: tuning_knob
+    source: design/gdd/five-axis-state.md
+    target_range: [0, 2]
+    safe_range: [0, 2]
+    unit: token_definitions
+    enforcement: advisory_warning_above_two
+    referenced_by:
+      - SYS-STATE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: axis_opportunity_spread
+    kind: tuning_knob
+    source: design/gdd/five-axis-state.md
+    target_range: [0, 1]
+    safe_range: [0, 1]
+    unit: opportunity_count_difference_per_canonical_route
+    enforcement: advisory_warning
+    referenced_by:
+      - SYS-STATE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: terminal_cause_classes_per_ending
+    kind: tuning_knob
+    source: design/gdd/five-axis-state.md
+    target_range: [1, 6]
+    safe_range: [1, 12]
+    warning_range: [7, 12]
+    hard_failure_above: 12
+    unit: terminal_cause_equivalence_classes_per_ending
+    signature_merge_to_meet_budget: forbidden
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_priority
+    kind: constant
+    source: design/gdd/deterministic-ending-resolution.md
+    value:
+      - rain_stops
+      - her_own_name
+      - see_the_sea
+      - one_person_train
+      - golden_cage
+      - unsent_postcard
+    selection_rule: first_true_predicate
+    fallback_ending_id: unsent_postcard
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-JOURNAL
+      - SYS-TEST
+
+  - name: terminal_route_qualification_ids
+    kind: constant
+    source: design/gdd/deterministic-ending-resolution.md
+    value:
+      - qualification_independent_contact_route
+      - qualification_shared_escape_route
+      - qualification_solo_departure_route
+      - qualification_old_order_return_route
+    qualification_kind: route_membership
+    owner_system: SYS-ENDING
+    terminal_path_mutual_exclusivity: required
+    source_binding_status: frozen_in_narrative_content_baseline_v1_2
+    source_binding_due: null
+    content_freeze_allowed_before_binding: false
+    rain_stops_predicate_input: forbidden
+    referenced_by:
+      - SYS-ENDING
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: narrative_route_qualification_bindings_v1
+    kind: content_catalog
+    source: design/narrative/seven-day-content-baseline.md
+    owner_system: SYS-NARRATIVE
+    derivation_operator: all
+    records:
+      qualification_independent_contact_route:
+        source_choice_ids: [day6_commit_independent_contact]
+        source_event_ids: [event_independent_route_committed, event_contact_risk_handover_complete, event_route_preference_honored]
+        source_resource_ids: [resource_contact_card]
+      qualification_shared_escape_route:
+        source_choice_ids: [day6_commit_shared_escape]
+        source_event_ids: [event_shared_route_committed, event_shared_cost_acknowledged, event_route_preference_honored]
+        source_resource_ids: [resource_two_tickets]
+      qualification_solo_departure_route:
+        source_choice_ids: [day6_commit_solo_departure]
+        source_event_ids: [event_solo_route_committed, event_no_continuing_contact_commitment, event_route_preference_honored]
+        source_resource_ids: [resource_single_ticket]
+        entry_guard_requires_resource_absent: resource_contact_card
+        absence_is_not_qualification_record_field: true
+      qualification_old_order_return_route:
+        source_choice_ids: [day6_commit_old_order_return]
+        source_event_ids: [event_old_order_route_committed]
+        source_resource_ids: []
+    commitment_choice_active_count_per_terminal_path: 1
+    zero_qualification_fallback_choice_id: day6_no_executable_route
+    referenced_by:
+      - SYS-ENDING
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: route_qualification_truth
+    kind: formula
+    source: design/gdd/deterministic-ending-resolution.md
+    expression: "Q(q) = all(f.truth for f in S_q) when derivation_operator is all; otherwise Q(q) = any(f.truth for f in S_q)"
+    variables:
+      - qualification_id
+      - ordered_choice_history
+      - completed_event_ids
+      - resource_possession_ids
+      - derivation_operator
+      - qualification_source_facts
+    source_union_nonempty: required
+    complete_source_evaluation_without_short_circuit: required
+    source_fact_shape: [source_kind, source_id, truth, contributor_choice_ids]
+    selected_ending_fate_as_source: forbidden
+    output: exact_bool
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_predicate_truth
+    kind: formula
+    source: design/gdd/deterministic-ending-resolution.md
+    predicates:
+      rain_stops: "understanding == 3 and autonomy == 3 and truth == 3 and preparation == 3 and sacrifice == 3 and unresolved_token_count == 0"
+      her_own_name: "autonomy >= 3 and truth >= 3 and understanding >= 2 and qualification_independent_contact_route and no unresolved autonomy/truth token"
+      see_the_sea: "autonomy >= 2 and preparation >= 2 and sacrifice >= 2 and understanding >= 1 and truth >= 1 and qualification_shared_escape_route and no unresolved autonomy/truth/sacrifice token"
+      one_person_train: "qualification_solo_departure_route and (understanding <= 1 or preparation <= 1 or at least one unresolved understanding/preparation/truth token)"
+      golden_cage: "qualification_old_order_return_route and at least one unresolved autonomy token"
+      unsent_postcard: "always_true"
+    output: exact_bool_per_ending
+    domain_token_conditions_expand_to_exact_atomic_clauses: required
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_selection
+    kind: formula
+    source: design/gdd/deterministic-ending-resolution.md
+    expression: "selected_ending = first ending in ending_priority whose complete predicate root is true"
+    input:
+      - ending_priority
+      - ending_predicate_truth
+    output: exactly_one_registered_ending_id
+    empty_result: impossible_for_legal_snapshot
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: display_cause_selection
+    kind: formula
+    source: design/gdd/deterministic-ending-resolution.md
+    expression: "first presentation-safe selected-ending anchor plus at most two stable-unique total-ordered safe remaining causes"
+    output_range: [1, 3]
+    first_item_non_fallback: selected_ending_first_safe_matched_cause
+    first_item_unsent_postcard: concrete_failure_or_unresolved_by_frozen_fallback_order
+    postcard_constant_match: audit_only
+    presentation_safe_summary_required: true
+    ui_reordering: forbidden
+    raw_axis_threshold_or_matrix_display: forbidden
+    referenced_by:
+      - SYS-ENDING
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: terminal_cause_class_identity
+    kind: formula
+    source: design/gdd/deterministic-ending-resolution.md
+    input_field_order:
+      - ending_id
+      - ordered_matched_cause_ids
+      - ordered_higher_priority_exclusions
+      - ordered_unresolved_token_ids
+      - terminal_outcome_signature
+    any_field_difference_creates_new_class: true
+    signature_merge_to_meet_budget: forbidden
+    output: exactly_one_class_key_per_legal_terminal_path
+    referenced_by:
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: ending_performance_budget
+    kind: performance_contract
+    source: design/gdd/deterministic-ending-resolution.md
+    metric: p95_canonical_resolver_time_ms
+    value: provisional_downstream_gate
+    whole_frame_budget_ms_not_inherited: 16.6
+    benchmark_manifest_required:
+      - minimum_hardware
+      - build_type
+      - timer
+      - gc_and_background_policy
+      - warmup_discard
+      - sample_count
+      - p95_algorithm
+      - maximum_content_fixture
+      - resolver_budget_ms
+    runtime:
+      renpy: 8.5.3
+      python: 3.12
+      platform: Windows
+    forbidden_shortcuts:
+      - file_or_network_io
+      - mutable_cache
+      - approximate_selection
+      - weakened_purity
+    evidence:
+      - UT_PURE
+      - STATIC
+    referenced_by:
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: choice_execution_order
+    kind: architecture_contract
+    source: design/gdd/choice-and-causality-record.md
+    value:
+      - player_confirmation
+      - apply_choice_history_commit
+      - immediate_reaction
+      - later_control_flow
+    normal_commit_result: APPLIED
+    duplicate_result: no_reaction_and_fail_closed
+    interaction_or_save_boundary_between_commit_and_reaction: forbidden
+    direct_axis_or_history_write: forbidden
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TENSION
+      - SYS-TEST
+
+  - name: choice_reaction_join_cardinality
+    kind: cardinality_contract
+    source: design/gdd/choice-and-causality-record.md
+    expression: "for every player-facing choice c, exactly one reaction binding exists and its reaction_id exact-equals c.immediate_reaction_id"
+    choice_to_binding: exactly_one
+    binding_to_choice: exactly_one
+    reaction_and_event_identity_sharing_between_choices: forbidden
+    reverse_event_metadata: [choice_id, reaction_binding_id]
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: choice_payoff_join_cardinality
+    kind: cardinality_contract
+    source: design/gdd/choice-and-causality-record.md
+    expression: "each choice declares one or more unique payoff_ids; each declared (choice_id, payoff_id) has exactly one binding; binding count equals declared payoff count"
+    choice_to_payoff: one_to_many_nonempty
+    choice_payoff_pair_to_binding: exactly_one
+    every_declared_payoff_used_by_witness: required
+    every_choice_prehistory_continuation_has_witness: required
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: choice_proof_kind_nullability_matrix
+    kind: schema_constraint
+    source: design/gdd/choice-and-causality-record.md
+    allowed_proof_kinds:
+      history_guard:
+        guard_reference_id_or_none: non_null
+        counterfactual_witness_id_or_none: null
+        outcome_reference_ids: exact_empty_tuple
+      counterfactual_outcome:
+        guard_reference_id_or_none: null
+        counterfactual_witness_id_or_none: non_null
+        outcome_reference_ids: nonempty_when_outcome_difference_or_empty_only_for_event_absence
+    modes_mutually_exclusive: true
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: choice_restore_checkpoint_contract
+    kind: lifecycle_contract
+    source: design/gdd/choice-and-causality-record.md
+    conceptual_only_not_persisted: true
+    stable_checkpoints:
+      - before_choice
+      - after_reaction
+      - before_payoff
+      - after_payoff
+    unstable_checkpoints:
+      - confirmed
+      - committed_before_reaction
+    observation_window: after_restore_spy_reset_to_frozen_horizon
+    expected_counts_by_checkpoint:
+      before_choice:
+        commit_count: exactly_one_after_reconfirmation
+        reaction_count: exactly_one
+        each_payoff_id_count: zero_or_one
+        terminal_total_payoff_count: at_least_one_if_horizon_reaches_terminal
+      after_reaction:
+        commit_count: zero
+        reaction_count: zero
+        each_future_payoff_id_count: zero_or_one
+        terminal_future_payoff_count: at_least_one_if_horizon_reaches_terminal
+      before_payoff:
+        commit_count: zero
+        reaction_count: zero
+        target_payoff_count: exactly_one_by_frozen_horizon
+      after_payoff:
+        commit_count: zero
+        reaction_count: zero
+        completed_target_payoff_count: zero_by_next_control_boundary
+    rollback_after_payoff_to_distinct_before_payoff: starts_new_before_payoff_observation_window
+    independent_reaction_or_payoff_ledger: forbidden
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: choice_ui_presentation_states
+    kind: presentation_contract
+    source: design/gdd/choice-and-causality-record.md
+    value:
+      - idle
+      - focused
+      - pressed
+      - confirmed
+      - disabled
+      - timeout
+    semantic_class_or_outcome_encoding: forbidden
+    canonical_choice_id_preserved_across_equivalent_inputs: true
+    non_timed_path_required: true
+    resolution_baseline: 1280x720
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-TENSION
+      - SYS-TEST
+
+  - name: choice_surface_partition_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "manifest_valid(M) and |S(M)| >= 1 and surface_ids(D_C) union surface_ids(D_A) = S(M) and for every x in S(M), count(D_C,x) + count(D_A,x) = 1 and every equivalent input in E is valid against raw D_C"
+    variables:
+      - source_manifest
+      - discovered_surfaces
+      - raw_choice_assignments
+      - raw_allowlist_assignments
+      - equivalent_inputs
+      - raw_assignment_multiplicity
+    output: exact_bool
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-TENSION
+      - SYS-TEST
+
+  - name: choice_projection_consistency_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "every catalog choice has exactly one semantic projection and one counterevidence entry, and SYS-STATE axis replay exact-equals snapshot axes"
+    variables:
+      - catalog_choices
+      - ordered_choice_history
+      - semantic_projection_index
+      - counterevidence_index
+      - snapshot_axes
+    output: exact_bool
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: route_projection_replay_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "references_registered(history) and events_union_valid(history) and resources_stepwise_legal(history)"
+    variables:
+      - ordered_choice_history
+      - completed_event_ids
+      - resource_possession_ids
+      - resource_operations
+    output: exact_bool
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: reaction_join_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "for choice c, binding count is one, reaction IDs exact-match, and reverse event metadata exact-matches"
+    variables:
+      - player_facing_choice_record
+      - choice_reaction_binding_records
+      - reaction_event_metadata
+    output: exact_bool
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: payoff_join_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "raw declared payoff list is nonempty and duplicate-free; every declared choice-payoff pair has exactly one binding; total binding count equals raw declaration count; every binding passes XOR proof-field and proof-reference joins and resolves to exactly one valid player-perceptible semantic-evidence record"
+    variables:
+      - player_facing_choice_record
+      - choice_payoff_binding_records
+      - choice_proof_kind_nullability_matrix
+      - choice_payoff_semantic_evidence_records
+    output: exact_bool
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: continuation_payoff_coverage_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "every reachable (choice, prehistory, legal terminal continuation) has at least one valid witness and every declared payoff is used by at least one witness"
+    variables:
+      - choice_graph
+      - canonical_prehistories
+      - legal_terminal_continuations
+      - choice_payoff_witness_records
+    output: exact_bool
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: restored_traversal_occurrence_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "counts after restore-spy reset equal the exact checkpoint-kind row; every payoff count is zero or one; terminal payoff requirements apply only to the before_choice and after_reaction rows whose frozen horizon reaches terminal"
+    variables:
+      - choice_id
+      - restored_traversal
+      - checkpoint_kind
+      - commit_count
+      - reaction_count
+      - payoff_counts
+      - terminal_reached
+    output: exact_bool
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: qualification_source_binding_valid
+    kind: formula
+    source: design/gdd/choice-and-causality-record.md
+    expression: "operator is all or any; choice/event/resource source union is nonempty; references resolve; event/resource facts are derivable from choice projections"
+    variables:
+      - route_qualification_record
+      - source_choice_ids
+      - source_event_ids
+      - source_resource_ids
+      - derivation_operator
+      - choice_projection_index
+    output: exact_bool
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_content_baseline_version
+    kind: constant
+    source: design/narrative/seven-day-content-baseline.md
+    value: narrative_content_baseline:v1.2
+    owner_system: SYS-NARRATIVE
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: canonical_production_units_v1
+    kind: constant
+    source: design/narrative/seven-day-content-baseline.md
+    value:
+      - chapter_prologue_rain_platform
+      - chapter_day1_her_own_name
+      - chapter_day2_two_game_tokens
+      - chapter_day3_empty_school
+      - chapter_day4_seaside_train
+      - chapter_day5_family_lie
+      - chapter_day6_no_safe_house
+      - chapter_day7_before_red_well
+      - ending_rain_stops
+      - ending_her_own_name
+      - ending_see_the_sea
+      - ending_one_person_train
+      - ending_golden_cage
+      - ending_unsent_postcard
+      - epilogue_rain_stops_arcade
+    exact_count: 15
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: narrative_content_baseline_counts_v1_2
+    kind: content_budget
+    source: design/narrative/seven-day-content-baseline.md
+    production_unit_count: 15
+    player_facing_choice_count: 54
+    agency_transaction_count: 9
+    route_critical_token_count: 7
+    irreversible_token_count: 0
+    route_qualification_binding_count: 4
+    canonical_ending_witness_count: 6
+    terminal_cause_family_forecast_count: 11
+    exact_terminal_cause_class_count: enumeration_required_before_content_lock
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_chapter_responsibility_ids_v1_2
+    kind: content_catalog
+    source: design/narrative/seven-day-content-baseline.md
+    owner_system: SYS-NARRATIVE
+    exact_count: 15
+    value:
+      chapter_prologue_rain_platform: responsibility_prologue_observe_ask_prepare
+      chapter_day1_her_own_name: responsibility_day1_daily_autonomy
+      chapter_day2_two_game_tokens: responsibility_day2_alias_and_tokens
+      chapter_day3_empty_school: responsibility_day3_evidence_and_pause
+      chapter_day4_seaside_train: responsibility_day4_self_controlled_options
+      chapter_day5_family_lie: responsibility_day5_truth_and_route_answer
+      chapter_day6_no_safe_house: responsibility_day6_resources_cost_and_commitment
+      chapter_day7_before_red_well: responsibility_day7_acknowledge_and_resolve
+      ending_rain_stops: responsibility_ending_rain_stops
+      ending_her_own_name: responsibility_ending_her_own_name
+      ending_see_the_sea: responsibility_ending_see_the_sea
+      ending_one_person_train: responsibility_ending_one_person_train
+      ending_golden_cage: responsibility_ending_golden_cage
+      ending_unsent_postcard: responsibility_ending_unsent_postcard
+      epilogue_rain_stops_arcade: responsibility_epilogue_ordinary_future
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: narrative_agency_transaction_ids_v1_2
+    kind: content_catalog
+    source: design/narrative/seven-day-content-baseline.md
+    owner_system: SYS-NARRATIVE
+    exact_count: 9
+    value:
+      - agency_prologue_destination
+      - agency_day1_clothing
+      - agency_day2_alias
+      - agency_day3_truth_pace
+      - agency_day4_route_preparation
+      - agency_day4_independent_contact
+      - agency_day5_response
+      - agency_day6_cost
+      - agency_day6_cost_reconsideration
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_character_answer_derivation_rules_v1_2
+    kind: content_catalog
+    source: design/narrative/seven-day-content-baseline.md
+    owner_system: SYS-NARRATIVE
+    records:
+      derivation_day4_route_preparation:
+        transaction_id: agency_day4_route_preparation
+        allowed_answer_state_ids: [preserve_executable_self_controlled_option]
+        priority_rule_id: single_candidate_day4_route_preparation_v1
+        observable_evidence_ids: [action_erii_places_ticket_map_and_contact_options, action_erii_returns_self_controlled_option]
+      derivation_day4_independent_contact:
+        transaction_id: agency_day4_independent_contact
+        allowed_answer_state_ids: [keep_independent_contact_option]
+        priority_rule_id: single_candidate_day4_independent_contact_v1
+        observable_evidence_ids: [action_erii_keeps_alias_note_and_arcade_token_ready]
+      erii_route_answer_derivation_v1:
+        transaction_id: agency_day5_response
+        allowed_answer_state_ids: [shared_escape, independent_contact, solo_departure, continue_without_executable_route]
+        priority_rule_id: two_tickets_then_contact_then_single_then_continue_v1
+        forbidden_input_kinds: [axis, counterevidence_token, qualification, ending_predicate, ending_prediction, developer_flag]
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_terminal_cause_families_v1_2
+    kind: production_variant_catalog
+    source: design/narrative/seven-day-content-baseline.md
+    owner_system: SYS-NARRATIVE
+    exact_family_count: 11
+    family_ids:
+      - family_rain_stops_ordinary_future
+      - family_her_own_name_independent_contact
+      - family_see_the_sea_identity_cost
+      - family_see_the_sea_route_cost
+      - family_one_person_train_understanding_loss
+      - family_one_person_train_preparation_truth_loss
+      - family_golden_cage_first_route_override
+      - family_golden_cage_daily_override
+      - family_unsent_postcard_no_route
+      - family_unsent_postcard_truth_loss
+      - family_unsent_postcard_shifted_cost
+    not_terminal_cause_equivalence_class_identity: true
+    actual_class_count_source: terminal_class_enumeration_record
+    family_does_not_authorize_signature_merge: true
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_true_ending_recovery_opportunities_v1_2
+    kind: content_catalog
+    source: design/narrative/seven-day-content-baseline.md
+    owner_system: SYS-NARRATIVE
+    opportunities:
+      understanding: [prologue_read_note, day1_read_food_gesture, day2_accept_alias, day3_honor_pause]
+      autonomy: [prologue_accept_destination, day2_accept_alias, day3_honor_pause, day5_honor_erii_response]
+      truth: [prologue_notice_tracker, day3_share_school_evidence, day4_register_independent_contact, day5_share_full_archive]
+      preparation: [prologue_notice_service_exit, day2_save_second_token, day4_buy_two_tickets_real_name, day5_include_self_in_truth]
+      sacrifice: [day2_spend_both_tokens, day4_buy_two_tickets_real_name, day5_include_self_in_truth, day6_burn_old_identity]
+    each_axis_exact_count: 4
+    earliest_miss_requires_remaining_three_reachable: true
+    per_path_per_chapter_per_axis_increment_max: 1
+    earliest_miss_witness_ids:
+      understanding: witness_recovery_u_miss_v1
+      autonomy: witness_recovery_a_miss_v1
+      truth: witness_recovery_t_miss_v1
+      preparation: witness_recovery_p_miss_v1
+      sacrifice: witness_recovery_s_miss_v1
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_counterevidence_catalog_v1
+    kind: content_catalog
+    source: design/narrative/seven-day-content-baseline.md
+    owner_system: SYS-NARRATIVE
+    irreversible_token_count: 0
+    repeat_revoke_policy: idempotent_token_membership_with_ordered_contributor_append
+    repair_requires_repaired_source_choice_ids_exact_equal_all_unresolved_contributors: true
+    generic_apology_without_full_contributor_acknowledgement: invalid
+    records:
+      token_override_first_destination:
+        domain: autonomy
+        resolution_mode: repairable
+        consequence_id: consequence_erii_waits_for_orders
+        repair_choice_ids: [day1_repair_first_destination]
+      token_override_daily_choice:
+        domain: autonomy
+        resolution_mode: repairable
+        consequence_id: consequence_erii_stops_offering_preferences
+        repair_choice_ids: [day5_repair_daily_choice]
+      token_silence_as_consent:
+        domain: understanding
+        resolution_mode: repairable
+        consequence_id: consequence_ambiguous_refusal_missed
+        repair_choice_ids: [day2_admit_alias_unknown]
+      token_hide_school_evidence:
+        domain: truth
+        resolution_mode: repairable
+        consequence_id: consequence_archive_initially_rejected
+        repair_choice_ids: [day5_repair_school_evidence]
+      token_withhold_family_truth:
+        domain: truth
+        resolution_mode: repairable
+        consequence_id: consequence_terminal_fact_missing
+        repair_choice_ids: [day6_disclose_withheld_archive]
+      token_abandon_backup_plan:
+        domain: preparation
+        resolution_mode: repairable
+        consequence_id: consequence_route_resource_lost
+        repair_choice_ids: [day6_reopen_service_exit]
+      token_shift_promised_cost:
+        domain: sacrifice
+        resolution_mode: repairable
+        consequence_id: consequence_erii_bears_promised_cost
+        repair_choice_ids: [day6_take_cost_back]
+    referenced_by:
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_chapter_record
+    kind: schema
+    source: design/gdd/seven-day-chapter-script.md
+    fields:
+      - chapter_id
+      - title
+      - entry_scene_id
+      - terminal_scene_ids
+      - required_scene_ids
+      - optional_scene_ids
+      - mandatory_responsibility_id
+      - input_fact_ids
+      - produced_event_ids
+      - choice_ids
+      - payoff_ids
+      - next_chapter_or_ending_ids
+      - chapter_summary_id
+      - owner_system
+    fixed_owner_system: SYS-NARRATIVE
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: narrative_scene_record
+    kind: schema
+    source: design/gdd/seven-day-chapter-script.md
+    fields:
+      - scene_id
+      - chapter_id
+      - purpose
+      - entry_condition_ids
+      - active_character_ids
+      - character_constraint_ids
+      - input_fact_ids
+      - choice_surface_ids
+      - choice_ids
+      - reaction_ids
+      - payoff_ids
+      - produced_event_ids
+      - outcome_reference_ids
+      - next_scene_ids
+      - perceptible_summary_ids
+      - owner_system
+    payoff_ids_order_is_semantic: true
+    fixed_owner_system: SYS-NARRATIVE
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: agency_transaction_record
+    kind: schema
+    source: design/gdd/seven-day-chapter-script.md
+    fields:
+      - transaction_id
+      - request_event_id
+      - answer_event_id
+      - answer_subject_id
+      - answer_state_id
+      - allowed_answer_state_ids
+      - answer_derivation_record_id
+      - source_response_node_ids
+      - response_choice_ids
+      - accepting_choice_ids
+      - overriding_choice_ids
+      - response_outcome_bindings
+      - resulting_outcome_ids
+      - owner_system
+    response_partition_required: true
+    source_response_universe_exact_match_required: true
+    per_response_nonempty_outcome_required: true
+    request_or_answer_alone_grants_autonomy: false
+    fixed_owner_system: SYS-NARRATIVE
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: character_answer_derivation_record
+    kind: schema
+    source: design/gdd/seven-day-chapter-script.md
+    fields:
+      - derivation_id
+      - transaction_id
+      - input_fact_ids
+      - allowed_answer_state_ids
+      - selected_answer_state_id
+      - observable_action_or_object_ids
+      - priority_rule_id
+      - source_hash
+      - forbidden_hidden_input_count
+      - unresolved_defect_ids
+    forbidden_input_kinds:
+      - axis
+      - counterevidence_token
+      - qualification
+      - ending_predicate
+      - ending_prediction
+      - developer_flag
+    selected_state_must_be_uniquely_derived: true
+    observable_evidence_nonempty: true
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: character_constraint_record
+    kind: schema
+    source: design/gdd/seven-day-chapter-script.md
+    fields:
+      - character_id
+      - source_reference_ids
+      - speech_constraints
+      - knowledge_bounds
+      - motivation_bounds
+      - relationship_baseline
+      - forbidden_behaviors
+      - approval_record_id
+      - owner_system
+    applicable_record_count_per_active_character_per_scene: 1
+    manual_scene_review_required: true
+    fixed_owner_system: SYS-NARRATIVE
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: source_game_concept_character_expression
+    kind: design_authority_reference
+    source: design/gdd/game-concept.md
+    section: 角色表达硬约束
+    status: approved
+    referenced_by:
+      - approval_character_erii_v1
+      - approval_character_lu_mingfei_v1
+      - SYS-NARRATIVE
+
+  - name: source_project_nonnegotiable_rules
+    kind: design_authority_reference
+    source: CLAUDE.md
+    section: Non-Negotiable Product Rules
+    status: approved
+    referenced_by:
+      - approval_character_erii_v1
+      - approval_character_lu_mingfei_v1
+      - SYS-NARRATIVE
+
+  - name: approval_character_erii_v1
+    kind: character_constraint_approval
+    source: design/narrative/seven-day-content-baseline.md
+    character_id: character_erii
+    authority_reference_ids: [source_game_concept_character_expression, source_project_nonnegotiable_rules]
+    checklist_version: character_constraint_review:v1
+    required_result_ids: [speech, known_facts, motivation, relationship_baseline, forbidden_behavior]
+    status: approved_design_baseline_source_hash_required_per_scene
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: approval_character_lu_mingfei_v1
+    kind: character_constraint_approval
+    source: design/narrative/seven-day-content-baseline.md
+    character_id: character_lu_mingfei
+    authority_reference_ids: [source_game_concept_character_expression, source_project_nonnegotiable_rules]
+    checklist_version: character_constraint_review:v1
+    required_result_ids: [speech, known_facts, motivation, relationship_baseline, forbidden_behavior]
+    status: approved_design_baseline_source_hash_required_per_scene
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: chapter_manifest_valid
+    kind: formula
+    source: design/gdd/seven-day-chapter-script.md
+    expression: "manifest has exact type, consumes the source-hash-bound choice_source_scanner:v1 canonical CFG artifact through narrative_manifest_projection:v1, required units exact-equal the 15 canonical production units, roots are nonempty, raw duplicate count is zero, expected and scanned units exact-equal the canonical units, unresolved and production-to-test-only edge counts are zero, and artifact/source hashes match"
+    variables:
+      - source_manifest
+      - required_content_units
+      - source_roots
+      - canonical_cfg_artifact_version
+      - canonical_cfg_artifact_hash
+      - manifest_projection_version
+      - expected_units
+      - scanned_units
+      - duplicate_unit_count
+      - unresolved_reference_count
+      - production_to_test_only_edge_count
+    output: exact_bool
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: scene_graph_valid
+    kind: formula
+    source: design/gdd/seven-day-chapter-script.md
+    expression: "graph is the canonical SYS-CHOICE CFG artifact and node catalog has exact type; raw control-node, scene and edge duplicate counts are zero; units exact-equal the 15 canonical units; every choice has exactly one owner node; sibling sets, openers, guards and replacement groups exact-match baseline v1.2; Day 6 route active count is one; ending entries exact-equal the canonical six; all nodes are reachable; the control graph terminates; every maximal path reaches exactly one ending"
+    variables:
+      - scene_graph
+      - content_units
+      - canonical_choice_node_topology
+      - registered_control_nodes
+      - ending_entries
+    output: exact_bool
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: agency_transaction_valid
+    kind: formula
+    source: design/gdd/seven-day-chapter-script.md
+    expression: "transaction and canonical-CFG-derived response source have exact types; character answer derivation uniquely selects a registered determinate state without hidden inputs; raw response, partition, binding and outcome multiplicities are unique; source and declared response universes exact-match; accepting/overriding form an exact partition; every response has a nonempty exact outcome tuple; aggregate outcomes equal the ordered unique union; accepting responses cannot revoke the current answer; only accepting choices may grant autonomy; all references resolve"
+    variables:
+      - agency_transaction
+      - answer_derivation_record
+      - source_response_choice_ids
+      - response_choice_ids
+      - accepting_choice_ids
+      - overriding_choice_ids
+      - response_outcome_bindings
+      - autonomy_delta
+      - counterevidence_effect
+      - resulting_outcome_ids
+    output: exact_bool
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: character_continuity_valid
+    kind: formula
+    source: design/gdd/seven-day-chapter-script.md
+    expression: "raw matching constraint count and raw matching review count are each exactly one before validity filtering; the only constraint is approved and source/version-valid; the only review matches the scene source hash, completes the checklist and has no unresolved defects"
+    variables:
+      - narrative_scene
+      - character_constraint_catalog
+      - active_character_ids
+      - character_scene_review_catalog
+    output: exact_bool
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: chapter_recovery_coverage_valid
+    kind: formula
+    source: design/gdd/seven-day-chapter-script.md
+    expression: "source chapters and raw catalogs have exact types; source chapters exact-equal the canonical seven; every anchor owns at least one payoff before universal pair validation; every anchor/payoff record is universally well-formed, strictly later, causally proven and backed by a registered state diff; anchor/payoff IDs are unique, payoff ownership is exactly one, no orphans exist, and every source chapter owns at least one anchor"
+    variables:
+      - source_chapters
+      - chapter_anchors
+      - payoff_candidates
+      - duplicate_anchor_id_count
+      - duplicate_payoff_id_count
+      - orphan_anchor_or_payoff_count
+      - raw_payoff_owner_count
+      - anchor_kind
+      - chapter_rank
+      - causal_proof_result
+      - perceptible_difference_result
+    output: exact_bool
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: narrative_scene_control_states
+    kind: lifecycle_contract
+    source: design/gdd/seven-day-chapter-script.md
+    conceptual_only_not_persisted: true
+    value:
+      - SceneEntered
+      - ObservationPresented
+      - AnswerRegistered
+      - ChoicePresented
+      - ChoiceCommitted
+      - ReactionEstablished
+      - ReactionCompleted
+      - Continuing
+      - PayoffRealized
+      - ChapterClosed
+      - EndingEntry
+    live_fact_sources:
+      - renpy_control_location
+      - semantic_state.choice_history
+    independent_lifecycle_ledger: forbidden
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: narrative_acceptance_oracle_records
+    kind: schema_catalog
+    source: design/gdd/seven-day-chapter-script.md
+    records:
+      narrative_content_review_record:
+        fields: [review_id, review_kind, subject_id, contract_version, source_hash, checklist_result_ids, reviewer_id, unresolved_defect_ids, owner_system]
+      validation_diagnostic_record:
+        fields: [validator_id, subject_id, valid, error_ids, offending_record_ids, catalog_emit_count, source_hash]
+      merge_preservation_record:
+        fields: [merge_node_id, prehistory_ids, history_diff_ids, unresolved_token_diff_ids, resource_diff_ids, pending_payoff_diff_ids, continuation_partition_ids]
+      character_answer_derivation_record:
+        fields: [derivation_id, transaction_id, input_fact_ids, allowed_answer_state_ids, selected_answer_state_id, observable_action_or_object_ids, priority_rule_id, source_hash, forbidden_hidden_input_count, unresolved_defect_ids]
+      character_scene_review_record:
+        fields: [review_id, scene_id, character_id, constraint_id, constraint_version, scene_source_hash, speech_result, known_fact_result, motivation_result, relationship_baseline_result, forbidden_behavior_result, reviewer_id, unresolved_defect_ids]
+      canonical_witness_replay_record:
+        fields: [witness_id, entry_node_id, ordered_choice_ids, visited_required_scene_ids, per_step_enabled_results, chapter_axis_snapshots, token_fold_result, route_fact_fold_result, ending_entry_id, resolver_result_id, first_failure_id]
+      agency_response_coverage_record:
+        fields: [transaction_id, answer_state_id, source_response_choice_ids, declared_response_choice_ids, missing_ids, extra_ids, per_response_outcome_ids]
+      action_gate_matrix_record:
+        fields: [surface_id, path_kind, phase_id, action_id, visible, enabled, focusable, invocation_count, restored_state_id]
+      accessible_semantic_fact_record:
+        fields: [subject_kind, subject_id, observable_fact_ids, confirmed_interpretation_ids, epistemic_certainty_id, ambiguity_class_id, permitted_causal_scope_ids, forbidden_inference_ids, source_hash, semantic_review_approval_id]
+      accessible_summary_binding_record:
+        fields: [subject_kind, subject_id, variant_id, accessible_causal_summary_id, source_hash, localized_text_id, owner_system]
+      audio_accessibility_binding_record:
+        fields: [audio_or_speech_cue_id, subtitle_or_alt_id, answer_state_id, registered_outcome_id, silent_mode_equivalent_id, source_hash]
+      accessibility_matrix_record:
+        fields: [scene_or_ending_id, surface_id, mode_set_id, activation_set_id, resolution_id, font_scale_id, page_id, canonical_choice_ids, outcome_ids, summary_ids, reachable_action_ids, spoken_or_visible_semantic_ids, forbidden_motion_event_count, audio_only_dependency_count, clipped_glyph_count]
+      layout_evidence_record:
+        fields: [surface_id, page_id, resolution_id, font_scale_id, content_rect_ids, reserved_quick_action_rect_id, intersection_count, clipped_glyph_count, focus_order_ids, next_action_id, previous_action_id, continue_action_id]
+      terminal_class_enumeration_record:
+        fields: [artifact_id, canonical_cfg_hash, terminal_path_count, terminal_class_ids, per_class_witness_ids, per_class_family_ids, per_class_payoff_ids, per_class_summary_ids, per_ending_class_counts, budget_verdict_ids, unresolved_defect_ids]
+      integration_gate_record:
+        fields: [gate_id, artifact_generation, input_contract_hashes, validator_ids, validator_result_ids, artifact_ids, frozen_output_hash, unresolved_defect_ids]
+      benchmark_protocol_record:
+        fields: [protocol_id, hardware_id, os_build_id, power_profile_id, build_id, renderer_id, fixture_id, input_scale_id, timer_id, gc_policy_id, process_temperature_id, file_cache_policy_id, warmup_count, run_count, sample_count, aggregation_method_id, reported_percentiles, peak_memory_metric_id, operation_count_kind_ids, threshold_ids]
+      playtest_protocol_record:
+        fields: [protocol_id, build_hash, approved_path_class_ids, per_class_minimum_counts, participant_exclusion_rules_id, fixed_question_ids, question_to_metric_map_id, coding_rubric_id, valid_participant_count, per_class_metric_eligible_counts, per_class_metric_success_counts, per_class_failure_sample_ids]
+        metric_ids: [early_choice_cause_recognition, tragedy_loss_comprehension, erii_agency_impact]
+    bare_manual_review_bool: forbidden
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: choice_content_build_hard_budgets
+    kind: budget_contract
+    source: design/gdd/choice-and-causality-record.md
+    reachable_terminal_paths_max: 4096
+    expanded_choice_prehistory_continuation_triples_max: 65536
+    continuation_choice_id_entries_max: 1048576
+    compiled_witness_artifact_bytes_max: 67108864
+    overflow_policy: fail_without_truncation_sampling_or_signature_merge
+    referenced_by:
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: chapter_recovery_anchor_kinds
+    kind: constant
+    source: design/gdd/seven-day-chapter-script.md
+    value:
+      - object
+      - information
+      - promise
+      - character_decision
+      - route_resource
+      - relationship
+      - consequence
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: total_text_characters
+    kind: tuning_knob
+    source: design/gdd/seven-day-chapter-script.md
+    target_range: [70000, 90000]
+    unit: simplified_chinese_characters
+    outside_target_policy: content_scope_review_not_automatic_build_failure
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-BUILD
+
+  - name: cross_chapter_anchor_count
+    kind: tuning_knob
+    source: design/gdd/seven-day-chapter-script.md
+    hard_minimum_per_source_chapter: 1
+    source_chapter_range: prologue_through_day_6
+    independent_hard_maximum: null
+    maximum_constrained_by:
+      - choice_content_build_hard_budgets
+      - chapter_recovery_coverage_valid
+      - manual_readability_review
+    referenced_by:
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: restore_control_location_record
+    kind: schema
+    source: design/gdd/save-load-rollback.md
+    value:
+      - control_location_id
+      - checkpoint_kind
+      - engine_statement_id
+      - source_artifact_hash
+      - action_gate_profile_id
+      - owner_system
+    exact_record: true
+    allowed_checkpoint_kinds:
+      - before_choice
+      - after_reaction
+      - before_payoff
+      - after_payoff
+    join_key:
+      - control_location_id
+      - checkpoint_kind
+    schema_owner: SYS-SAVE
+    production_mapping_owner: SYS-NARRATIVE
+    file_line_identity: forbidden
+    referenced_by:
+      - SYS-SAVE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: UNSUPPORTED_CONTROL_LOCATION
+    kind: constant
+    source: design/gdd/save-load-rollback.md
+    value: UNSUPPORTED_CONTROL_LOCATION
+    stage: post_load
+    condition: valid_semantic_and_ending_state_with_no_exact_control_location_match
+    outcome: blocking_safe_flow
+    referenced_by:
+      - SYS-SAVE
+      - SYS-NARRATIVE
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: UNREADABLE_SAVE
+    kind: constant
+    source: design/gdd/save-load-rollback.md
+    value: UNREADABLE_SAVE
+    stage: pre_after_load
+    condition: engine_cannot_read_or_deserialize_save_container
+    outcome: remain_on_current_safe_load_surface
+    referenced_by:
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: INTERNAL_LOAD_VALIDATION_FAILURE
+    kind: constant
+    source: design/gdd/save-load-rollback.md
+    value: INTERNAL_LOAD_VALIDATION_FAILURE
+    stage: post_load
+    condition: unexpected_internal_validator_or_catalog_failure
+    outcome: blocking_safe_flow_without_attributing_fault_to_player_save
+    referenced_by:
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: load_compatibility_result
+    kind: formula
+    source: design/gdd/save-load-rollback.md
+    expression: >-
+      LEGACY_INCOMPATIBLE if either sentinel is None; otherwise
+      UNSUPPORTED_VERSION if either sentinel has a wrong exact type or unknown
+      value without invoking state validation; otherwise CORRUPT_STATE if
+      semantic or ending validation fails; otherwise
+      UNSUPPORTED_CONTROL_LOCATION if the exact control-location match count is
+      not one; otherwise CORRUPT_STATE if checkpoint coherence fails; otherwise
+      SUPPORTED
+    variables:
+      - semantic_sentinel
+      - ending_sentinel
+      - semantic_state_valid
+      - ending_lifecycle_valid
+      - control_location_match_count
+      - checkpoint_state_coherent
+    output:
+      - SUPPORTED
+      - LEGACY_INCOMPATIBLE
+      - UNSUPPORTED_VERSION
+      - CORRUPT_STATE
+      - UNSUPPORTED_CONTROL_LOCATION
+    excludes_preload_result: UNREADABLE_SAVE
+    referenced_by:
+      - SYS-SAVE
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: restore_checkpoint_join_valid
+    kind: formula
+    source: design/gdd/save-load-rollback.md
+    expression: >-
+      both exact catalogs are nonempty and duplicate-free; every checkpoint
+      record has exactly one location record and every location record has
+      exactly one checkpoint record on control_location_id plus checkpoint_kind;
+      all source hashes and engine statement identities are valid
+    variables:
+      - checkpoint_evidence_catalog
+      - location_mapping_catalog
+      - control_location_id
+      - checkpoint_kind
+      - source_artifact_hash
+      - engine_statement_id
+    output: exact_bool
+    referenced_by:
+      - SYS-SAVE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: save_restore_integrity_valid
+    kind: formula
+    source: design/gdd/save-load-rollback.md
+    expression: >-
+      the expected checkpoint record is exact; restored control location,
+      state sentinel, history, axes and ending lifecycle equal the saved
+      checkpoint; the checkpoint/location join is valid; and the reused
+      restored_traversal_occurrence_valid formula passes for the target choice,
+      restored traversal and checkpoint kind
+    variables:
+      - expected_checkpoint_record
+      - restored_snapshot
+      - post_restore_trace
+      - checkpoint_catalog
+      - location_catalog
+      - restored_traversal_occurrence_valid
+    output: exact_bool
+    persistent_state_in_equality: false
+    persistent_invariance_assertion: required
+    referenced_by:
+      - SYS-SAVE
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: save_action_allowed
+    kind: formula
+    source: design/gdd/save-load-rollback.md
+    expression: >-
+      allowed_phase(phase, action) and gate_profile[action].visible and
+      gate_profile[action].enabled and gate_profile[action].focusable
+    variables:
+      - phase
+      - action
+      - gate_profile
+    output: exact_bool
+    stable_phase_actions:
+      - manual_save
+      - quick_save
+      - auto_save
+      - load
+      - quick_load
+      - rollback
+    main_menu_actions:
+      - load
+      - quick_load
+    denied_phases:
+      - CriticalInteraction
+      - LoadedUnvalidated
+      - BlockingSafeFlow
+    referenced_by:
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: save_load_performance_pass
+    kind: formula
+    source: design/gdd/save-load-rollback.md
+    expression: >-
+      for each manual, quick and auto class, nearest-rank save p95 is at most
+      500 ms and maximum save latency is at most 1000 ms; nearest-rank load p95
+      is at most 1000 ms
+    variables:
+      - save_latency_samples_by_origin
+      - load_latency_samples_by_slot_class
+      - origin_or_slot_class
+      - latency_milliseconds
+    output: exact_bool
+    aggregation: nearest_rank_p95
+    warmup_count_per_class: 5
+    measured_sample_count_per_class: 30
+    referenced_by:
+      - SYS-SAVE
+      - SYS-TEST
+      - SYS-BUILD
+
+  - name: manual_slot_page_count
+    kind: tuning_knob
+    source: design/gdd/save-load-rollback.md
+    target: 3
+    safe_range: [1, 5]
+    unit: pages
+    slots_per_page: 6
+    default_total_slots: 18
+    referenced_by:
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: quicksave_slot_count
+    kind: tuning_knob
+    source: design/gdd/save-load-rollback.md
+    target: 3
+    safe_range: [1, 10]
+    unit: rotating_slots
+    rotation_order: oldest_replaced_newest_identity_preserved
+    referenced_by:
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: autosave_slot_count
+    kind: tuning_knob
+    source: design/gdd/save-load-rollback.md
+    target: 6
+    safe_range: [3, 10]
+    unit: rotating_slots
+    rotation_order: oldest_replaced_newest_identity_preserved
+    referenced_by:
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: autosave_checkpoint_policy
+    kind: tuning_knob
+    source: design/gdd/save-load-rollback.md
+    target:
+      - every_after_reaction
+      - chapter_closing_after_payoff
+    allowed_locations: registered_stable_control_points_only
+    requires: save_action_allowed_true
+    denied_request_policy: skip_without_delayed_write
+    referenced_by:
+      - SYS-SAVE
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: slot_summary_fields
+    kind: schema
+    source: design/gdd/save-load-rollback.md
+    value:
+      - chapter_title
+      - playtime
+      - timestamp
+      - compatibility_hint
+    authoritative_for_load_validation: false
+    forbidden_fields:
+      - scene_screenshot
+      - route
+      - choice
+      - hidden_axis
+      - reaction
+      - payoff
+      - ending
+    referenced_by:
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persist_root_field_name
+    kind: constant
+    source: design/gdd/cross-playthrough-unlocks.md
+    value: sys_persist_state
+    storage_namespace: persistent
+    canonical_product_root: true
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-ACHIEVE
+      - SYS-JOURNAL
+      - SYS-GALLERY
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persist_schema_version
+    kind: constant
+    source: design/gdd/cross-playthrough-unlocks.md
+    value: 2
+    exact_type: int_not_bool
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: persist_catalog_generation_id
+    kind: constant
+    source: design/gdd/cross-playthrough-unlocks.md
+    value: "persist_catalog:v2"
+    migration_on_change: accepted_migration_ADR_required
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-ACCESS
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: persist_root_top_level_fields
+    kind: schema
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - schema_version
+      - catalog_generation_id
+      - collection_epoch_id
+      - achievement_ids
+      - seen_achievement_ids
+      - ending_ids
+      - memory_ids
+      - settings
+    container: exact_builtin_dict
+    settings_fields:
+      - font_scale
+      - high_contrast
+      - reduced_motion
+      - flash_effects_enabled
+      - screen_shake_enabled
+    mutation_policy: complete_candidate_then_single_replacement_assignment
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: persist_normative_leaf_paths
+    kind: schema
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - schema_version
+      - catalog_generation_id
+      - collection_epoch_id
+      - achievement_ids
+      - seen_achievement_ids
+      - ending_ids
+      - memory_ids
+      - settings.font_scale
+      - settings.high_contrast
+      - settings.reduced_motion
+      - settings.flash_effects_enabled
+      - settings.screen_shake_enabled
+    leaf_field_count: 12
+    exact_types:
+      schema_version: int_not_bool
+      catalog_generation_id: str
+      collection_epoch_id: nonnegative_int_not_bool
+      achievement_ids: tuple_of_exact_str
+      seen_achievement_ids: tuple_of_exact_str_subset_of_achievement_ids
+      ending_ids: tuple_of_exact_str
+      memory_ids: tuple_of_exact_str
+      settings.font_scale: finite_approved_float
+      settings.high_contrast: bool
+      settings.reduced_motion: bool
+      settings.flash_effects_enabled: bool
+      settings.screen_shake_enabled: bool
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persistent_ownership_manifest_fields
+    kind: schema
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - manifest_generation_id
+      - root_field_name
+      - schema_version
+      - catalog_generation_id
+      - leaf_field_paths
+      - leaf_field_count
+      - exact_type_ids
+      - semantic_owner_system_ids
+      - allowed_requester_system_ids
+      - merge_policy_ids
+      - reset_policy_ids
+      - migration_policy_id
+    nonempty: true
+    unique_storage_writer: SYS-PERSIST
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persistent_unlock_request_fields
+    kind: schema
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - unlock_kind
+      - stable_id
+      - completed_event_id
+      - requesting_owner_system_id
+      - checkpoint_id
+      - checkpoint_occurrence_id
+      - collection_epoch_id
+      - catalog_generation_id
+    persistence: transient_input_only
+    allowed_kinds:
+      - achievement
+      - ending
+      - memory
+    forbidden_storage:
+      - persistent
+      - per_run_save
+      - rollback_state
+      - pending_ledger
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: persistent_batch_fields
+    kind: schema
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - checkpoint_id
+      - checkpoint_occurrence_id
+      - collection_epoch_id
+      - catalog_generation_id
+      - unlock_requests
+      - seen_achievement_ids_to_add
+      - setting_updates
+      - settings_base
+    request_count_range: [0, 24]
+    seen_count_range: [0, 11]
+    duplicate_kind_id_policy: reject_entire_batch
+    canonical_request_order: unlock_kind_UTF8_then_stable_id_UTF8
+    persistence: transient_input_only
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-ACCESS
+      - SYS-JOURNAL
+      - SYS-TEST
+
+  - name: persistent_durable_result_fields
+    kind: schema
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - status
+      - checkpoint_occurrence_id
+      - collection_epoch_id
+      - added_achievement_ids
+      - existing_achievement_ids
+      - added_ending_ids
+      - added_memory_ids
+      - newly_seen_achievement_ids
+      - notification_group_id
+    mark_seen_notification_group_id: empty_string
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-ACCESS
+      - SYS-JOURNAL
+      - SYS-TEST
+
+  - name: persist_update_result_values
+    kind: enum
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - REJECTED_INVALID
+      - REJECTED_REENTRANT
+      - DUPLICATE_NOOP
+      - APPLIED_FLUSHED
+      - STALE_DRAFT_CONFLICT
+      - PERSIST_FLUSH_FAILED_SAFE
+      - COMMIT_STATUS_UNKNOWN
+      - PERSISTENCE_UNAVAILABLE
+    public_success_value: APPLIED_FLUSHED
+    forbidden_public_success_aliases:
+      - legacy_internal_success_alias
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persist_runtime_states
+    kind: enum
+    source: design/gdd/cross-playthrough-unlocks.md
+    value:
+      - Validated
+      - CandidatePrepared
+      - Flushing
+      - CommitUnknown
+      - ProjectionRepair
+      - PersistenceSafeRecovery
+      - ResetRecovery
+    persisted_lifecycle_enum: false
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persist_valid_root
+    kind: formula
+    source: design/gdd/cross-playthrough-unlocks.md
+    expression: >-
+      the root and settings are exact built-in dicts with exact frozen key
+      sets; schema_version is exact int 2; catalog_generation_id is exact
+      string persist_catalog:v2; collection_epoch_id is an exact nonnegative
+      int; all four membership/seen tuples are exact, canonical,
+      duplicate-free approved subsets; seen_achievement_ids is a subset of
+      achievement_ids; high_contrast, reduced_motion, flash_effects_enabled,
+      and screen_shake_enabled are exact bools; and font_scale is an approved
+      exact finite float
+    output: exact_bool
+    rejects_normalization: true
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persist_batch_result
+    kind: formula
+    source: design/gdd/cross-playthrough-unlocks.md
+    expression: >-
+      REJECTED_INVALID when request or manifest is invalid;
+      PERSISTENCE_UNAVAILABLE when root is invalid or recovery is active;
+      REJECTED_REENTRANT when another operation owns the mutex;
+      STALE_DRAFT_CONFLICT for conflicting setting bases; DUPLICATE_NOOP when
+      the complete candidate equals current root; APPLIED_FLUSHED when the
+      candidate differs and the canonical flush succeeds;
+      PERSIST_FLUSH_FAILED_SAFE only for proven pre-write failure; otherwise
+      COMMIT_STATUS_UNKNOWN
+    variables:
+      - current_root
+      - validated_requests
+      - complete_candidate
+      - flush_success
+    output:
+      - REJECTED_INVALID
+      - REJECTED_REENTRANT
+      - DUPLICATE_NOOP
+      - APPLIED_FLUSHED
+      - STALE_DRAFT_CONFLICT
+      - PERSIST_FLUSH_FAILED_SAFE
+      - COMMIT_STATUS_UNKNOWN
+      - PERSISTENCE_UNAVAILABLE
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persist_merge_valid
+    kind: formula
+    source: design/gdd/cross-playthrough-unlocks.md
+    expression: >-
+      when roots are valid and have identical schema and catalog generation,
+      select the maximum collection epoch; only roots at that epoch
+      contribute canonical membership and seen unions, while project settings
+      use the newer valid source value; otherwise enter persistence safe
+      recovery without selective salvage
+    unlock_properties:
+      - commutative
+      - associative
+      - idempotent
+    output:
+      - valid_merged_root
+      - PERSISTENCE_SAFE_RECOVERY
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: persist_projection_missing
+    kind: formula
+    source: design/gdd/cross-playthrough-unlocks.md
+    expression: >-
+      canonical_root_achievement_ids minus approved IDs for which
+      achievement.has returns true
+    variables:
+      - canonical_root_achievement_ids
+      - backend_granted_achievement_ids
+    output: canonical_achievement_id_tuple
+    reverse_import_forbidden: true
+    popup_on_repair: false
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-TEST
+
+  - name: persist_operation_invariance
+    kind: formula
+    source: design/gdd/cross-playthrough-unlocks.md
+    expression: >-
+      for load, rollback, blocking exit and explicit new game, deep values of
+      all nine fields enumerated by a nonempty generation-matched ownership
+      manifest are equal before and after the operation
+    operations:
+      - load
+      - rollback
+      - blocking_exit
+      - explicit_new_game
+    output: exact_bool
+    empty_or_stale_manifest_pass: false
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-SAVE
+      - SYS-STATE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: persist_collection_limits
+    kind: schema
+    source: design/gdd/cross-playthrough-unlocks.md
+    achievement_id_limit: 11
+    ending_id_limit: 6
+    memory_id_limit: 7
+    seen_achievement_id_limit: 11
+    total_member_limit: 24
+    canonical_order: UTF8_bytes
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-JOURNAL
+      - SYS-GALLERY
+      - SYS-TEST
+
+  - name: font_scale_options
+    kind: tuning_knob
+    source: design/gdd/cross-playthrough-unlocks.md
+    target: [1.0, 1.25, 1.5]
+    default_value: 1.0
+    unit: scale_multiplier
+    removal_after_release_requires_migration: true
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-JOURNAL
+      - SYS-GALLERY
+      - SYS-TEST
+
+  - name: sys_access_project_setting_contract
+    kind: schema
+    source: design/gdd/sys-access.md
+    canonical_order:
+      - settings.font_scale
+      - settings.high_contrast
+      - settings.reduced_motion
+      - settings.flash_effects_enabled
+      - settings.screen_shake_enabled
+    default_tuple: [1.0, false, false, false, false]
+    semantic_owner: SYS-ACCESS
+    storage_writer: SYS-PERSIST
+    merge_policy: exact_five_value_tuple_from_one_approved_source
+    collection_reset_policy: preserve_exact
+    recovery_temporary_profile: [1.5, true, true, false, false]
+    renpy_engine_font_multiplier: 1.0
+    renpy_engine_high_contrast_text: false
+    renpy_accessibility_menu_in_production: forbidden
+    output_only_shortcuts: [V, Shift+C]
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-SAVE
+      - SYS-JOURNAL
+      - SYS-TEST
+
+  - name: unlock_flush_policy
+    kind: tuning_knob
+    source: design/gdd/cross-playthrough-unlocks.md
+    target: once_per_stable_completion_checkpoint
+    same_checkpoint_multi_unlock_policy: one_batch
+    delayed_until_exit: forbidden
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: projection_repair_points
+    kind: tuning_knob
+    source: design/gdd/cross-playthrough-unlocks.md
+    target:
+      - after_startup_validation
+      - after_successful_unlock_flush
+    per_achievement_attempt_cap_per_interaction: 1
+    render_frame_scan: forbidden
+    referenced_by:
+      - SYS-PERSIST
+      - SYS-ACHIEVE
+      - SYS-TEST
+
+  - name: achievement_condition_catalog
+    kind: catalog
+    source: design/gdd/local-achievements.md
+    generation_id: "achievement_catalog:v2"
+    record_count: 11
+    owner_system: SYS-ACHIEVE
+    record_schema: achievement_condition_entry_fields
+    condition_operator: all
+    display_order:
+      - CHOICE_READ_THE_NOTE
+      - CHOICE_ASK_FIRST
+      - CHOICE_ACCEPT_NO
+      - CHOICE_SHARE_TRUTH
+      - CHOICE_KEEP_PROMISE
+      - ROUTE_ARCADE_ALIAS
+      - ROUTE_EMPTY_SCHOOL
+      - ROUTE_SEASIDE_TICKET
+      - ROUTE_BACKUP_EXIT
+      - EPILOGUE_FIRST_GUEST
+      - EPILOGUE_LIGHTS_OUT
+    condition_bindings:
+      CHOICE_READ_THE_NOTE:
+        events: [event_achievement_read_note_recovered]
+        zero_delta_witnesses: [witness_achievement_read_note_zero_delta]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 01_scene_echoes
+      CHOICE_ASK_FIRST:
+        events: [event_achievement_ask_first_answer_honored]
+        zero_delta_witnesses: [witness_achievement_ask_first_accept_cost]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 01_scene_echoes
+      CHOICE_ACCEPT_NO:
+        events: [event_achievement_refusal_honored]
+        zero_delta_witnesses: []
+        non_best_ending_witnesses: [witness_achievement_accept_no_nonbest]
+        reveal_policy: ON_UNLOCK
+        display_group: 01_scene_echoes
+      CHOICE_SHARE_TRUTH:
+        events: [event_full_archive_shared, event_erii_selects_route_response]
+        zero_delta_witnesses: [witness_achievement_share_truth_answer_expressed]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 01_scene_echoes
+      CHOICE_KEEP_PROMISE:
+        events: [event_shared_cost_promised, event_prior_cost_promise_honored_without_shift]
+        zero_delta_witnesses: [witness_achievement_direct_cost_honored]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 01_scene_echoes
+      ROUTE_ARCADE_ALIAS:
+        events: [event_erii_enters_alias]
+        zero_delta_witnesses: [witness_route_arcade_alias_expressed]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 02_route_discoveries
+      ROUTE_EMPTY_SCHOOL:
+        events: [event_empty_school_trace_confirmed]
+        zero_delta_witnesses: [witness_route_empty_school_trace]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 02_route_discoveries
+      ROUTE_SEASIDE_TICKET:
+        events: [event_two_window_tickets_acquired]
+        zero_delta_witnesses: [witness_route_two_window_tickets]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 02_route_discoveries
+      ROUTE_BACKUP_EXIT:
+        events: [event_service_exit_used]
+        zero_delta_witnesses: [witness_route_service_exit_used]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 02_route_discoveries
+      EPILOGUE_FIRST_GUEST:
+        events: [event_epilogue_first_guest_completed]
+        zero_delta_witnesses: [witness_epilogue_first_guest]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 03_true_epilogue
+      EPILOGUE_LIGHTS_OUT:
+        events: [event_epilogue_lights_out_completed]
+        zero_delta_witnesses: [witness_epilogue_lights_out]
+        non_best_ending_witnesses: []
+        reveal_policy: ON_UNLOCK
+        display_group: 03_true_epilogue
+    provisional_binding_ids: []
+    provisional_binding_count: 0
+    ending_or_memory_mirror_count: 0
+    gate_status: approved_v2_producer_rereview_waived
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-PERSIST
+      - SYS-JOURNAL
+      - SYS-TEST
+
+  - name: achievement_completion_event_catalog
+    kind: catalog
+    source: design/narrative/seven-day-content-baseline.md
+    generation_id: "achievement_event_catalog:v2"
+    record_count: 11
+    event_checkpoint_map:
+      event_achievement_read_note_recovered: cp_day6_note_recovery_complete
+      event_achievement_ask_first_answer_honored: cp_prologue_small_station_detour_complete
+      event_achievement_refusal_honored: cp_day6_cost_reconsideration_complete
+      event_erii_selects_route_response: cp_day5_route_answer_expressed
+      event_prior_cost_promise_honored_without_shift: cp_day6_direct_cost_complete
+      event_erii_enters_alias: cp_day2_alias_answer_expressed
+      event_empty_school_trace_confirmed: cp_day3_empty_school_trace_complete
+      event_two_window_tickets_acquired: cp_day4_two_tickets_complete
+      event_service_exit_used: cp_day6_service_exit_complete
+      event_epilogue_first_guest_completed: cp_epilogue_first_guest_complete
+      event_epilogue_lights_out_completed: cp_epilogue_lights_out_complete
+    prerequisite_events:
+      CHOICE_SHARE_TRUTH: [event_full_archive_shared]
+      CHOICE_KEEP_PROMISE: [event_shared_cost_promised]
+    completion_event_unique: true
+    checkpoint_mapping_cardinality: exactly_one_per_event
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-PERSIST
+      - SYS-TEST
+
+  - name: achievement_witness_catalog
+    kind: catalog
+    source: design/narrative/seven-day-content-baseline.md
+    record_count: 11
+    value:
+      - witness_achievement_read_note_zero_delta
+      - witness_achievement_ask_first_accept_cost
+      - witness_achievement_accept_no_nonbest
+      - witness_achievement_share_truth_answer_expressed
+      - witness_achievement_direct_cost_honored
+      - witness_route_arcade_alias_expressed
+      - witness_route_empty_school_trace
+      - witness_route_two_window_tickets
+      - witness_route_service_exit_used
+      - witness_epilogue_first_guest
+      - witness_epilogue_lights_out
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-TEST
+
+  - name: achievement_evidence_snapshot_fields
+    kind: schema
+    source: design/gdd/local-achievements.md
+    value:
+      - catalog_generation_id
+      - collection_epoch_id
+      - checkpoint_occurrence_id
+      - checkpoint_id
+      - completed_event_ids
+      - newly_completed_event_ids
+      - stable_completion_boundary
+    exact_types:
+      catalog_generation_id: exact_str
+      collection_epoch_id: nonnegative_int_not_bool
+      checkpoint_occurrence_id: exact_nonempty_str
+      checkpoint_id: exact_str
+      completed_event_ids: exact_tuple_of_exact_str
+      newly_completed_event_ids: exact_tuple_of_exact_str
+      stable_completion_boundary: exact_bool
+    canonical_ordering: UTF8_bytes
+    delta_rule: newly_completed_event_ids_are_canonical_tail_of_completed_event_ids
+    generation_status: frozen_v2_pending_source_callsite_evidence
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: achievement_runtime_states
+    kind: enum
+    source: design/gdd/local-achievements.md
+    value:
+      - Observing
+      - SnapshotValidation
+      - ConditionEvaluation
+      - NoChange
+      - BatchSubmitted
+      - PresentationDeferred
+      - PresentationReady
+      - Presented
+      - PersistenceBlocked
+    persisted_lifecycle_enum: false
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: achievement_presentation_decision_values
+    kind: enum
+    source: design/gdd/local-achievements.md
+    value:
+      - PRESENT
+      - DEFER
+      - NO_PRESENTATION
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: achievement_ui_membership_states
+    kind: enum
+    source: design/gdd/local-achievements.md
+    value:
+      - UNLOCKED
+      - UNLOCKED_UNSEEN
+      - LOCKED_ABSENT
+      - PERSISTENCE_UNAVAILABLE
+    hidden_preunlock_surface_count: 0
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: achievement_display_group_values
+    kind: enum
+    source: design/gdd/local-achievements.md
+    value:
+      - 01_scene_echoes
+      - 02_route_discoveries
+      - 03_true_epilogue
+    order_is_normative: true
+    axis_or_token_domain_mapping: forbidden
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: achievement_reveal_policy_values
+    kind: enum
+    source: design/gdd/local-achievements.md
+    value:
+      - ON_UNLOCK
+    locked_surface_count: 0
+    locked_policy: absent_from_render_count_focus_and_self_voicing
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: achievement_ui_copy_catalog
+    kind: copy_catalog
+    source: design/gdd/local-achievements.md
+    value:
+      notification_title: "新的旅途记录"
+      unlocked_state: "曾经走过"
+      unseen_state: "新记录"
+      recorded_summary: "曾经走过 X 项"
+      complete_summary: "这册旅途记录已经完整"
+      continue_action: "继续"
+      unavailable_title: "收藏记录暂时不可用"
+    forbidden_copy:
+      - total_denominator
+      - percentage
+      - condition_progress
+      - missing_event_hint
+      - internal_id
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: achievement_catalog_valid
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      exact eight-field record schema, exactly 11 unique approved v2 IDs,
+      nonempty uniquely resolving conditions and witnesses, all operators set
+      to all, all reveal policies set to ON_UNLOCK, SYS-ACHIEVE ownership,
+      zero ending or memory mirrors and exact approved display order
+    variables:
+      - condition_catalog
+      - approved_achievement_ids
+      - completed_event_catalog
+      - witness_catalog
+      - ending_or_memory_mirror_count
+      - locked_surface_count
+    output: exact_bool
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-TEST
+
+  - name: achievement_snapshot_valid
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      exact snapshot schema with matching generation and collection epoch,
+      unclaimed occurrence and stable checkpoint; canonical valid
+      completed/new event tuples; new events are the canonical tail of
+      cumulative events and every new event maps to the checkpoint
+    variables:
+      - snapshot_generation_id
+      - catalog_generation_id
+      - snapshot_collection_epoch_id
+      - root_collection_epoch_id
+      - checkpoint_occurrence_id
+      - checkpoint_id
+      - completed_event_ids
+      - newly_completed_event_ids
+      - stable_completion_boundary
+      - event_checkpoint_index
+    output: exact_bool
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-NARRATIVE
+      - SYS-ENDING
+      - SYS-TEST
+
+  - name: achievement_condition_satisfied
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      every required event is in the one derived cumulative event set; the
+      launch catalog only permits the all operator
+    variables:
+      - achievement_condition_record
+      - completed_event_ids
+      - condition_event_ids
+      - condition_operator
+    output: exact_bool
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-TEST
+
+  - name: achievement_grant_eligible_now
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      snapshot is valid, complete condition is satisfied, the causally last
+      condition event is newly completed at this checkpoint, and achievement
+      membership is absent
+    variables:
+      - achievement_condition_record
+      - achievement_evidence_snapshot
+      - canonical_achievement_ids
+      - canonical_completion_event
+    output: exact_bool
+    historical_snapshot_backfill: forbidden
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-TEST
+
+  - name: new_achievement_ids
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      UTF8-byte-sorted exact tuple of achievement IDs whose records are
+      grant-eligible at the current stable checkpoint
+    variables:
+      - achievement_condition_catalog
+      - achievement_evidence_snapshot
+      - canonical_achievement_ids
+    output: exact_tuple_of_approved_achievement_ids
+    output_count_range: [0, 11]
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-TEST
+
+  - name: achievement_unlock_requests
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      one canonical achievement unlock request per new ID, using the
+      condition tuple's final event and that event's unique checkpoint
+    variables:
+      - new_achievement_ids
+      - completion_event_map
+      - event_checkpoint_index
+      - catalog_generation_id
+    output: exact_tuple_of_persistent_unlock_requests
+    output_count_range: [0, 11]
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-TEST
+
+  - name: achievement_presentation_decision
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      PRESENT in approved display order after durable success at a safe
+      boundary; DEFER after durable success at an unsafe boundary; otherwise
+      NO_PRESENTATION
+    variables:
+      - persistent_batch_result
+      - durably_added_achievement_ids
+      - safe_presentation_boundary
+      - achievement_display_rank
+    output:
+      - PRESENT
+      - DEFER
+      - NO_PRESENTATION
+    ending_or_memory_mirror_count: 0
+    notification_policy: one_composed_notification_group
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: achievement_anti_proxy_valid
+    kind: formula
+    source: design/gdd/local-achievements.md
+    expression: >-
+      no forbidden condition edge, display token or locked pre-unlock
+      surface; at least one zero-delta witness and one non-best-ending witness;
+      display groups exact-match the approved narrative grouping
+    variables:
+      - forbidden_condition_edges
+      - forbidden_display_tokens
+      - locked_surface_count
+      - zero_delta_witness_count
+      - non_best_ending_witness_count
+      - achievement_display_groups
+    output: exact_bool
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-STATE
+      - SYS-CHOICE
+      - SYS-JOURNAL
+      - SYS-TEST
+
+  - name: presentation_settle_delay_ms
+    kind: tuning_knob
+    source: design/gdd/local-achievements.md
+    target: 500
+    safe_range: [0, 1000]
+    unit: milliseconds
+    starts_after_safe_presentation_boundary: true
+    load_rollback_exit_cancels: true
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: notification_transition_ms
+    kind: tuning_knob
+    source: design/gdd/local-achievements.md
+    target: 200
+    safe_range: [0, 300]
+    unit: milliseconds
+    reduced_motion_effective_value: 0
+    input_and_focus_blocking: false
+    referenced_by:
+      - SYS-ACHIEVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: journal_read_model_valid
+    kind: formula
+    source: design/gdd/sys-journal.md
+    expression: >-
+      the detached SYS-PERSIST snapshot is valid; all four content catalogs
+      have exact schemas and matching generations; chapter and memory IDs
+      exact-equal the approved memory IDs; achievement and ending IDs
+      exact-equal their approved canonical sets; and every catalog reference
+      resolves exactly once
+    variables:
+      - detached_snapshot
+      - content_catalog_bundle
+      - persist_snapshot_valid
+      - catalog_generation_ids
+      - catalog_reference_counts
+    output: exact_bool
+    false_result_policy: no_normal_category_read_model_or_zero_count
+    referenced_by:
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: visible_ordered_ids
+    kind: formula
+    source: design/gdd/sys-journal.md
+    expression: >-
+      select the category membership from the valid detached snapshot,
+      intersect it with the approved category catalog, and apply the category's
+      deterministic display order; chapter and memory share memory membership
+      but resolve to different player-safe content views
+    variables:
+      - detached_snapshot
+      - content_catalog_bundle
+      - journal_category
+      - category_display_order
+    output: exact_tuple_of_unique_approved_ids
+    output_count_range_by_category:
+      chapter: [0, 7]
+      memory: [0, 7]
+      achievement: [0, 11]
+      ending: [0, 6]
+    requires_journal_read_model_valid: true
+    referenced_by:
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: journal_session_new_ids
+    kind: formula
+    source: design/gdd/sys-journal.md
+    expression: >-
+      at journal-open-cycle start use the display-ordered unseen achievement
+      IDs; after each valid refresh, stable-union the current cycle IDs with
+      the refreshed unseen IDs, intersect with refreshed visible achievement
+      membership, and reapply approved achievement display order
+    variables:
+      - opening_unseen_achievement_ids
+      - current_cycle_new_ids
+      - refreshed_detached_snapshot
+      - refreshed_visible_achievement_ids
+      - achievement_display_order
+    output: cycle_only_exact_tuple_of_approved_achievement_ids
+    output_count_range: [0, 11]
+    cleared_on_journal_close_or_recovery_handoff: true
+    durable_mark_seen_removes_during_current_cycle: false
+    referenced_by:
+      - SYS-JOURNAL
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: journal_seen_ack_ids
+    kind: formula
+    source: design/gdd/sys-journal.md
+    expression: >-
+      return the canonical-UTF8-ordered upstream unseen achievement IDs only
+      when the journal read model is valid, the complete achievement list has
+      been successfully presented and the current list version has not already
+      submitted acknowledgement; otherwise return an empty tuple
+    variables:
+      - detached_snapshot
+      - presentation_success
+      - submission_latch
+      - journal_read_model_valid
+      - canonical_utf8_order
+    output: exact_tuple_of_unique_approved_achievement_ids
+    output_count_range: [0, 11]
+    nonempty_submission_limit_per_list_version: 1
+    empty_tuple_submits_request: false
+    referenced_by:
+      - SYS-JOURNAL
+      - SYS-ACHIEVE
+      - SYS-PERSIST
+      - SYS-TEST
+
+  - name: journal_visible_count
+    kind: formula
+    source: design/gdd/sys-journal.md
+    expression: >-
+      the length of visible_ordered_ids for the requested category when the
+      complete journal read model is valid
+    variables:
+      - visible_ordered_ids
+      - journal_category
+    output: exact_nonnegative_int
+    output_range_by_category:
+      chapter: [0, 7]
+      memory: [0, 7]
+      achievement: [0, 11]
+      ending: [0, 6]
+    player_visible_count_category: achievement_only
+    denominator_or_percentage_display: forbidden
+    invalid_or_unavailable_output: none
+    referenced_by:
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: journal_restore_focus
+    kind: formula
+    source: design/gdd/sys-journal.md
+    expression: >-
+      return the first valid semantic focus ID in the frozen candidate order:
+      previous target, section return, corresponding contents entry, caller
+      fallback
+    variables:
+      - valid_focus_target_ids
+      - previous_focus_id
+      - section_return_id
+      - contents_entry_id
+      - caller_fallback_id
+    output: exactly_one_valid_semantic_focus_id
+    candidate_priority:
+      - previous_focus_id
+      - section_return_id
+      - contents_entry_id
+      - caller_fallback_id
+    empty_target_or_missing_fallback_policy: contract_validation_failure
+    displayable_guessing: forbidden
+    referenced_by:
+      - SYS-JOURNAL
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: tension_mode_enabled
+    kind: setting
+    source: design/gdd/sys-tension.md
+    owner: SYS-TENSION
+    type: exact_bool
+    default: false
+    persists_across:
+      - application_restart
+      - new_game
+    excluded_from:
+      - per_run_save_restore
+      - rollback
+    invalid_or_unavailable_effective_value: false
+    scope: post_mvp_deferred
+    current_production_gate: excluded
+    storage_mechanism_status: deferred_pending_post_mvp_adr
+    current_persistent_contract_inclusion: false
+    current_sys_persist_leaf_addition: forbidden
+    sys_persist_12_leaf_5_setting_root_amendment_without_approval: forbidden
+    referenced_by:
+      - SYS-TENSION
+      - SYS-ACCESS
+      - SYS-NARRATIVE
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: tension_state_lifecycle
+    kind: lifecycle_contract
+    source: design/gdd/sys-tension.md
+    states:
+      - Disabled
+      - Validating
+      - Presenting
+      - Running
+      - Paused
+      - ResolvingConfirmed
+      - ResolvingTimeout
+      - HandedOff
+      - FallbackUntimed
+      - Closed
+    resolution_states_mutually_exclusive: true
+    fallback_after_resolution_latch: forbidden
+    timer_ownership_after_handoff: none
+    referenced_by:
+      - SYS-TENSION
+      - SYS-ACCESS
+      - SYS-SAVE
+      - SYS-TEST
+
+  - name: tension_scene_manifest_fields
+    kind: schema
+    source: design/gdd/sys-tension.md
+    value:
+      - scene_id
+      - timed_choice_surface
+      - non_timed_choice_surface
+      - duration_configuration
+      - timeout_choice_id
+      - accessible_time_bindings
+      - timed_only_affordance_delta
+      - narrative_eligibility_record_id
+    raw_declaration_count_per_scene: exactly_one
+    timed_non_timed_choice_sequence: exact_match
+    timeout_choice_manual_reachability: required
+    invalid_runtime_policy_before_resolution_latch: fallback_untimed_without_semantic_write
+    referenced_by:
+      - SYS-TENSION
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: tension_narrative_eligibility_record
+    kind: schema
+    source: design/gdd/sys-tension.md
+    owner: SYS-NARRATIVE
+    value:
+      - scene_id
+      - diegetic_deadline_id
+      - decision_context_summary_id
+      - decision_information_complete
+      - agency_answer_state
+      - agency_answer_determined_or_not_applicable
+      - timeout_causal_bridge_id
+      - min_intervening_narrative_event_count
+      - next_player_choice_id
+      - reviewer_ids
+      - source_hash
+    agency_answer_determined_or_not_applicable: derived_not_authorable
+    validity_expression: "unique_record and diegetic_deadline_valid and decision_information_complete and decision_context_summary_valid and agency_answer_determined_or_not_applicable and timeout_causal_bridge_valid and min_intervening_narrative_event_count >= 1 and next_player_choice_valid and terminal_policy_valid and reviewer_pair_valid and source_hash_current"
+    non_agency_answer_state: not_applicable
+    agency_answer_forbidden_states:
+      - undetermined
+      - not_applicable
+    reviewer_roles_exact:
+      - Narrative Director
+      - Creative Director
+    reviewer_canonical_person_count: exactly_two_distinct
+    source_hash: lowercase_sha256_64hex
+    source_hash_covers:
+      - scene_declaration
+      - paired_surfaces
+      - decision_summary
+      - answer_state
+      - causal_bridge
+      - continuation_witness
+    referenced_by:
+      - SYS-TENSION
+      - SYS-NARRATIVE
+      - SYS-CHOICE
+      - SYS-TEST
+
+  - name: tension_initial_duration
+    kind: formula
+    source: design/gdd/sys-tension.md
+    expression: "D = clamp((B + C / V + K * N) * P, D_min, D_max)"
+    variables:
+      - base_decision_seconds
+      - readable_character_count
+      - reading_chars_per_second
+      - per_option_seconds
+      - option_count
+      - pressure_factor
+      - minimum_duration_seconds
+      - maximum_duration_seconds
+    output: finite_float_seconds
+    target_output_range: [18, 40]
+    absolute_safe_output_range: [15, 50]
+    dynamic_player_adaptation: forbidden
+    referenced_by:
+      - SYS-TENSION
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: tension_effective_paused_duration
+    kind: formula
+    source: design/gdd/sys-tension.md
+    expression: "P_t = measure(union([s_i, min(e_i, t)] for each approved pause interval i))"
+    variables:
+      - pause_interval_starts
+      - pause_interval_ends
+      - current_monotonic_time
+    output: finite_float_seconds
+    output_range: [0, raw_elapsed_time]
+    overlapping_pause_intervals: union_not_sum
+    referenced_by:
+      - SYS-TENSION
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: tension_remaining_time
+    kind: formula
+    source: design/gdd/sys-tension.md
+    expression: "R(t) = clamp(D - ((t - t0) - P_t), 0, D)"
+    variables:
+      - initial_duration
+      - timer_start_monotonic_time
+      - current_monotonic_time
+      - effective_paused_duration
+    output: finite_float_seconds
+    output_range: [0, initial_duration]
+    expired_time_may_increase: false
+    referenced_by:
+      - SYS-TENSION
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: tension_warning_phase
+    kind: formula
+    source: design/gdd/sys-tension.md
+    expression: "Q = R / D; stable if U < Q <= 1; urgent if H < Q <= U; critical if 0 < Q <= H; expired if Q = 0"
+    variables:
+      - remaining_time
+      - initial_duration
+      - urgent_threshold
+      - critical_threshold
+    output:
+      - stable
+      - urgent
+      - critical
+      - expired
+    target_thresholds:
+      urgent: 0.5
+      critical: 0.2
+    semantic_or_input_effect: forbidden
+    referenced_by:
+      - SYS-TENSION
+      - SYS-ACCESS
+      - SYS-AUDIO
+      - SYS-TEST
+
+  - name: tension_resolution
+    kind: formula
+    source: design/gdd/sys-tension.md
+    expression: "reduce immutable snapshot by timestamp, state-event priority, activation priority, timeout priority, and receive_seq; confirmed wins at active_elapsed <= D only while Running; a self-voicing paused intent may be created only when frozen R_pause > 0; R_pause = 0 resumes to timeout"
+    variables:
+      - resolution_latch
+      - activation_valid
+      - activation_monotonic_time
+      - validated_pause_intervals
+      - state_events
+      - receive_sequence
+      - frozen_remaining_time_at_pause
+      - deadline
+      - confirmed_choice_id
+      - timeout_choice_id
+    output: unresolved_or_exact_registered_choice_id
+    equal_deadline_priority: confirmed_choice
+    equal_deadline_pause_start_priority: pause_state
+    zero_remaining_paused_intent: forbidden
+    zero_remaining_resume_result: timeout_choice
+    successful_resolution_count: exactly_one
+    referenced_by:
+      - SYS-TENSION
+      - SYS-CHOICE
+      - SYS-STATE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: tension_scene_manifest_valid
+    kind: formula
+    source: design/gdd/sys-tension.md
+    expression: "unique_scene and exact_surface_pair and same_choice_sequence and same_initial_focus_rule and same_navigation_semantics and same_causal_projection and declared_affordance_delta and registered_timeout and timeout_manual_reachable and reaction_payoff_covered and readable_time_text_ready and noncolor_visual_time_state_ready and stable_focus_bound and direct_keyboard_activation_bound and narrative_eligibility_valid and duration_inputs_valid"
+    variables:
+      - unique_scene
+      - exact_surface_pair
+      - same_choice_sequence
+      - same_initial_focus_rule
+      - same_navigation_semantics
+      - same_causal_projection
+      - declared_affordance_delta
+      - registered_timeout
+      - timeout_manual_reachable
+      - reaction_payoff_covered
+      - readable_time_text_ready
+      - noncolor_visual_time_state_ready
+      - stable_focus_bound
+      - direct_keyboard_activation_bound
+      - narrative_eligibility_valid
+      - duration_inputs_valid
+    output: exact_bool
+    false_runtime_policy_before_resolution_latch: fallback_untimed_without_semantic_write
+    referenced_by:
+      - SYS-TENSION
+      - SYS-CHOICE
+      - SYS-NARRATIVE
+      - SYS-ACCESS
+      - SYS-TEST
+
+  - name: test_run_states
+    kind: enum
+    source: design/gdd/sys-test.md
+    value:
+      - UNBOUND
+      - BLOCKED_INPUT
+      - READY
+      - RUNNING
+      - FAILED
+      - PASSED_CURRENT
+      - STALE
+    lifecycle_owner: SYS-TEST
+    persisted_lifecycle_enum: false
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_evidence_type_values
+    kind: enum
+    source: design/gdd/sys-test.md
+    value:
+      - UT_PURE
+      - UT_ENGINE
+      - STATIC
+      - INSTR
+      - BRANCH
+      - A11Y
+      - VISUAL
+      - BENCH
+      - SPIKE
+      - HUMAN
+      - PLAYTEST
+      - REVIEW
+    owner_system: SYS-TEST
+    substitution_for_other_evidence_types: false
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_gate_tier_values
+    kind: enum
+    source: design/gdd/sys-test.md
+    value:
+      - FAST
+      - INTEGRATION
+      - RELEASE
+    owner_system: SYS-TEST
+    release_full_manifest_required: true
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_artifact_current
+    kind: formula
+    source: design/gdd/sys-test.md
+    expression: "exact_identity_keys and identity_generation_match and all_identity_hashes_match and raw_output_present and raw_output_hash_matches"
+    variables:
+      - required_identity_keys
+      - artifact_identity_keys
+      - recorded_identity_hashes
+      - current_identity_hashes
+      - recorded_raw_output_hash
+      - current_raw_output_hash
+      - recorded_identity_generation
+      - current_identity_generation
+      - raw_output_present
+    output: exact_bool
+    hash_algorithm: SHA-256
+    canonical_identity_encoding: UTF8_sorted_key_bytes_with_length_prefixes
+    timestamp_in_identity: false
+    any_missing_extra_or_mismatched_field: false
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_criterion_pass
+    kind: formula
+    source: design/gdd/sys-test.md
+    expression: "nonempty and exact_case_set and evidence_coverage and all_artifacts_current and all_artifacts_passed and no_blocking_findings"
+    variables:
+      - required_artifact_set
+      - expected_case_count
+      - executed_case_count
+      - required_case_ids
+      - executed_case_ids
+      - required_evidence_types
+      - present_evidence_types
+      - artifact_current_result
+      - artifact_result
+      - blocking_finding_count
+    output: exact_bool
+    strict_and: true
+    empty_artifact_pass: false
+    pass_rate_override: forbidden
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_gate_pass
+    kind: formula
+    source: design/gdd/sys-test.md
+    expression: "nonempty_required_criteria and all_required_criteria_pass and no_blocked_inputs and no_stale_artifacts and no_unresolved_blocking_findings"
+    variables:
+      - required_criteria
+      - criterion_result
+      - blocked_input_count
+      - stale_artifact_count
+      - global_blocking_finding_count
+    output: exact_bool
+    strict_and: true
+    empty_required_criteria: false
+    blocked_input_result: false
+    stale_artifact_result: false
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_impacted_suites
+    kind: formula
+    source: design/gdd/sys-test.md
+    expression: "all_tier_suites if unresolved_edge_count > 0 else suites_reached_by_impact_closure"
+    variables:
+      - dependency_graph
+      - changed_nodes
+      - tier_suites
+      - transitive_reachable_nodes
+      - impact_closure
+      - suite_inputs
+      - unresolved_edge_count
+    output: exact_sorted_suite_id_tuple
+    unresolved_edge_policy: full_tier
+    release_pruning: forbidden
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_nearest_rank_percentile
+    kind: formula
+    source: design/gdd/sys-test.md
+    expression: "sort(X)[ceil(canonical_rational_p * len(X)) - 1]"
+    variables:
+      - raw_samples
+      - percentile
+      - canonical_rational_percentile
+      - sample_count
+      - rank
+    output: finite_sample_value
+    interpolation: forbidden
+    invalid_sample_policy: reject_protocol
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_performance_pass
+    kind: formula
+    source: design/gdd/sys-test.md
+    expression: "protocol_valid and nonempty_approved_thresholds and all_metric_comparisons_pass"
+    variables:
+      - protocol_valid
+      - approved_comparisons
+      - measured_metrics
+      - comparison_operators
+      - approved_thresholds
+    output: exact_bool
+    threshold_owner: owning_gdd
+    missing_threshold_result: REPORT_ONLY
+    referenced_by:
+      - SYS-TEST
+
+  - name: test_evidence_bundle_v1
+    kind: schema
+    source: design/gdd/sys-test.md
+    generation_id: "test_evidence_bundle:v1"
+    value:
+      - bundle_schema_version
+      - run_id
+      - scope
+      - criterion_id
+      - owner_system
+      - suite_id
+      - expected_case_ids
+      - executed_case_ids
+      - fixture_manifest_id
+      - oracle_id
+      - matrix_cell_ids
+      - expected_case_count
+       - required_evidence_types
+       - identity_generation
+       - evidence_stage
+       - candidate_manifest_id_hash
+       - candidate_identity
+       - archive_hash
+       - artifact_ids
+      - source_catalog_config_fixture_runner_environment_hashes
+      - source_inventory_id_hash
+      - protocol_manifest_id_hash
+      - threshold_manifest_id_hash
+      - capture_protocol
+      - provider_approval
+      - canonical_artifact_path
+      - raw_output_references
+      - criterion_results
+      - blocked_input_reason_codes
+      - failure_and_finding_ids
+      - exit_codes
+       - unresolved_blocking_findings
+       - exclusion_report_id_hash
+    owner_system: SYS-TEST
+    provisional: false
+    acceptance_adr: ADR-0007
+    evidence_stages:
+      - STAGING_EVIDENCE_BOUND
+      - ARCHIVE_EVIDENCE_BOUND
+    referenced_by:
+      - SYS-TEST
+
+  - name: candidate_manifest_v1
+    kind: schema
+    source: design/gdd/sys-build.md
+    generation_id: "candidate_manifest:v1"
+    value:
+      - schema
+      - candidate
+      - inputs
+      - engine_capability
+      - artifact_layout
+      - evidence_contract
+      - legal_closure
+      - archive
+      - provenance
+    candidate_identity_excludes:
+      - build_run_id
+      - timestamp
+      - archive_bytes
+      - archive_hash
+      - manifest_hash
+      - provenance_hash
+      - release_identity
+    owner_system: SYS-BUILD
+    acceptance_adr: ADR-0007
+    referenced_by:
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: canonical_encoding_v1
+    kind: encoding_contract
+    source: design/gdd/sys-build.md
+    generation_id: "canonical_encoding:v1"
+    text_encoding: UTF-8_without_BOM
+    line_endings: LF
+    structured_format: canonical_JSON
+    key_order: lexicographic
+    path_order: UTF8_byte_order_with_slash_separator
+    allowed_identity_values: [null, boolean, exact_integer, string, array, object]
+    forbidden_identity_values: [float, NaN, infinity, timestamp, implicit_default]
+    acceptance_adr: ADR-0007
+    referenced_by:
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: archive_hash
+    kind: formula
+    source: design/gdd/sys-build.md
+    expression: "SHA256(exact_final_package_bytes_only)"
+    algorithm: SHA-256
+    output: lowercase_sha256_64hex
+    manifest_inside_archive: forbidden
+    self_reference: forbidden
+    acceptance_adr: ADR-0007
+    referenced_by:
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: release_identity
+    kind: formula
+    source: design/gdd/sys-build.md
+    expression: "SHA256(canonical_bytes_v1(candidate_identity, archive_hash, manifest_hash, provenance_hash, legal_closure_hash, evidence_hashes, exclusion_report_hashes))"
+    candidate_identity_input: forbidden
+    output: lowercase_sha256_64hex
+    acceptance_adr: ADR-0007
+    referenced_by:
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: diagnostic_repeat_count
+    kind: tuning_knob
+    source: design/gdd/sys-test.md
+    target: 3
+    safe_range: [2, 10]
+    unit: diagnostic_repeats
+    pass_override: forbidden
+    referenced_by:
+      - SYS-TEST
+
+  - name: current_artifact_retention_generations
+    kind: tuning_knob
+    source: design/gdd/sys-test.md
+    target: 10
+    safe_range: [3, 50]
+    unit: input_generations
+    release_artifact_deletion: forbidden
+    referenced_by:
+      - SYS-TEST
+
+  - name: fast_gate_feedback_target_seconds
+    kind: tuning_knob
+    source: design/gdd/sys-test.md
+    target: 120
+    safe_range: [30, 300]
+    unit: seconds
+    over_target_result: workflow_warning_only
+    required_case_reduction: forbidden
+    referenced_by:
+      - SYS-TEST
+
+  - name: sys_test_acceptance_criteria_count
+    kind: constant
+    source: design/gdd/sys-test.md
+    value: 66
+    unit: criterion_ids
+    unique_ids_required: true
+    referenced_by:
+      - SYS-TEST
+
+  - name: candidate_identity
+    kind: formula
+    source: design/gdd/sys-build.md
+    expression: "SHA256(canonical_bytes_v1(source_identity, bundle_identity, engine_capability, identity_affecting_build_config, legal_asset_inventory))"
+    variables:
+       - source_identity
+      - bundle_identity
+      - engine_capability
+      - identity_affecting_build_config
+      - legal_asset_inventory
+    output: lowercase_sha256_64hex
+    build_run_id_excluded: true
+    archive_hash_excluded: true
+    final_manifest_hash_excluded: true
+    provenance_hash_excluded: true
+    canonical_encoding: canonical_encoding:v1
+    run_only_config_excluded:
+      - workspace_path
+      - output_location
+      - log_level
+      - timeout
+      - diagnostic_retention_runs
+    deterministic: true
+    referenced_by:
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: archive_closure_valid
+    kind: formula
+    source: design/gdd/sys-build.md
+    expression: "test_only_count == 0 and network_dependency_count == 0 and telemetry_entry_count == 0 and unallowlisted_asset_count == 0 and undeclared_asset_count == 0 and production_to_test_only_edge_count == 0 and legal_asset_valid and archive_hash_valid"
+    variables:
+      - test_only_count
+      - network_dependency_count
+      - telemetry_entry_count
+      - unallowlisted_asset_count
+      - undeclared_asset_count
+      - production_to_test_only_edge_count
+      - legal_asset_valid
+      - archive_hash_valid
+    output: exact_bool
+    failure_on_any_nonzero_count: true
+    referenced_by:
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: release_gate_pass
+    kind: formula
+    source: design/gdd/sys-build.md
+    expression: "source_manifest_valid and journal_bundle_valid and staging_evidence_bound and archive_evidence_bound and candidate_identity_match and environment_match and package_runner_success and archive_closure_valid and legal_asset_valid and archive_hash_valid"
+    variables:
+      - source_manifest_valid
+      - journal_bundle_valid
+       - staging_evidence_bound
+       - archive_evidence_bound
+      - candidate_identity_match
+      - environment_match
+      - package_runner_success
+      - archive_closure_valid
+      - legal_asset_valid
+      - archive_hash_valid
+    output: exact_bool
+    aggregation: strict_and
+    partial_pass: forbidden
+    referenced_by:
+      - SYS-BUILD
+      - SYS-TEST
+
+  - name: build_runner_timeout_ms
+    kind: tuning_knob
+    source: design/gdd/sys-build.md
+    target: 600000
+    safe_range: [60000, 3600000]
+    unit: milliseconds
+    provisional: true
+    provisional_reason: BUILD-Q1
+    timeout_result: FAILED/TIMEOUT
+    gate_reduction: forbidden
+    referenced_by:
+      - SYS-BUILD
+
+  - name: diagnostic_retention_runs
+    kind: tuning_knob
+    source: design/gdd/sys-build.md
+    target: 5
+    safe_range: [1, 20]
+    unit: non_release_diagnostic_runs
+    release_artifact_deletion: forbidden
+    referenced_by:
+      - SYS-BUILD
+
+  - name: journal_catalog_bundle_v1
+    kind: constant
+    source: design/gdd/sys-journal.md
+    value: "journal_catalog_bundle:v1"
+    schema_owner: SYS-JOURNAL
+    assembler_owner: SYS-JOURNAL
+    execution_owner: SYS-BUILD
+    referenced_by:
+      - SYS-JOURNAL
+      - SYS-BUILD

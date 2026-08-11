@@ -1,0 +1,34 @@
+Scanning project files...
+Scanning Ren'Py files...
+
+Full traceback:
+  File "renpy/bootstrap.py", line 401, in bootstrap
+    renpy.main.main()
+    ~~~~~~~~~~~~~~~^^
+  File "renpy/main.py", line 596, in main
+    run(restart)
+    ~~~^^^^^^^^^
+  File "renpy/main.py", line 92, in run
+    if not renpy.arguments.post_init():
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^ 
+  File "renpy/arguments.py", line 355, in post_init
+    return commands[command]()
+           ~~~~~~~~~~~~~~~~~^^
+  File "game/distribute.rpy", line 1828, in distribute_command
+  File "game/distribute.rpy", line 748, in __init__
+
+    ...<3 lines>...
+        p["file_lists"],
+  File "game/distribute.rpy", line 1532, in make_package
+    if format not in FORMATS:
+Exception: Format 'not-a-real-format' is unknown.
+
+After initialization, but before game start.
+  File "game/distribute.rpy", line 1828, in distribute_command
+  File "game/distribute.rpy", line 748, in __init__
+
+    ...<3 lines>...
+        p["file_lists"],
+  File "game/distribute.rpy", line 1532, in make_package
+    if format not in FORMATS:
+Exception: Format 'not-a-real-format' is unknown.

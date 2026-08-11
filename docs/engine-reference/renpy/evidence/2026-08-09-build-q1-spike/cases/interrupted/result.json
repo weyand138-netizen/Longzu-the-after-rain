@@ -1,0 +1,42 @@
+{
+    "name":  "interrupted",
+    "fixture":  "interrupt",
+    "executable":  "E:\\Longzu\\.tools\\renpy-8.5.3-sdk\\renpy.exe",
+    "working_directory":  "E:\\Longzu\\.tools\\renpy-8.5.3-sdk",
+    "arguments":  [
+                      "launcher",
+                      "distribute",
+                      "--destination",
+                      "E:\\Longzu\\docs\\engine-reference\\renpy\\evidence\\2026-08-09-build-q1-spike-run12\\cases\\interrupted\\artifacts",
+                      "--package",
+                      "win",
+                      "--format",
+                      "zip",
+                      "--no-update",
+                      "E:\\Longzu\\docs\\engine-reference\\renpy\\evidence\\2026-08-09-build-q1-spike-run12\\fixtures\\interrupt"
+                  ],
+    "timeout_ms":  120000,
+    "termination_after_ms":  1500,
+    "termination_kind":  "external-process-kill",
+    "started_utc":  "2026-08-09T05:22:25.5825557Z",
+    "finished_utc":  "2026-08-09T05:22:27.1153081Z",
+    "duration_ms":  1533,
+    "pid":  1220,
+    "process_exit_code":  -1,
+    "timed_out":  false,
+    "externally_terminated":  true,
+    "termination_observed_utc":  "2026-08-09T05:22:27.0936907Z",
+    "stdout_bytes":  27,
+    "stderr_bytes":  0,
+    "log_files":  [
+                      "log.txt"
+                  ],
+    "output_file_count":  0,
+    "sdk_tmp_fixture_exists":  true,
+    "matching_processes_before":  [
+
+                                  ],
+    "matching_processes_after":  [
+
+                                 ]
+}

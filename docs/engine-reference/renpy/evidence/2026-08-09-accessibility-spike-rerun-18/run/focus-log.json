@@ -1,0 +1,343 @@
+[
+  {
+    "focus": "first_action",
+    "semantic_id": "first_action",
+    "rect": [
+      96.0,
+      315.0,
+      760.0,
+      36.0
+    ],
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false,
+    "viewport_child": "MultiBox",
+    "viewport_child_count": 15,
+    "viewport_child_surface": [
+      760.0,
+      1060.0
+    ],
+    "focused_type": "Button",
+    "focused_focus_name": null,
+    "focused_id": null,
+    "focused_repr": "<renpy.display.behavior.Button object at 0x0000000008b69a30>",
+    "screen_widget_repr": {
+      "first_action": "<renpy.text.text.Text object ('第一操作') at 0x0000000008b69940>",
+      "second_action": "<renpy.text.text.Text object ('第二操作') at 0x0000000008b69b20>",
+      "deep_action": "<renpy.text.text.Text object ('深层操作（不自动执行）') at 0x0000000008b6a3f0>",
+      "exit_action": "<renpy.text.text.Text object ('退出 Spike') at 0x0000000008b6a780>"
+    },
+    "focus_list": [
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b69a30>",
+        "rect": [
+          96.0,
+          315.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b69a90>",
+        "rect": [
+          96.0,
+          365.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b6a4e0>",
+        "rect": [
+          880.0,
+          179.0,
+          129.0,
+          36.0
+        ]
+      }
+    ]
+  },
+  {
+    "focus": "second_action",
+    "semantic_id": "second_action",
+    "rect": [
+      96.0,
+      365.0,
+      760.0,
+      36.0
+    ],
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false,
+    "viewport_child": "MultiBox",
+    "viewport_child_count": 15,
+    "viewport_child_surface": [
+      760.0,
+      1060.0
+    ],
+    "focused_type": "Button",
+    "focused_focus_name": null,
+    "focused_id": null,
+    "focused_repr": "<renpy.display.behavior.Button object at 0x0000000008b31b50>",
+    "screen_widget_repr": {
+      "first_action": "<renpy.text.text.Text object ('第一操作') at 0x0000000008b31d90>",
+      "second_action": "<renpy.text.text.Text object ('第二操作') at 0x0000000008b30290>",
+      "deep_action": "<renpy.text.text.Text object ('深层操作（不自动执行）') at 0x0000000008b10080>",
+      "exit_action": "<renpy.text.text.Text object ('退出 Spike') at 0x0000000008b12cc0>"
+    },
+    "focus_list": [
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b31dc0>",
+        "rect": [
+          96.0,
+          315.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b31b50>",
+        "rect": [
+          96.0,
+          365.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b109e0>",
+        "rect": [
+          880.0,
+          179.0,
+          129.0,
+          36.0
+        ]
+      }
+    ]
+  },
+  {
+    "focus": "deep_action",
+    "semantic_id": "deep_action",
+    "rect": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "viewport_y": 221.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      679.0,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": true,
+    "viewport_child": "MultiBox",
+    "viewport_child_count": 15,
+    "viewport_child_surface": [
+      760.0,
+      1060.0
+    ],
+    "focused_type": "Button",
+    "focused_focus_name": null,
+    "focused_id": null,
+    "focused_repr": "<renpy.display.behavior.Button object at 0x0000000008b134d0>",
+    "screen_widget_repr": {
+      "first_action": "<renpy.text.text.Text object ('第一操作') at 0x0000000008b31d90>",
+      "second_action": "<renpy.text.text.Text object ('第二操作') at 0x0000000008b30290>",
+      "deep_action": "<renpy.text.text.Text object ('深层操作（不自动执行）') at 0x0000000008b10080>",
+      "exit_action": "<renpy.text.text.Text object ('退出 Spike') at 0x0000000008b12cc0>"
+    },
+    "focus_list": [
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b31b50>",
+        "rect": [
+          96.0,
+          179.0,
+          760.0,
+          1.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008b109e0>",
+        "rect": [
+          880.0,
+          179.0,
+          129.0,
+          36.0
+        ]
+      }
+    ]
+  },
+  {
+    "focus": "first_action",
+    "semantic_id": "first_action",
+    "rect": [
+      96.0,
+      315.0,
+      760.0,
+      36.0
+    ],
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false,
+    "viewport_child": "MultiBox",
+    "viewport_child_count": 15,
+    "viewport_child_surface": [
+      760.0,
+      1060.0
+    ],
+    "focused_type": "Button",
+    "focused_focus_name": null,
+    "focused_id": null,
+    "focused_repr": "<renpy.display.behavior.Button object at 0x0000000008a947a0>",
+    "screen_widget_repr": {
+      "first_action": "<renpy.text.text.Text object ('第一操作') at 0x0000000008a956d0>",
+      "second_action": "<renpy.text.text.Text object ('第二操作') at 0x0000000008a95520>",
+      "deep_action": "<renpy.text.text.Text object ('深层操作（不自动执行）') at 0x0000000008ac9550>",
+      "exit_action": "<renpy.text.text.Text object ('退出 Spike') at 0x0000000008ac8590>"
+    },
+    "focus_list": [
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008a947a0>",
+        "rect": [
+          96.0,
+          315.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008a96f30>",
+        "rect": [
+          96.0,
+          365.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008acbd40>",
+        "rect": [
+          880.0,
+          179.0,
+          129.0,
+          36.0
+        ]
+      }
+    ]
+  },
+  {
+    "focus": "second_action",
+    "semantic_id": "second_action",
+    "rect": [
+      96.0,
+      365.0,
+      760.0,
+      36.0
+    ],
+    "viewport_y": 0.0,
+    "viewport_range": 630.0,
+    "deep_rect": [
+      96,
+      900,
+      760,
+      36
+    ],
+    "viewport_rect": [
+      96,
+      285,
+      760,
+      430
+    ],
+    "deep_action_fully_visible": false,
+    "viewport_child": "MultiBox",
+    "viewport_child_count": 15,
+    "viewport_child_surface": [
+      760.0,
+      1060.0
+    ],
+    "focused_type": "Button",
+    "focused_focus_name": null,
+    "focused_id": null,
+    "focused_repr": "<renpy.display.behavior.Button object at 0x0000000008a96f30>",
+    "screen_widget_repr": {
+      "first_action": "<renpy.text.text.Text object ('第一操作') at 0x0000000008a956d0>",
+      "second_action": "<renpy.text.text.Text object ('第二操作') at 0x0000000008a95520>",
+      "deep_action": "<renpy.text.text.Text object ('深层操作（不自动执行）') at 0x0000000008ac9550>",
+      "exit_action": "<renpy.text.text.Text object ('退出 Spike') at 0x0000000008ac8590>"
+    },
+    "focus_list": [
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008a947a0>",
+        "rect": [
+          96.0,
+          315.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008a96f30>",
+        "rect": [
+          96.0,
+          365.0,
+          760.0,
+          36.0
+        ]
+      },
+      {
+        "widget": "<renpy.display.behavior.Button object at 0x0000000008acbd40>",
+        "rect": [
+          880.0,
+          179.0,
+          129.0,
+          36.0
+        ]
+      }
+    ]
+  }
+]

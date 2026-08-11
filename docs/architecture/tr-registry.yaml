@@ -1,0 +1,121 @@
+version: 1
+last_updated: 2026-08-11
+engine: Ren'Py 8.5.3
+entries:
+  - id: TR-STATE-001
+    system: SYS-STATE
+    gdd: design/gdd/five-axis-state.md
+    requirement: Schema 2, five axes, and ordered history share one rollback/save envelope
+    status: covered
+  - id: TR-STATE-002
+    system: SYS-STATE
+    gdd: design/gdd/five-axis-state.md
+    requirement: Strict validation and one complete replacement assignment
+    status: covered
+  - id: TR-END-001
+    system: SYS-ENDING
+    gdd: design/gdd/deterministic-ending-resolution.md
+    requirement: Deterministic total six-ending resolution without randomness
+    status: covered
+  - id: TR-END-002
+    system: SYS-ENDING
+    gdd: design/gdd/deterministic-ending-resolution.md
+    requirement: Counterevidence, cause lineage, terminal compatibility, and resolver purity
+    status: covered
+  - id: TR-CHOICE-001
+    system: SYS-CHOICE
+    gdd: design/gdd/choice-and-causality-record.md
+    requirement: Every player-facing choice commits through SYS-STATE
+    status: covered
+  - id: TR-CHOICE-002
+    system: SYS-CHOICE
+    gdd: design/gdd/choice-and-causality-record.md
+    requirement: Exact reaction/payoff joins and terminal continuation witness coverage
+    status: covered
+  - id: TR-NAR-001
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Seven-day chapter paths and six endings are valid and content-locked
+    status: partial
+  - id: TR-NAR-004
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Canonical Day 2 authored source declares required beats, exact choice/reaction/payoff bindings, and player-safe source-hash/catalog inputs
+    status: active
+  - id: TR-NAR-005
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 2 engine-route validation proves canonical choice paths, accessible presentation, current source-hash evidence, and no expansion of the Day 1-only partial manifest
+    status: active
+  - id: TR-NAR-006
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Canonical Day 3 authored source declares the empty-school scenes, exact choice/reaction/payoff bindings, perceptible trace completion, and player-safe source-hash/catalog inputs without partial-manifest or terminal-scope expansion
+    status: active
+  - id: TR-NAR-007
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 3 engine-route validation proves all canonical evidence-and-pause paths, accessible presentation, current source-hash evidence, and no expansion of the Day 1-only partial manifest or terminal scope
+    status: active
+  - id: TR-NAR-008
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 3 runtime assets are provenance-admitted with stable semantic paths and accessible bindings; missing or unregistered assets are not admitted
+    status: active
+  - id: TR-SAVE-001
+    system: SYS-SAVE
+    gdd: design/gdd/save-load-rollback.md
+    requirement: Free save, load, and rollback remain supported
+    status: covered
+  - id: TR-SAVE-002
+    system: SYS-SAVE
+    gdd: design/gdd/save-load-rollback.md
+    requirement: Legacy, unsupported, and corrupt loads enter a blocking safe flow
+    status: covered
+  - id: TR-PERSIST-001
+    system: SYS-PERSIST
+    gdd: design/gdd/cross-playthrough-unlocks.md
+    requirement: Schema-v2 root, 12-leaf authority, epoch, settings, merge/reset, and flush
+    status: covered
+  - id: TR-PERSIST-002
+    system: SYS-PERSIST
+    gdd: design/gdd/cross-playthrough-unlocks.md
+    requirement: Ending completion emits one durable completed-event boundary
+    status: covered
+  - id: TR-ACH-001
+    system: SYS-ACHIEVE
+    gdd: design/gdd/local-achievements.md
+    requirement: Eleven event-based achievements evaluate and persist independently and idempotently
+    status: partial
+  - id: TR-JOURNAL-001
+    system: SYS-JOURNAL
+    gdd: design/gdd/sys-journal.md
+    requirement: Journal bundle/read model exposes chapters, memories, endings, and achievements
+    status: partial
+  - id: TR-ACCESS-001
+    system: SYS-ACCESS
+    gdd: design/gdd/sys-access.md
+    requirement: Keyboard, scale, contrast, self-voicing, captions, and effect alternatives remain semantically equivalent
+    status: partial
+  - id: TR-TENSION-001
+    system: SYS-TENSION
+    gdd: design/gdd/sys-tension.md
+    requirement: Timeout maps to a canonical choice and does not alter ending rules
+    status: deferred
+    deferred_reason: Feature deferred to post-MVP
+  - id: TR-TENSION-002
+    system: SYS-TENSION
+    gdd: design/gdd/sys-tension.md
+    requirement: Tension preference survives restart but not per-run rollback
+    status: deferred
+    deferred_reason: Feature deferred to post-MVP; future ADR required
+  - id: TR-TEST-001
+    system: SYS-TEST
+    gdd: design/gdd/sys-test.md
+    requirement: Lint, pure logic, engine testcase, and gate evidence control hand-off
+    status: partial
+  - id: TR-BUILD-001
+    system: SYS-BUILD
+    gdd: design/gdd/sys-build.md
+    requirement: Offline Windows package includes legal and integrity provenance
+    status: covered

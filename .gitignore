@@ -1,0 +1,26 @@
+.tools/
+.renpy/
+.renpy-*/
+.uv-*-cache/
+# Regenerable Ren'Py runtime data captured during evidence runs.
+docs/engine-reference/renpy/evidence/**/appdata/
+docs/engine-reference/renpy/evidence/**/saves/
+production/qa/evidence/**/appdata/
+production/qa/evidence/**/saves/
+*.rpyc
+*.rpymc
+game/cache/
+game/saves/
+**/game/cache/
+**/game/saves/
+log.txt
+errors.txt
+traceback.txt
+lint.txt
+build/
+dist/
+releases/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
