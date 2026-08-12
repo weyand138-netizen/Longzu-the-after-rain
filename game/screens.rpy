@@ -73,7 +73,7 @@ screen choice(items):
                 text_size int(32 * accessibility_scale)
                 text_color ("#ffffff" if accessibility_high_contrast else "#f7ead1")
                 text_hover_color ("#000000" if accessibility_high_contrast else "#ffffff")
-                text_hover_underline (current_chapter == "day3")
+                text_hover_underline (current_chapter in ("day3", "day4"))
 
 screen quick_menu():
     zorder 100

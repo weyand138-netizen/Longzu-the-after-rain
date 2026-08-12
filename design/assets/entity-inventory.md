@@ -23,7 +23,7 @@ the hash then identifies its owning source file in the legal register.
 |---|---|---|---|---|---|---|
 | `font_source_han_sans_lite` | Font | Simplified-Chinese body, dialogue, and choice text | `game/assets/fonts/SourceHanSansLite.ttf`, loaded as `assets/fonts/SourceHanSansLite.ttf` | **Present; admitted** | `FONT-SOURCEHAN-LITE-P0`; `b2aaf73b7acc23d746b110f1caeaecc93d4292824979af44e96000200591b2a7` | `a11y.day1.text-and-choice-copy`: all Day 1 dialogue and choice captions remain readable at 1.0/1.25/1.5 scale; text is the decision-bearing channel. |
 | `runtime_solid_day1_warm_room` | Code-defined background | Non-decision decorative scene backing for the Day 1 room | Ren'Py image `bg warm_room` from `game/00_resources.rpy` (`Solid("#4a3840")`); no file path | **Present; admitted as project code** | `RUNTIME-SOLID-DAY1-WARM-ROOM`; source-file SHA-256 `4333d936fbe481f61c4cb828e43e17057133ae5af99b79cdf76e76545ee49801` | `a11y.day1.warm-room-decorative`: decorative only. Clothing, food, receipt-name, choices, reactions, and progress are supplied by visible/localizable text and keyboard-operable controls, never by this colour field. |
-| `runtime_ui_day1_choice_surface` | Code-defined UI primitives | Dialogue window and two-option critical-choice surface | Ren'Py `say` and `choice` screens in `game/screens.rpy`; `Solid()` backgrounds, no image file | **Present; admitted as project code** | `RUNTIME-UI-DAY1-CHOICE-SURFACE`; source-file SHA-256 `019041a6ae96cb28e88a45547e385b014217e3c612a1bb2215ec0dc77835757c` | `a11y.day1.choice-surface`: stable IDs `day1_choice_0`/`day1_choice_1`, first keyboard focus, captions as accessible text, distinct high-contrast focus treatment, and no quick-menu focus during critical choices. Verified at 1280x720, silent, reduced motion, and 1.5x/high-contrast baselines. |
+| `runtime_ui_day1_choice_surface` | Code-defined UI primitives | Dialogue window and two-option critical-choice surface | Ren'Py `say` and `choice` screens in `game/screens.rpy`; `Solid()` backgrounds, no image file | **Present; admitted as project code** | `RUNTIME-UI-DAY1-CHOICE-SURFACE`; source-file SHA-256 `1778ee71ef4c48c206145a19b88a29b2389780a36bd21a61a13389a2916d0726` | `a11y.day1.choice-surface`: stable IDs `day1_choice_0`/`day1_choice_1`, first keyboard focus, captions as accessible text, distinct high-contrast focus treatment, and no quick-menu focus during critical choices. Verified at 1280x720, silent, reduced motion, and 1.5x/high-contrast baselines. |
 
 ## Planned or not-admitted inventory
 
@@ -40,7 +40,7 @@ the hash then identifies its owning source file in the legal register.
 
 ## Day 3 audit result
 
-**Date**: 2026-08-11  
+**Date**: 2026-08-11<br>
 **Scope**: Sprint 2 / S2-02 actual runtime references in
 `game/chapters/day3.rpy`, `game/00_resources.rpy`, `game/screens.rpy`, and
 `game/assets/`.
@@ -55,11 +55,34 @@ reuse; they are not duplicate assets.
 |---|---|---|---|---|---|
 | `font_source_han_sans_lite` | All Day 3 dialogue and evidence/pause choice captions | `game/assets/fonts/SourceHanSansLite.ttf`, loaded by `game/screens.rpy` as `assets/fonts/SourceHanSansLite.ttf` | `FONT-SOURCEHAN-LITE-P0`; `b2aaf73b7acc23d746b110f1caeaecc93d4292824979af44e96000200591b2a7` | `a11y.day3.text-and-choice-copy`: the trace, evidence choice, and pause answer are visible/localizable text; no decision meaning depends on a visual asset. | **Present; admitted reuse.** |
 | `runtime_solid_day1_warm_room` | Decorative backing for `chapter_day3_empty_school` | Ren'Py image `bg warm_room` from `game/00_resources.rpy` (`Solid("#4a3840")`); no file path | `RUNTIME-SOLID-DAY1-WARM-ROOM`; source-file SHA-256 `4333d936fbe481f61c4cb828e43e17057133ae5af99b79cdf76e76545ee49801` | `a11y.day3.warm-room-decorative`: the background does not establish the classroom trace, choices, reactions, or progress; those facts remain text and keyboard accessible. | **Present; admitted reuse.** |
-| `runtime_ui_day1_choice_surface` | Day 3 evidence and truth-pace choices | Ren'Py `say` and `choice` screens in `game/screens.rpy`; `Solid()`/textbutton primitives, no image file | `RUNTIME-UI-DAY1-CHOICE-SURFACE`; source-file SHA-256 `019041a6ae96cb28e88a45547e385b014217e3c612a1bb2215ec0dc77835757c` | `a11y.day3.choice-surface`: captions carry the choice meaning; keyboard focus and high-contrast treatment must be verified by Story 007, with no quick-menu focus during critical input. | **Present; admitted reuse pending Story 007 presentation verification.** |
+| `runtime_ui_day1_choice_surface` | Day 3 evidence and truth-pace choices | Ren'Py `say` and `choice` screens in `game/screens.rpy`; `Solid()`/textbutton primitives, no image file | `RUNTIME-UI-DAY1-CHOICE-SURFACE`; source-file SHA-256 `1778ee71ef4c48c206145a19b88a29b2389780a36bd21a61a13389a2916d0726` | `a11y.day3.choice-surface`: captions carry the choice meaning; keyboard focus and high-contrast treatment must be verified by Story 007, with no quick-menu focus during critical input. | **Present; admitted reuse pending Story 007 presentation verification.** |
 
 No Day 3 image, audio, video, character art, CG, prop, generated, or planned
 file is present or admitted. The papers, red-clay trace, and archive in Day 3
 are narrative text/semantic facts, not asset-file claims.
+
+## Day 4 audit result
+
+**Date**: 2026-08-11<br>
+**Scope**: Sprint 3 / S3-03 actual runtime references in
+`game/chapters/day4.rpy`, `game/00_resources.rpy`, `game/screens.rpy`, and
+`game/assets/`.
+
+Day 4 introduces no binary, external, generated, image, audio, video,
+character-art, CG, or prop asset. Its direct scene reference is `bg warm_room`;
+dialogue and the two possible critical choice surfaces reuse the admitted font
+and code-defined screens. Tickets, route map, contact card, game coin, and sea
+window are narrative text and semantic facts, not asset-file claims.
+
+| Existing asset ID | Day 4 production role | Verified runtime path | Source / SHA-256 | Day 4 accessibility semantic binding | Admission status |
+|---|---|---|---|---|---|
+| `font_source_han_sans_lite` | All Day 4 dialogue and ticket/route/contact choice captions | `game/assets/fonts/SourceHanSansLite.ttf`, loaded by `game/screens.rpy` as `assets/fonts/SourceHanSansLite.ttf` | `FONT-SOURCEHAN-LITE-P0`; `b2aaf73b7acc23d746b110f1caeaecc93d4292824979af44e96000200591b2a7` | `a11y.day4.text-and-choice-copy`: ticket, route, independent-contact, and consequence facts are visible/localizable text; no decision depends on a visual asset. | **Present; admitted reuse.** |
+| `runtime_solid_day1_warm_room` | Decorative backing for `chapter_day4_seaside_train` | Ren'Py image `bg warm_room` from `game/00_resources.rpy` (`Solid("#4a3840")`); no file path | `RUNTIME-SOLID-DAY1-WARM-ROOM`; source-file SHA-256 `4333d936fbe481f61c4cb828e43e17057133ae5af99b79cdf76e76545ee49801` | `a11y.day4.warm-room-decorative`: the background supplies no ticket, identity-cost, route, contact, or progress fact; all such facts remain text and keyboard accessible. | **Present; admitted reuse.** |
+| `runtime_ui_day1_choice_surface` | Day 4 route-preparation and conditional independent-contact choices | Ren'Py `say` and `choice` screens in `game/screens.rpy`; `Solid()`/textbutton primitives, no image file | `RUNTIME-UI-DAY1-CHOICE-SURFACE`; source-file SHA-256 `1778ee71ef4c48c206145a19b88a29b2389780a36bd21a61a13389a2916d0726` | `a11y.day4.choice-surface`: captions are semantic and keyboard-operable; high-contrast focus must remain distinct and critical input must expose no quick-menu target. | **Present; admitted reuse.** Story 010 presentation verification passed on 2026-08-11. |
+
+No Day 4 image, audio, video, character art, CG, prop, generated, or planned
+file is present or admitted. Intended background and prop files listed below
+remain not admitted and must not be treated as Day 4 runtime references.
 
 ## Admission checklist
 

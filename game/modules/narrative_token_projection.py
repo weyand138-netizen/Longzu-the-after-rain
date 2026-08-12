@@ -13,6 +13,8 @@ TOKEN_REVOKE_BY_CHOICE = {
     "day2_assign_alias": "token_override_daily_choice",
     "day3_hide_school_evidence": "token_hide_school_evidence",
     "day3_force_explanation": "token_override_daily_choice",
+    "day4_decline_independent_contact": "token_abandon_backup_plan",
+    "day4_follow_one_route_no_backup": "token_abandon_backup_plan",
 }
 TOKEN_REPAIR_BY_CHOICE = {
     "day2_admit_alias_unknown": "token_silence_as_consent",

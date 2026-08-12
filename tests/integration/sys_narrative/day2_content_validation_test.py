@@ -97,7 +97,7 @@ class Day2ContentValidationTests(unittest.TestCase):
             self.assertIn(choice_id, self.testcases)
         day2_cases = self.testcases[
             self.testcases.index("testcase day2_accept_alias_save_token_route_contract:") : self.testcases.index(
-                "testcase accessibility_settings_batch_contract:"
+                "testcase day3_share_honor_route_contract:"
             )
         ]
         self.assertEqual(12, day2_cases.count('keysym "K_RETURN"'))

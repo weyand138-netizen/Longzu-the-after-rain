@@ -62,6 +62,21 @@ entries:
     gdd: design/gdd/seven-day-chapter-script.md
     requirement: Day 3 runtime assets are provenance-admitted with stable semantic paths and accessible bindings; missing or unregistered assets are not admitted
     status: active
+  - id: TR-NAR-009
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Canonical Day 4 authored source declares the seaside-train scenes, exact choice/reaction/payoff and self-controlled-option bindings, and player-safe source-hash/catalog inputs without partial-manifest or terminal-scope expansion
+    status: active
+  - id: TR-NAR-010
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 4 engine-route validation proves canonical ticket, contact, and no-backup paths, accessible presentation, current source-hash evidence, and no partial-manifest or terminal-scope expansion
+    status: active
+  - id: TR-NAR-011
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 4 runtime assets are provenance-admitted with stable semantic paths and accessible bindings; missing or unregistered assets are not admitted
+    status: active
   - id: TR-SAVE-001
     system: SYS-SAVE
     gdd: design/gdd/save-load-rollback.md

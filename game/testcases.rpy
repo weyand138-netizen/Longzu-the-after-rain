@@ -195,6 +195,48 @@ init python:
                 return choice_id
         return None
 
+    def _focused_day4_choice_id():
+        """Observe a rendered Day 4 focus target without assigning focus."""
+
+        focused = renpy.display.focus.get_focused()
+        for choice_id in ("day1_choice_0", "day1_choice_1", "day1_choice_2"):
+            widget = renpy.get_displayable("choice", choice_id)
+            if (
+                focused is widget
+                or getattr(focused, "child", None) is widget
+                or getattr(widget, "child", None) is focused
+            ):
+                return choice_id
+        return None
+
+    def _reset_day4_test_state():
+        """Reset Day 4 rollback fields that are not owned by reset_run_state."""
+
+        global event_identity_exposed, event_two_window_tickets_acquired
+        global cp_day4_two_tickets_complete, event_contact_risk_handover_complete
+        global event_contact_channel_declined, resource_two_tickets
+        global resource_single_ticket, resource_contact_card
+        global agency_day4_route_preparation_request, agency_day4_route_preparation_answer
+        global agency_day4_route_preparation_outcome
+        global agency_day4_independent_contact_request, agency_day4_independent_contact_answer
+        global agency_day4_independent_contact_outcome, critical_choice_interaction
+
+        event_identity_exposed = False
+        event_two_window_tickets_acquired = False
+        cp_day4_two_tickets_complete = False
+        event_contact_risk_handover_complete = False
+        event_contact_channel_declined = False
+        resource_two_tickets = False
+        resource_single_ticket = False
+        resource_contact_card = False
+        agency_day4_route_preparation_request = None
+        agency_day4_route_preparation_answer = None
+        agency_day4_route_preparation_outcome = None
+        agency_day4_independent_contact_request = None
+        agency_day4_independent_contact_answer = None
+        agency_day4_independent_contact_outcome = None
+        critical_choice_interaction = False
+
     class _ActionGateEngineTestAdapter(NoRollback):
         def __init__(self, phase):
             self.phase = phase
@@ -758,6 +800,227 @@ testcase day3_accessibility_visual_baselines:
     pause 0.1
     assert eval _focused_day3_choice_id() == "day1_choice_0"
     screenshot "visual/day3_truth_pace_1280x720_font_1_5_high_contrast.png"
+
+    run Function(apply_accessibility_settings, 1.0, False, False, False, False)
+
+testcase day4_two_ticket_contact_register_route_contract:
+    description "A Day 3-compatible two-ticket route registers independent contact by keyboard."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_share_school_evidence", {"truth": 1})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Jump("chapter_day4_seaside_train")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    assert eval renpy.get_displayable("choice", "day1_choice_0") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_1") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_2") is not None
+    run Function(renpy.set_focus, "choice", "day1_choice_0")
+    keysym "K_RETURN"
+    assert "两张靠窗票落进她掌心。售票员核对姓名时停了一下，路明非知道这会留下被人找到的代价。"
+    advance
+    assert eval current_chapter == "day4"
+    assert eval agency_day4_route_preparation_request == "event_route_preparation_requested"
+    assert eval agency_day4_route_preparation_answer == "preserve_executable_self_controlled_option"
+    assert eval agency_day4_route_preparation_outcome == "outcome_shared_option_prepared"
+    assert eval resource_two_tickets is True
+    assert eval event_identity_exposed is True
+    assert eval event_two_window_tickets_acquired is True
+    assert eval cp_day4_two_tickets_complete is True
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    assert eval renpy.get_displayable("choice", "day1_choice_0") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_1") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_2") is None
+    run Function(renpy.set_focus, "choice", "day1_choice_0")
+    keysym "K_RETURN"
+    assert "她自己念出昵称的读法，把游戏币交给窗口后拿走联系人卡，也看完了背面写着的风险。"
+    advance
+    assert eval agency_day4_independent_contact_request == "event_independent_contact_option_requested"
+    assert eval agency_day4_independent_contact_answer == "keep_independent_contact_option"
+    assert eval agency_day4_independent_contact_outcome == "outcome_independent_option_prepared"
+    assert eval resource_contact_card is True
+    assert eval event_contact_risk_handover_complete is True
+    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact"]
+    advance until screen "choice"
+    assert eval current_chapter == "prologue"
+
+testcase day4_single_ticket_contact_decline_route_contract:
+    description "A Day 3-compatible single-ticket route declines independent contact by keyboard."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Jump("chapter_day4_seaside_train")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    assert eval renpy.get_displayable("choice", "day1_choice_0") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_1") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_2") is not None
+    run Function(renpy.set_focus, "choice", "day1_choice_1")
+    keysym "K_RETURN"
+    assert "她接过那张票，没有把它塞回他手里，只把路线图折到能一个人展开的那一页。"
+    advance
+    assert eval agency_day4_route_preparation_outcome == "outcome_solo_option_prepared"
+    assert eval resource_single_ticket is True
+    assert eval resource_two_tickets is False
+    assert eval event_identity_exposed is False
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    assert eval renpy.get_displayable("choice", "day1_choice_0") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_1") is not None
+    run Function(renpy.set_focus, "choice", "day1_choice_1")
+    keysym "K_RETURN"
+    assert "她把游戏币和写着昵称的纸片收回掌心。她保留了它们，也没有留下能继续联系的号码。"
+    advance
+    assert eval agency_day4_independent_contact_outcome == "outcome_independent_option_declined"
+    assert eval event_contact_channel_declined is True
+    assert eval resource_contact_card is False
+    assert eval has_unresolved_token("token_abandon_backup_plan") is True
+    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_buy_single_ticket_cash", "day4_decline_independent_contact"]
+    advance until screen "choice"
+    assert eval current_chapter == "prologue"
+
+testcase day4_no_backup_contact_register_route_contract:
+    description "A Day 3-compatible no-backup route still exposes the guarded contact response by keyboard."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(apply_choice, "day2_admit_alias_unknown", {"understanding": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_share_school_evidence", {"truth": 1})
+    run Function(apply_choice, "day3_force_explanation", {})
+    run Jump("chapter_day4_seaside_train")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    assert eval renpy.get_displayable("choice", "day1_choice_0") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_1") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_2") is not None
+    run Function(renpy.set_focus, "choice", "day1_choice_2")
+    keysym "K_RETURN"
+    assert "路线图上只剩一条被折出来的线。她把联系人纸片收回袖口，没有替他补上空白。"
+    advance
+    assert eval agency_day4_route_preparation_outcome == "outcome_self_controlled_option_not_prepared"
+    assert eval has_unresolved_token("token_abandon_backup_plan") is True
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    assert eval renpy.get_displayable("choice", "day1_choice_0") is not None
+    assert eval renpy.get_displayable("choice", "day1_choice_1") is not None
+    run Function(renpy.set_focus, "choice", "day1_choice_0")
+    keysym "K_RETURN"
+    assert "她自己念出昵称的读法，把游戏币交给窗口后拿走联系人卡，也看完了背面写着的风险。"
+    advance
+    assert eval agency_day4_independent_contact_outcome == "outcome_independent_option_prepared"
+    assert eval resource_contact_card is True
+    assert eval event_contact_risk_handover_complete is True
+    assert eval choice_history == ["day2_admit_alias_unknown", "day2_save_second_token", "day3_share_school_evidence", "day3_force_explanation", "day4_follow_one_route_no_backup", "day4_register_independent_contact"]
+    advance until screen "choice"
+    assert eval current_chapter == "prologue"
+
+testcase day4_contact_requires_approved_alias_and_retained_token_contract:
+    description "A retained token without an approved alias cannot create a Day 4 contact response."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(apply_choice, "day2_assign_alias", {})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Jump("chapter_day4_seaside_train")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    run Function(renpy.set_focus, "choice", "day1_choice_2")
+    keysym "K_RETURN"
+    assert eval agency_day4_independent_contact_request is None
+    assert eval agency_day4_independent_contact_answer is None
+    assert eval agency_day4_independent_contact_outcome is None
+    assert eval has_unresolved_token("token_abandon_backup_plan") is True
+    assert eval choice_history == ["day2_assign_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup"]
+    advance until screen "choice"
+    assert eval current_chapter == "prologue"
+
+testcase day4_keyboard_default_focus_and_traversal_contract:
+    description "Day 4 surfaces set native focus, traverse all siblings by arrows, and hide quick-menu targets."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_share_school_evidence", {"truth": 1})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Jump("chapter_day4_seaside_train")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_0"
+    keysym "K_DOWN"
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_1"
+    keysym "K_DOWN"
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_2"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_0"
+    keysym "K_DOWN"
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_1"
+    keysym "K_RETURN"
+    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup", "day4_decline_independent_contact"]
+
+testcase day4_accessibility_visual_baselines:
+    description "Day 4 critical choice surfaces remain readable, focused, silent, and reduced-motion at both required baselines."
+
+    run Function(renpy.set_physical_size, (1280, 720))
+    run Function(setattr, renpy.game.preferences, "self_voicing", False)
+    assert eval renpy.game.preferences.self_voicing is False
+    run Function(apply_accessibility_settings, 1.0, False, True, False, False)
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_share_school_evidence", {"truth": 1})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Jump("chapter_day4_seaside_train")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_0"
+    screenshot "visual/day4_route_1280x720_keyboard_silent_reduced_motion.png"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_0"
+    screenshot "visual/day4_contact_1280x720_keyboard_silent_reduced_motion.png"
+
+    run Function(apply_accessibility_settings, 1.5, True, True, False, False)
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_share_school_evidence", {"truth": 1})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Jump("chapter_day4_seaside_train")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_0"
+    screenshot "visual/day4_route_1280x720_font_1_5_high_contrast.png"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day4_choice_id() == "day1_choice_0"
+    screenshot "visual/day4_contact_1280x720_font_1_5_high_contrast.png"
 
     run Function(apply_accessibility_settings, 1.0, False, False, False, False)
 
