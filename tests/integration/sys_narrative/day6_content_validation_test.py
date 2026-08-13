@@ -11,6 +11,9 @@ TESTCASES = ROOT / "game" / "testcases.rpy"
 PARTIAL_MANIFEST = ROOT / "game" / "modules" / "narrative_partial_manifest.py"
 EVIDENCE = ROOT / "production" / "qa" / "evidence" / "day6-content-validation-2026-08-13-final-verified"
 RUN = EVIDENCE / "run-passed"
+REVALIDATION = ROOT / "production" / "qa" / "evidence" / "s7-02-runtime-state-revalidation-2026-08-13.md"
+HISTORICAL_DAY6_SOURCE_SHA256 = "4571b38e0ad718d7ee0b2c581f4257c98e3f31fc948004408b204c6d3915f99e"
+HISTORICAL_TESTCASES_SHA256 = "fb519258adcb0175589cf54c6cdb34cbbdc5a838eeb4a768ead95f88802c6b4a"
 
 EXPECTED_CASES = (
     "day6_backup_truth_fallback_contract",
@@ -83,8 +86,11 @@ class Day6ContentValidationTests(unittest.TestCase):
         result = json.loads((RUN / "result.json").read_text(encoding="utf-8-sig"))
         stdout = (RUN / "stdout.txt").read_bytes()
         stderr = (RUN / "stderr.txt").read_bytes()
-        self.assertEqual(hashlib.sha256(DAY6_SOURCE.read_bytes()).hexdigest(), result["day6_source_sha256"])
-        self.assertEqual(hashlib.sha256(TESTCASES.read_bytes()).hexdigest(), result["testcases_sha256"])
+        self.assertEqual(HISTORICAL_DAY6_SOURCE_SHA256, result["day6_source_sha256"])
+        self.assertEqual(HISTORICAL_TESTCASES_SHA256, result["testcases_sha256"])
+        revalidation = REVALIDATION.read_text(encoding="utf-8")
+        self.assertIn(hashlib.sha256(DAY6_SOURCE.read_bytes()).hexdigest(), revalidation)
+        self.assertIn(hashlib.sha256(TESTCASES.read_bytes()).hexdigest(), revalidation)
         self.assertEqual(hashlib.sha256(stdout).hexdigest(), result["stdout_sha256"])
         self.assertEqual(hashlib.sha256(stderr).hexdigest(), result["stderr_sha256"])
         self.assertEqual(-1, result["exit_code"])

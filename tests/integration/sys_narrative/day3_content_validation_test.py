@@ -66,7 +66,10 @@ class Day3ContentValidationTests(unittest.TestCase):
             expected_history = "[{}]".format(
                 ", ".join('"{}"'.format(choice_id) for choice_id in history)
             )
-            self.assertIn("choice_history == {}".format(expected_history), route_case)
+            self.assertIn(
+                "current_choice_history() == {}".format(expected_history),
+                route_case,
+            )
             self.assertIn('advance until screen "choice"', route_case)
             self.assertIn('assert eval current_chapter == "prologue"', route_case)
             self.assertIn('renpy.get_displayable("choice", "day1_choice_0") is not None', route_case)

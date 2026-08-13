@@ -179,7 +179,7 @@ label chapter_day6_no_safe_house:
             narrator "他把旧身份凭据烧在空铁盒里，再把要承担的联络、追踪和失去写到自己一栏。绘梨衣看完后，把她的路线留在纸上。"
             $ event_shared_cost_acknowledged = True
             $ agency_day6_cost_outcome = "outcome_cost_borne_by_lu"
-            if event_shared_cost_promised and "day6_shift_cost_to_erii" not in choice_history:
+            if event_shared_cost_promised and "day6_shift_cost_to_erii" not in current_choice_history():
                 $ event_prior_cost_promise_honored_without_shift = True
                 $ cp_day6_direct_cost_complete = True
             $ critical_choice_interaction = False

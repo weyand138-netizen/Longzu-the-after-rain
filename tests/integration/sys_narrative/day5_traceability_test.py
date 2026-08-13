@@ -9,6 +9,7 @@ SOURCE = ROOT / "game" / "chapters" / "day5.rpy"
 GENERATION = ROOT / "game" / "modules" / "day5_source_generation.py"
 EPIC = ROOT / "production" / "epics" / "sys-narrative" / "EPIC.md"
 SPRINT_STATUS = ROOT / "production" / "sprint-status.yaml"
+SPRINT = ROOT / "production" / "sprints" / "sprint-004.md"
 TRACEABILITY = ROOT / "production" / "qa" / "evidence" / "day5-traceability-2026-08-13.md"
 STORY = ROOT / "production" / "epics" / "sys-narrative" / "story-015-day5-traceability.md"
 SMOKE = ROOT / "production" / "qa" / "smoke-sprint-004-2026-08-13.md"
@@ -22,6 +23,7 @@ class Day5TraceabilityTests(unittest.TestCase):
         cls.generation = GENERATION.read_text(encoding="utf-8")
         cls.epic = EPIC.read_text(encoding="utf-8")
         cls.sprint_status = SPRINT_STATUS.read_text(encoding="utf-8")
+        cls.sprint = SPRINT.read_text(encoding="utf-8")
         cls.traceability = TRACEABILITY.read_text(encoding="utf-8")
         cls.story = STORY.read_text(encoding="utf-8")
         cls.smoke = SMOKE.read_text(encoding="utf-8")
@@ -59,8 +61,10 @@ class Day5TraceabilityTests(unittest.TestCase):
             )
         self.assertIn("**Status**: Complete", self.story)
         self.assertIn("## Verdict: APPROVED", self.qa_signoff)
-        self.assertIn("sprint: 5", self.sprint_status)
-        self.assertIn('status: complete', self.sprint_status)
+        self.assertIn("# Sprint 4", self.sprint)
+        self.assertIn("Day 5", self.sprint)
+        self.assertIn("Stories 012-015 are Complete and Sprint", self.traceability)
+        self.assertIn("4 is `complete`", self.traceability)
 
     def test_objective_smoke_and_human_review_close_the_qa_hand_off(self):
         self.assertIn("**Verdict**: PASS", self.smoke)

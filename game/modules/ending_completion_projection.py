@@ -18,7 +18,7 @@ class EndingCompletionEvent:
     checkpoint_occurrence_id: str
     collection_epoch_id: int
     catalog_generation_id: str
-    stable_boundary: bool
+    stable_completion_boundary: bool
     owner_system: str = "SYS-ENDING"
 
 

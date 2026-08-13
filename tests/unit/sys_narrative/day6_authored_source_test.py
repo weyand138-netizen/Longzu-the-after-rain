@@ -10,6 +10,7 @@ BASELINE_PATH = ROOT / "design" / "narrative" / "seven-day-content-baseline.md"
 DERIVATION_PATH = ROOT / "game" / "modules" / "day6_commitment_derivation.py"
 SOURCE_GENERATION_PATH = ROOT / "game" / "modules" / "day6_source_generation.py"
 EVIDENCE_PATH = ROOT / "production" / "qa" / "evidence" / "day6-authored-source-evidence.md"
+REVALIDATION_EVIDENCE_PATH = ROOT / "production" / "qa" / "evidence" / "s7-02-runtime-state-revalidation-2026-08-13.md"
 
 EXPECTED_RECORDS = (
     ("day6_reopen_service_exit", "reaction_day6_reopen_service_exit", "payoff_day6_exit_ending"),
@@ -39,6 +40,7 @@ class Day6AuthoredSourceTests(unittest.TestCase):
         cls.derivation = DERIVATION_PATH.read_text(encoding="utf-8")
         cls.generation = SOURCE_GENERATION_PATH.read_text(encoding="utf-8")
         cls.evidence = EVIDENCE_PATH.read_text(encoding="utf-8")
+        cls.revalidation_evidence = REVALIDATION_EVIDENCE_PATH.read_text(encoding="utf-8")
 
     def test_source_declares_only_the_canonical_unit_and_four_frozen_scenes(self):
         self.assertEqual(1, self.source.count("label chapter_day6_no_safe_house:"))
@@ -74,7 +76,10 @@ class Day6AuthoredSourceTests(unittest.TestCase):
         self.assertIn("if resource_service_exit:", self.chapter)
         self.assertIn("elif resource_service_exit:", self.chapter)
         self.assertIn('if has_unresolved_token("token_withhold_family_truth"):', self.chapter)
-        self.assertIn('if event_shared_cost_promised and "day6_shift_cost_to_erii" not in choice_history:', self.chapter)
+        self.assertIn(
+            'if event_shared_cost_promised and "day6_shift_cost_to_erii" not in current_choice_history():',
+            self.chapter,
+        )
         shift_index = self.chapter.index('apply_choice("day6_shift_cost_to_erii"')
         visible_index = self.chapter.index("event_shifted_cost_consequence_visible = True")
         reconsider_index = self.chapter.index("event_cost_reconsideration_requested = True")
@@ -167,7 +172,8 @@ class Day6AuthoredSourceTests(unittest.TestCase):
         recorded = re.search(r'^DAY6_SOURCE_SHA256 = "([0-9a-f]{64})"$', self.generation, re.MULTILINE)
         self.assertIsNotNone(recorded)
         self.assertEqual(hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest(), recorded.group(1))
-        self.assertIn(recorded.group(1), self.evidence)
+        self.assertIn("4571b38e0ad718d7ee0b2c581f4257c98e3f31fc948004408b204c6d3915f99e", self.evidence)
+        self.assertIn(recorded.group(1), self.revalidation_evidence)
         self.assertIn("zero hidden inputs", self.evidence)
 
 

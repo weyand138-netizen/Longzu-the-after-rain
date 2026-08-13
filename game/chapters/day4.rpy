@@ -140,10 +140,10 @@ label chapter_day4_seaside_train:
 
     # scene_day4_contact_channel
     if (
-        "day2_save_second_token" in choice_history
+        "day2_save_second_token" in current_choice_history()
         and (
-            "day2_accept_alias" in choice_history
-            or "day2_admit_alias_unknown" in choice_history
+            "day2_accept_alias" in current_choice_history()
+            or "day2_admit_alias_unknown" in current_choice_history()
         )
     ):
         $ agency_day4_independent_contact_request = DAY4_INDEPENDENT_CONTACT_REQUEST_ID

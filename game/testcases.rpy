@@ -167,6 +167,57 @@ init python:
         replay = classify_completion_replay(event, restored.persistent_snapshot)
         return restored, replay, post
 
+    def _apply_s7_rain_stops_witness():
+        """Build the frozen rain-stops witness through the public state API."""
+
+        for choice_id, deltas in (
+            ("prologue_read_note", {"understanding": 1}),
+            ("prologue_ask_destination", {}),
+            ("prologue_accept_destination", {"autonomy": 1}),
+            ("prologue_notice_tracker", {"truth": 1}),
+            ("day1_accept_clothing", {"autonomy": 1}),
+            ("day1_read_food_gesture", {"understanding": 1}),
+            ("day2_accept_alias", {"understanding": 1, "autonomy": 1}),
+            ("day2_save_second_token", {"preparation": 1}),
+            ("day3_share_school_evidence", {"truth": 1}),
+            ("day3_honor_pause", {"understanding": 1, "autonomy": 1}),
+            ("day4_buy_two_tickets_real_name", {"preparation": 1, "sacrifice": 1}),
+            ("day4_register_independent_contact", {"truth": 1}),
+            ("day5_share_full_archive", {"truth": 1}),
+            ("day5_include_self_in_truth", {"preparation": 1, "sacrifice": 1}),
+            ("day5_honor_erii_response", {"autonomy": 1}),
+            ("day6_burn_old_identity", {"sacrifice": 1}),
+            ("day6_commit_shared_escape", {}),
+        ):
+            apply_choice(choice_id, deltas)
+
+    def _reset_s7_test_persistent_root():
+        """Isolate the completion-boundary fixture from prior testcase unlocks."""
+
+        candidate = build_fresh_persist_root()
+        persistent.sys_persist_state = candidate
+        persistent.settings = candidate["settings"]
+
+    def _stage_s7_ending_label(ending_id):
+        """Build a valid owned pending-ID fixture without re-resolving content."""
+
+        global pending_ending_id
+        global event_epilogue_first_guest_completed, cp_epilogue_first_guest_complete
+        global event_epilogue_lights_out_completed, cp_epilogue_lights_out_complete
+
+        _reset_s7_test_persistent_root()
+        reset_run_state()
+        pending_ending_id = _pending_id_for(ending_id)
+        event_epilogue_first_guest_completed = False
+        cp_epilogue_first_guest_complete = False
+        event_epilogue_lights_out_completed = False
+        cp_epilogue_lights_out_complete = False
+        validate_ending_lifecycle(
+            ending_flow_sentinel,
+            ending_flow_state,
+            pending_ending_id,
+        )
+
     def _focused_day2_choice_id():
         """Observe the rendered Day 2 focus target without assigning focus."""
 
@@ -559,12 +610,12 @@ testcase prologue_observe_and_ask:
     advance until screen "choice"
     click "对照红泥，并把追踪方向指给她看"
     advance until screen "chapter_complete"
-    assert eval understanding == 1
-    assert eval autonomy == 1
-    assert eval truth == 1
-    assert eval "prologue_read_note" in choice_history
-    assert eval "prologue_ask_destination" in choice_history
-    assert eval "prologue_accept_destination" in choice_history
+    assert eval current_axis_snapshot()["understanding"] == 1
+    assert eval current_axis_snapshot()["autonomy"] == 1
+    assert eval current_axis_snapshot()["truth"] == 1
+    assert eval "prologue_read_note" in current_choice_history()
+    assert eval "prologue_ask_destination" in current_choice_history()
+    assert eval "prologue_accept_destination" in current_choice_history()
 
 testcase prologue_expressive_choices:
     description "Zero-delta safety, route, and promise choices remain recorded."
@@ -578,10 +629,10 @@ testcase prologue_expressive_choices:
     click "告诉绘梨衣：如果出事，我们一起决定"
     advance until screen "chapter_complete"
     assert eval all(value == 0 for value in current_axis_snapshot().values())
-    assert eval len(choice_history) == 3
-    assert eval "prologue_hurry_to_train" in choice_history
-    assert eval "prologue_choose_route" in choice_history
-    assert eval "prologue_promise_cost" in choice_history
+    assert eval len(current_choice_history()) == 3
+    assert eval "prologue_hurry_to_train" in current_choice_history()
+    assert eval "prologue_choose_route" in current_choice_history()
+    assert eval "prologue_promise_cost" in current_choice_history()
 
 testcase day1_authored_route_contract:
     description "The authored Day 1 route reaches its receipt-name anchor by keyboard without exposing quick-menu focus during choices."
@@ -596,8 +647,8 @@ testcase day1_authored_route_contract:
     run Function(renpy.set_focus, "choice", "day1_choice_0")
     keysym "K_RETURN"
     advance repeat 3
-    assert eval "day1_accept_clothing" in choice_history
-    assert eval "day1_read_food_gesture" in choice_history
+    assert eval "day1_accept_clothing" in current_choice_history()
+    assert eval "day1_read_food_gesture" in current_choice_history()
 
 testcase day1_accessibility_visual_baselines:
     description "The Day 1 critical choice records default and 1.5x high-contrast reduced-motion visual baselines."
@@ -644,7 +695,7 @@ testcase day2_accept_alias_save_token_route_contract:
     assert "\u5979\u628a\u7b2c\u4e8c\u679a\u5e01\u4ea4\u7ed9\u4ed6\u4fdd\u7ba1\uff0c\u7136\u540e\u7528\u7559\u4e0b\u7684\u4e00\u679a\u5e01\u5f00\u59cb\u6e38\u620f\u3002"
     advance repeat 3
     assert eval current_chapter == "day2"
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token"]
 
 testcase day2_assign_alias_spend_tokens_route_contract:
     description "The ordinary assigned-alias path reaches the last-machine handoff by keyboard."
@@ -663,7 +714,7 @@ testcase day2_assign_alias_spend_tokens_route_contract:
     assert "\u6700\u540e\u4e00\u679a\u5e01\u843d\u8fdb\u673a\u5668\u3002\u5979\u628a\u624b\u653e\u56de\u64cd\u7eb5\u6746\u4e0a\uff0c\u76f4\u5230\u8fd9\u4e00\u5c40\u7684\u97f3\u4e50\u505c\u4e0b\u3002"
     advance repeat 3
     assert eval current_chapter == "day2"
-    assert eval choice_history == ["day2_assign_alias", "day2_spend_both_tokens"]
+    assert eval current_choice_history() == ["day2_assign_alias", "day2_spend_both_tokens"]
 
 testcase day2_repair_alias_route_contract:
     description "The unresolved-silence repair route is keyboard-operable and resolves its canonical token."
@@ -685,7 +736,7 @@ testcase day2_repair_alias_route_contract:
     advance repeat 3
     assert eval current_chapter == "day2"
     assert eval has_unresolved_token("token_silence_as_consent") is False
-    assert eval choice_history == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]
+    assert eval current_choice_history() == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]
 
 testcase day2_keyboard_default_focus_and_traversal_contract:
     description "Day 2 surfaces set first focus automatically and traverse by real arrow-key input."
@@ -711,7 +762,7 @@ testcase day2_keyboard_default_focus_and_traversal_contract:
     keysym "K_RETURN"
     assert "\u6700\u540e\u4e00\u679a\u5e01\u843d\u8fdb\u673a\u5668\u3002\u5979\u628a\u624b\u653e\u56de\u64cd\u7eb5\u6746\u4e0a\uff0c\u76f4\u5230\u8fd9\u4e00\u5c40\u7684\u97f3\u4e50\u505c\u4e0b\u3002"
     advance repeat 3
-    assert eval choice_history == ["day2_assign_alias", "day2_spend_both_tokens"]
+    assert eval current_choice_history() == ["day2_assign_alias", "day2_spend_both_tokens"]
 
     # The conditional third alias choice is reachable from the automatic
     # first focus, with no test-only focus assignment.
@@ -730,7 +781,7 @@ testcase day2_keyboard_default_focus_and_traversal_contract:
     pause 0.1
     assert eval _focused_day2_choice_id() == "day1_choice_0"
     keysym "K_RETURN"
-    assert eval choice_history == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]
+    assert eval current_choice_history() == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]
 
 testcase day2_accessibility_visual_baselines:
     description "Day 2 critical choice surfaces retain keyboard focus and readable silent reduced-motion baselines."
@@ -795,7 +846,7 @@ testcase day3_share_honor_route_contract:
     assert eval agency_day3_truth_pace_request == "event_truth_pace_requested"
     assert eval agency_day3_truth_pace_answer == "event_erii_closes_archive"
     assert eval agency_day3_truth_pace_outcome == "outcome_pause_honored"
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -822,7 +873,7 @@ testcase day3_share_force_route_contract:
     assert "\u4ed6\u7ee7\u7eed\u628a\u4f59\u4e0b\u7684\u8bf4\u660e\u5ff5\u5b8c\u3002\u5979\u5411\u540e\u9000\uff0c\u624b\u4ece\u7eb8\u8fb9\u79fb\u5f00\uff0c\u76f4\u5230\u8d70\u5eca\u706f\u5728\u95e8\u7f1d\u91cc\u53d8\u7a84\u3002"
     assert eval current_chapter == "day3"
     assert eval agency_day3_truth_pace_outcome == "outcome_pause_overridden"
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_force_explanation"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_force_explanation"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -849,7 +900,7 @@ testcase day3_hide_honor_route_contract:
     assert "\u4ed6\u628a\u6863\u6848\u6536\u5728\u684c\u8fb9\u3002\u8fc7\u4e86\u4e00\u4f1a\u513f\uff0c\u5979\u81ea\u5df1\u628a\u6700\u4e0a\u9762\u90a3\u9875\u91cd\u65b0\u6253\u5f00\u3002"
     assert eval current_chapter == "day3"
     assert eval agency_day3_truth_pace_outcome == "outcome_pause_honored"
-    assert eval choice_history == ["day2_assign_alias", "day2_spend_both_tokens", "day3_hide_school_evidence", "day3_honor_pause"]
+    assert eval current_choice_history() == ["day2_assign_alias", "day2_spend_both_tokens", "day3_hide_school_evidence", "day3_honor_pause"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -876,7 +927,7 @@ testcase day3_hide_force_route_contract:
     assert "\u4ed6\u7ee7\u7eed\u628a\u4f59\u4e0b\u7684\u8bf4\u660e\u5ff5\u5b8c\u3002\u5979\u5411\u540e\u9000\uff0c\u624b\u4ece\u7eb8\u8fb9\u79fb\u5f00\uff0c\u76f4\u5230\u8d70\u5eca\u706f\u5728\u95e8\u7f1d\u91cc\u53d8\u7a84\u3002"
     assert eval current_chapter == "day3"
     assert eval agency_day3_truth_pace_outcome == "outcome_pause_overridden"
-    assert eval choice_history == ["day2_assign_alias", "day2_spend_both_tokens", "day3_hide_school_evidence", "day3_force_explanation"]
+    assert eval current_choice_history() == ["day2_assign_alias", "day2_spend_both_tokens", "day3_hide_school_evidence", "day3_force_explanation"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -905,7 +956,7 @@ testcase day3_keyboard_default_focus_and_traversal_contract:
     assert eval _focused_day3_choice_id() == "day1_choice_1"
     keysym "K_RETURN"
     assert "\u4ed6\u7ee7\u7eed\u628a\u4f59\u4e0b\u7684\u8bf4\u660e\u5ff5\u5b8c\u3002\u5979\u5411\u540e\u9000\uff0c\u624b\u4ece\u7eb8\u8fb9\u79fb\u5f00\uff0c\u76f4\u5230\u8d70\u5eca\u706f\u5728\u95e8\u7f1d\u91cc\u53d8\u7a84\u3002"
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_force_explanation"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_force_explanation"]
 
 testcase day3_accessibility_visual_baselines:
     description "Day 3 critical choice surfaces retain keyboard focus and readable silent reduced-motion baselines."
@@ -990,7 +1041,7 @@ testcase day4_two_ticket_contact_register_route_contract:
     assert eval agency_day4_independent_contact_outcome == "outcome_independent_option_prepared"
     assert eval resource_contact_card is True
     assert eval event_contact_risk_handover_complete is True
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -1029,7 +1080,7 @@ testcase day4_single_ticket_contact_decline_route_contract:
     assert eval event_contact_channel_declined is True
     assert eval resource_contact_card is False
     assert eval has_unresolved_token("token_abandon_backup_plan") is True
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_buy_single_ticket_cash", "day4_decline_independent_contact"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_buy_single_ticket_cash", "day4_decline_independent_contact"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -1065,7 +1116,7 @@ testcase day4_no_backup_contact_register_route_contract:
     assert eval agency_day4_independent_contact_outcome == "outcome_independent_option_prepared"
     assert eval resource_contact_card is True
     assert eval event_contact_risk_handover_complete is True
-    assert eval choice_history == ["day2_admit_alias_unknown", "day2_save_second_token", "day3_share_school_evidence", "day3_force_explanation", "day4_follow_one_route_no_backup", "day4_register_independent_contact"]
+    assert eval current_choice_history() == ["day2_admit_alias_unknown", "day2_save_second_token", "day3_share_school_evidence", "day3_force_explanation", "day4_follow_one_route_no_backup", "day4_register_independent_contact"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -1087,7 +1138,7 @@ testcase day4_contact_requires_approved_alias_and_retained_token_contract:
     assert eval agency_day4_independent_contact_answer is None
     assert eval agency_day4_independent_contact_outcome is None
     assert eval has_unresolved_token("token_abandon_backup_plan") is True
-    assert eval choice_history == ["day2_assign_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup"]
+    assert eval current_choice_history() == ["day2_assign_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup"]
     advance until screen "choice"
     assert eval current_chapter == "prologue"
 
@@ -1120,7 +1171,7 @@ testcase day4_keyboard_default_focus_and_traversal_contract:
     pause 0.1
     assert eval _focused_day4_choice_id() == "day1_choice_1"
     keysym "K_RETURN"
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup", "day4_decline_independent_contact"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup", "day4_decline_independent_contact"]
 
 testcase day4_accessibility_visual_baselines:
     description "Day 4 critical choice surfaces remain readable, focused, silent, and reduced-motion at both required baselines."
@@ -1224,7 +1275,7 @@ testcase day5_shared_honor_and_repair_route_contract:
     assert eval has_unresolved_token("token_override_daily_choice") is True
     keysym "K_RETURN"
     assert "他逐项承认自己替她安排过什么，把仍在生效的安排划掉，等她自己把纸重新摆好。"
-    assert eval choice_history == ["day2_assign_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact", "day5_share_full_archive", "day5_honor_erii_response", "day5_include_self_in_truth", "day5_repair_school_evidence", "day5_repair_daily_choice"]
+    assert eval current_choice_history() == ["day2_assign_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact", "day5_share_full_archive", "day5_honor_erii_response", "day5_include_self_in_truth", "day5_repair_school_evidence", "day5_repair_daily_choice"]
     assert eval current_axis_snapshot() == {"understanding": 1, "autonomy": 2, "truth": 2, "preparation": 3, "sacrifice": 2}
     assert eval has_unresolved_token("token_hide_school_evidence") is False
     assert eval has_unresolved_token("token_override_daily_choice") is False
@@ -1266,7 +1317,7 @@ testcase day5_contact_replace_route_contract:
     assert eval event_external_blame_only is True
     assert eval day5_daily_override_was_unresolved is False
     assert eval event_daily_override_unrepaired is False
-    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup", "day4_register_independent_contact", "day5_give_safe_summary", "day5_replace_erii_response", "day5_blame_family_only"]
+    assert eval current_choice_history() == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup", "day4_register_independent_contact", "day5_give_safe_summary", "day5_replace_erii_response", "day5_blame_family_only"]
     assert eval has_unresolved_token("token_withhold_family_truth") is True
     assert eval has_unresolved_token("token_override_daily_choice") is True
     assert eval has_unresolved_token("token_hide_school_evidence") is True
@@ -1476,7 +1527,7 @@ testcase day6_backup_truth_fallback_contract:
     assert eval agency_day6_commitment_state == "no_executable_route"
     keysym "K_RETURN"
     assert eval event_shared_cost_acknowledged is True
-    assert eval choice_history == ["day4_follow_one_route_no_backup", "day5_give_safe_summary", "day6_reopen_service_exit", "day6_disclose_withheld_archive", "day6_burn_old_identity", "day6_no_executable_route"]
+    assert eval current_choice_history() == ["day4_follow_one_route_no_backup", "day5_give_safe_summary", "day6_reopen_service_exit", "day6_disclose_withheld_archive", "day6_burn_old_identity", "day6_no_executable_route"]
 
 testcase day6_shared_commitment_contract:
     description "A Day 5 shared answer plus two tickets and direct cost exposes only the shared commitment."
@@ -1496,7 +1547,7 @@ testcase day6_shared_commitment_contract:
     assert eval agency_day6_commitment_derivation_record["observable_action_or_object_ids"] == ("action_erii_confirms_two_tickets_and_shared_route",)
     keysym "K_RETURN"
     assert eval event_shared_cost_acknowledged is True
-    assert eval choice_history == ["day6_burn_old_identity", "day6_commit_shared_escape"]
+    assert eval current_choice_history() == ["day6_burn_old_identity", "day6_commit_shared_escape"]
 
 testcase day6_independent_commitment_contract:
     description "A closed independent-contact answer with handover facts exposes only independent contact commitment."
@@ -1537,7 +1588,7 @@ testcase day6_shift_takeback_old_order_contract:
     run Function(_reset_day4_test_state)
     run Function(_reset_day5_test_state)
     run Function(_reset_day6_test_state)
-    run Function(apply_choice, "day2_assign_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_assign_alias", {})
     run Function(_set_day5_route_facts, False, False, False, False)
     run Function(_set_day6_route_context, "independent_contact", "outcome_route_preference_overridden_to_old_order", False, True)
     run Function(_set_day6_preconditions, False, True, False)
@@ -1555,7 +1606,7 @@ testcase day6_shift_takeback_old_order_contract:
     keysym "K_RETURN"
     assert eval has_unresolved_token("token_shift_promised_cost") is False
     assert eval cp_day6_cost_reconsideration_complete is True
-    assert eval choice_history == ["day2_assign_alias", "day6_shift_cost_to_erii", "day6_take_cost_back", "day6_commit_old_order_return"]
+    assert eval current_choice_history() == ["day2_assign_alias", "day6_shift_cost_to_erii", "day6_take_cost_back", "day6_commit_old_order_return"]
 
 testcase day6_invalid_facts_hide_commitment_contract:
     description "Contradictory closed Day 5 answer/outcome facts stop before any Day 6 commitment choice is exposed."
@@ -1735,6 +1786,102 @@ testcase ending_completion_restore_contract:
         _ending_completion_restore_test_result()[2].persistent_snapshot,
         _ending_completion_restore_test_result()[1].persistent_snapshot,
     )
+
+testcase ending_lifecycle_schema2_boundary_contract:
+    description "Schema-2 state is the only Day 7 resolver input and entry transition."
+
+    run Function(_reset_s7_test_persistent_root)
+    run Function(reset_run_state)
+    assert eval state_schema_sentinel == "semantic_state:v2"
+    assert eval semantic_state == {"schema_version": 2, "axes": {"understanding": 0, "autonomy": 0, "truth": 0, "preparation": 0, "sacrifice": 0}, "choice_history": []}
+    assert eval ending_flow_sentinel == "ending_flow:v1"
+    assert eval ending_flow_state == "Active"
+    assert eval pending_ending_id is None
+    run Function(_apply_s7_rain_stops_witness)
+    assert eval current_axis_snapshot() == {"understanding": 3, "autonomy": 3, "truth": 3, "preparation": 3, "sacrifice": 3}
+    assert eval prepare_day7_ending_jump() == "ending_rain_stops"
+    assert eval ending_flow_state == "Active"
+    assert eval pending_ending_id == "ending.rain_stops"
+    assert eval validate_ending_completion_state(ending_flow_state, pending_ending_id, ending_completion_event_record, persistent.sys_persist_state) is None
+    assert eval "rain_stops" not in persistent.sys_persist_state["ending_ids"]
+    assert eval ending_completion_event_record is None
+    run Function(commit_ending_entry, "rain_stops")
+    assert eval ending_flow_state == "Ended"
+    assert eval semantic_state["axes"] == {"understanding": 3, "autonomy": 3, "truth": 3, "preparation": 3, "sacrifice": 3}
+    # `assert eval` may evaluate its expression more than once while reporting.
+    # Invoke this one-time durable boundary as an engine action, then assert its
+    # externally observable ADR-0006 effects without making the assertion
+    # itself a second completion request.
+    run Function(commit_ending_completion, "rain_stops", "ending.rain_stops.completion")
+    assert eval ending_completion_event_record.completed_event_id == "ending_completed:rain_stops"
+    assert eval ending_completion_event_record.checkpoint_occurrence_id == "ending.rain_stops.completion:1"
+    assert eval ending_completion_event_record.stable_completion_boundary is True
+    assert eval "rain_stops" in persistent.sys_persist_state["ending_ids"]
+    run Function(commit_ending_completion, "rain_stops", "ending.rain_stops.completion")
+    assert eval ending_completion_event_record.completed_event_id == "ending_completed:rain_stops"
+    assert eval persistent.sys_persist_state["ending_ids"].count("rain_stops") == 1
+
+testcase ending_her_own_name_terminal_contract:
+    description "The independent-contact closure enters only from its owned pending ID and remains keyboard accessible."
+
+    run Function(_stage_s7_ending_label, "her_own_name")
+    run Jump("ending_her_own_name")
+    assert "她把联系人卡和写着自己名字的纸放进外套口袋"
+    assert eval ending_flow_state == "Ended"
+    assert eval ending_completion_event_record is None
+    assert eval pending_ending_id == "ending.her_own_name"
+
+testcase ending_see_the_sea_terminal_contract:
+    description "The shared-escape closure enters only from its owned pending ID and remains keyboard accessible."
+
+    run Function(_stage_s7_ending_label, "see_the_sea")
+    run Jump("ending_see_the_sea")
+    assert "两张靠窗的票被并排放在桌上"
+    assert eval ending_flow_state == "Ended"
+    assert eval ending_completion_event_record is None
+    assert eval pending_ending_id == "ending.see_the_sea"
+
+testcase ending_one_person_train_terminal_contract:
+    description "The solo-departure closure reaches its unique completion through keyboard advance."
+
+    run Function(_stage_s7_ending_label, "one_person_train")
+    run Jump("ending_one_person_train")
+    assert "单人票在她手里，能离开的路线确实存在。"
+    assert eval ending_flow_state == "Ended"
+    assert eval ending_completion_event_record is None
+    assert eval pending_ending_id == "ending.one_person_train"
+
+testcase ending_golden_cage_terminal_contract:
+    description "The old-order closure reaches its unique completion through keyboard advance."
+
+    run Function(_stage_s7_ending_label, "golden_cage")
+    run Jump("ending_golden_cage")
+    assert "被称作安全的方案盖过了她已经说出的决定。"
+    assert eval ending_flow_state == "Ended"
+    assert eval ending_completion_event_record is None
+    assert eval pending_ending_id == "ending.golden_cage"
+
+testcase ending_unsent_postcard_terminal_contract:
+    description "The route-collapse closure reaches its unique completion through keyboard advance."
+
+    run Function(_stage_s7_ending_label, "unsent_postcard")
+    run Jump("ending_unsent_postcard")
+    assert "桌上没有一条还能执行的路线。"
+    assert eval ending_flow_state == "Ended"
+    assert eval ending_completion_event_record is None
+    assert eval pending_ending_id == "ending.unsent_postcard"
+
+testcase ending_rain_stops_epilogue_contract:
+    description "Only rain-stops reaches the ordinary arcade epilogue through keyboard advance."
+
+    run Function(_stage_s7_ending_label, "rain_stops")
+    run Jump("ending_rain_stops")
+    advance until "傍晚的网吧只开了几盏灯。"
+    assert eval ending_flow_state == "Ended"
+    assert eval ending_completion_event_record.ending_id == "rain_stops"
+    assert eval "rain_stops" in persistent.sys_persist_state["ending_ids"]
+    assert eval event_epilogue_first_guest_completed is False
+    assert eval event_epilogue_lights_out_completed is False
 
 testcase action_gate_mutex_contract:
     description "Adapters publish the mutex before callbacks and gate screen/keyboard actions."

@@ -1,5 +1,5 @@
 version: 1
-last_updated: 2026-08-11
+last_updated: 2026-08-14
 engine: Ren'Py 8.5.3
 entries:
   - id: TR-STATE-001
@@ -21,6 +21,26 @@ entries:
     system: SYS-ENDING
     gdd: design/gdd/deterministic-ending-resolution.md
     requirement: Counterevidence, cause lineage, terminal compatibility, and resolver purity
+    status: covered
+  - id: TR-END-003
+    system: SYS-ENDING
+    gdd: design/gdd/deterministic-ending-resolution.md
+    requirement: Schema-2 detached snapshot replay, ordered-history folds, route qualifications, and the immutable canonical resolution record
+    status: covered
+  - id: TR-END-004
+    system: SYS-ENDING
+    gdd: design/gdd/deterministic-ending-resolution.md
+    requirement: Day 7 has one failure-closed resolver adapter, fixed label map, entry transition, and ADR-0006 completion boundary
+    status: covered
+  - id: TR-END-005
+    system: SYS-ENDING
+    gdd: design/gdd/deterministic-ending-resolution.md
+    requirement: All six fixed ending closures and the rain-stops arcade epilogue are playable without changing their approved meanings
+    status: covered
+  - id: TR-END-006
+    system: SYS-ENDING
+    gdd: design/gdd/deterministic-ending-resolution.md
+    requirement: Pure, engine, integration, accessibility, and traceability evidence proves terminal contracts without claiming full-manifest or release completion
     status: covered
   - id: TR-CHOICE-001
     system: SYS-CHOICE
@@ -116,6 +136,26 @@ entries:
     system: SYS-NARRATIVE
     gdd: design/gdd/seven-day-chapter-script.md
     requirement: Day 6 story, source, asset, test, and QA evidence records identify one verified content generation and do not claim Day 7, terminal, ending, epilogue, or release work
+    status: active
+  - id: TR-NAR-020
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Canonical Day 7 source presents the three required acknowledgement scenes and hands off exactly once through the owned terminal resolver interface without creating new state facts
+    status: active
+  - id: TR-NAR-021
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 7 runtime assets are provenance-admitted with stable semantic paths and accessible bindings; missing or unregistered assets are not admitted
+    status: active
+  - id: TR-NAR-022
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 7 engine-route validation proves prior-state preservation, a single owned terminal handoff, accessible presentation, and failure-closed resolver errors without ending or epilogue scope expansion
+    status: active
+  - id: TR-NAR-023
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 7 story, source, asset, terminal-handoff test, and QA evidence records identify one verified content generation and do not claim ending, epilogue, manifest, release, or stage delivery
     status: active
   - id: TR-SAVE-001
     system: SYS-SAVE

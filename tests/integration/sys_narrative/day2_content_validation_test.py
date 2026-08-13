@@ -139,9 +139,9 @@ class Day2ContentValidationTests(unittest.TestCase):
         self.assertIn('keysym "K_DOWN" repeat 2', focus_case)
         self.assertIn('assert eval _focused_day2_choice_id() == "day1_choice_2"', focus_case)
         self.assertIn('keysym "K_RETURN"', focus_case)
-        self.assertIn('choice_history == ["day2_assign_alias", "day2_spend_both_tokens"]', focus_case)
+        self.assertIn('current_choice_history() == ["day2_assign_alias", "day2_spend_both_tokens"]', focus_case)
         self.assertIn(
-            'choice_history == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]',
+            'current_choice_history() == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]',
             focus_case,
         )
 

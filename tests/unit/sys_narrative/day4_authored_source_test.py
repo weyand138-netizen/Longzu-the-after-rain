@@ -20,9 +20,14 @@ BASELINE_PATH = PROJECT_ROOT / "design" / "narrative" / "seven-day-content-basel
 PARTIAL_MANIFEST_PATH = (
     PROJECT_ROOT / "game" / "modules" / "narrative_partial_manifest.py"
 )
-EVIDENCE_PATH = (
+HISTORICAL_EVIDENCE_PATH = (
     PROJECT_ROOT / "production" / "qa" / "evidence" / "day4-authored-source-evidence.md"
 )
+REVALIDATION_EVIDENCE_PATH = (
+    PROJECT_ROOT / "production" / "qa" / "evidence"
+    / "s7-02-runtime-state-revalidation-2026-08-13.md"
+)
+HISTORICAL_DAY4_SOURCE_SHA256 = "dc62786bf08623b243dca77a5e24e37c17084d39e37e3041985e3a9350fccaac"
 
 EXPECTED_DAY4_RECORDS = (
     (
@@ -68,7 +73,8 @@ class Day4AuthoredSourceTests(unittest.TestCase):
         cls.source = SOURCE_PATH.read_text(encoding="utf-8")
         cls.baseline = BASELINE_PATH.read_text(encoding="utf-8")
         cls.partial_manifest = PARTIAL_MANIFEST_PATH.read_text(encoding="utf-8")
-        cls.evidence = EVIDENCE_PATH.read_text(encoding="utf-8")
+        cls.historical_evidence = HISTORICAL_EVIDENCE_PATH.read_text(encoding="utf-8")
+        cls.revalidation_evidence = REVALIDATION_EVIDENCE_PATH.read_text(encoding="utf-8")
 
     def test_source_declares_only_the_canonical_day4_unit_and_scenes(self):
         self.assertEqual(1, self.source.count("label chapter_day4_seaside_train:"))
@@ -136,6 +142,9 @@ class Day4AuthoredSourceTests(unittest.TestCase):
             or "day2_admit_alias_unknown" in choice_history
         )
     ):'''
+        contact_guard = contact_guard.replace(
+            "choice_history", "current_choice_history()"
+        )
         self.assertIn(contact_guard, self.source)
         self.assertIn("她自己念出昵称的读法", self.source)
         self.assertIn("resource_contact_card = True", self.source)
@@ -167,18 +176,19 @@ class Day4AuthoredSourceTests(unittest.TestCase):
             self.assertNotIn(forbidden, visible_lines)
 
     def test_evidence_binds_current_hash_and_day1_only_manifest_is_unchanged(self):
-        recorded_hash = re.search(
+        historical_hash = re.search(
             r"^\*\*Source SHA-256\*\*: `([0-9a-f]{64})`$",
-            self.evidence,
+            self.historical_evidence,
             re.MULTILINE,
         )
-        self.assertIsNotNone(recorded_hash)
-        self.assertEqual(
-            hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest(), recorded_hash.group(1)
-        )
+        self.assertIsNotNone(historical_hash)
+        self.assertEqual(HISTORICAL_DAY4_SOURCE_SHA256, historical_hash.group(1))
+        current_hash = hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest()
+        self.assertIn(current_hash, self.revalidation_evidence)
+        self.assertIn("state-only change", self.revalidation_evidence)
         self.assertIn('PARTIAL_MANIFEST_SCHEMA = "narrative_partial_day1_manifest:v1"', self.partial_manifest)
         self.assertNotIn("day4_", self.partial_manifest)
-        self.assertIn("No Day 4 partial manifest", self.evidence)
+        self.assertIn("No Day 4 partial manifest", self.historical_evidence)
 
 
 if __name__ == "__main__":

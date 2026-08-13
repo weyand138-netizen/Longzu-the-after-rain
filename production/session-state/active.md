@@ -201,3 +201,127 @@
   Day 7 as the only new scope.
 
 <!-- QA RUN: 2026-08-13 | Sprint: sprint-005 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-005-2026-08-13.md -->
+
+## Session Extract — Sprint 6 Day 7 planning 2026-08-13
+
+- Scope: exactly `chapter_day7_before_red_well`, its three frozen scenes, and
+  one owned SYS-ENDING handoff; zero new choice, axis, repair, qualification,
+  route-resource, or ending source fact.
+- Result: scope delta is 0%, but Stories 020-023 are correctly blocked. The
+  current runtime lacks the owned `day7_resolve_ending` adapter, six real
+  ending labels, and ADR-0006 completion callsites required for a runnable Day
+  7 terminal handoff.
+- Guardrail: no empty label, local resolver copy, test-only substitute, or
+  empty `src/` directory is permitted. Runtime implementation remains in
+  `game/`.
+- Next: deliver the already-authorized SYS-ENDING terminal implementation as
+  the dependency, then re-run Day 7 story-readiness.
+
+## Session Extract — Sprint 7 terminal dependency planning 2026-08-13
+
+- Scope: only the existing SYS-ENDING resolver/lifecycle/completion contracts,
+  six frozen ending closures, and the approved rain-stops arcade epilogue.
+- Status correction: `TR-END-001` and `TR-END-002` were marked covered while
+  the runtime still contained only an axes-only resolver and no terminal flow;
+  both are now correctly `partial`, with active delivery TRs 003-006.
+- Guardrail: this enables Sprint 6; it does not alter Day 7's zero-new-facts
+  scope or claim full-manifest, release, or stage delivery. Runtime remains in
+  `game/`, never an empty `src/` directory.
+- Next: run Sprint 7 Story 001 readiness, then implement it through the full
+  dev-story, review, story-done, smoke, and QA sequence.
+
+## Session Extract — Sprint 7 Story 001 readiness 2026-08-13
+
+- Initial verdict: BLOCKED by a review misread of the Golden Cage witness.
+- Correction: the authoritative witness contains only
+  `day5_replace_erii_response`, not `day5_honor_erii_response`. It remains
+  topology-valid with replace's zero-axis projection and final `3/2/3/2/1`.
+- Final verdict: READY. No GDD, choice projection, topology, or Golden Cage
+  predicate was modified; proceed with the canonical resolver implementation.
+
+## Session Extract — Sprint 7 Story 001 completion 2026-08-13
+
+- Verdict: COMPLETE. The history-only schema-2 resolver record is implemented
+  in `game/modules/ending_rules.py`; it owns no live Ren'Py state.
+- Owner-approved vector alignment: the stale `axis_match_v1` vector was
+  regenerated from the current authoritative `rain_stops` witness. Its current
+  digest is `8d6112f9e5f8292f03db2560738b124cbe429e2d1ea40095e979bfd29ebaee0c`.
+  Golden Cage remains replace-only, zero-axis, and `3/2/3/2/1`.
+- Verification: focused resolver 9/9; Python 246/246; Ren'Py global 45/45
+  testcases and 386/386 assertions; isolated lint/compile; diff check PASS.
+- Runtime-root note: this Ren'Py project implements runtime content in `game/`;
+  no empty `src/` directory was created for gate compliance.
+- Next: run S7-02 readiness and implement the owned lifecycle/completion
+  boundary before any ending prose or Day 7 handoff.
+
+## Session Extract — Sprint 7 Story 002 completion 2026-08-13
+
+- Verdict: COMPLETE. Schema-2 is the sole rollback-owned semantic state; the
+  Day 7 handoff builds one validated detached snapshot, resolves once, and uses
+  the frozen six-label map. Entry and ADR-0006 completion remain the only
+  lifecycle/persistence boundaries.
+- Review correction: `Active + pending ending ID + no event` is the valid
+  resolver-handoff state. `after_load` now rejects only an impossible Active
+  completion event and strictly binds any present event to durable membership.
+- Verification: focused S7-02 suite 6/6; Python 252/252; Ren'Py global 46/46
+  testcases and 405/405 assertions; lint/compile; and diff check PASS.
+- Runtime-root note: implementation remains in `game/`; no empty `src/`
+  directory was created.
+- Next: run S7-03 readiness, then implement the six frozen closures and only
+  the approved rain-stops arcade epilogue.
+
+## Session Extract — Sprint 7 Story 003 readiness 2026-08-13
+
+- Verdict: READY. The dependency boundary is complete; the six stable label
+  IDs, each frozen closure meaning, and the rain-only epilogue requirements are
+  specific and testable.
+- Presentation limit: reuse only `game/`'s code-defined `bg warm_room` and
+  standard accessible text flow. No asset, selector, predicate, route fact, or
+  content identity is authorized to change.
+- Next: implement the six labels, their visible closures, the terminal
+  completion nodes, and the rain-stops-only arcade epilogue.
+
+## Session Extract — Sprint 7 Story 003 completion 2026-08-13
+
+- Verdict: COMPLETE. Six mapped labels now present only the frozen closure
+  meanings, use their owned entry and one completion boundary, and do not
+  inspect resolver inputs or persistent state. `rain_stops` alone continues
+  after completion into the ordinary arcade epilogue.
+- Review correction: Ren'Py direct-jump test execution resets after labels
+  return, so engine evidence observes entry/visible closure in each real label
+  and advances the rain path into the real epilogue. Static source tests prove
+  every post-closure completion node and rain-only successor exactly.
+- Verification: terminal source suite 11/11; Python 257/257; Ren'Py global
+  52/52 testcases and 431/431 assertions; lint/compile; and diff check PASS.
+- Runtime-root note: implementation remains in `game/`; no empty `src/`
+  directory was created.
+- Next: run S7-04 readiness and deliver terminal traceability/smoke/team-QA
+  evidence before reopening Sprint 6 Day 7 readiness.
+
+## Session Extract — Sprint 7 Story 004 completion 2026-08-13
+
+- Verdict: COMPLETE pending sprint-level QA. The terminal traceability record
+  and 15-case consistency suite bind all six terminal TRs, stories, source
+  identities, reviews, smoke/QA locations, runtime-root convention, and scope
+  exclusions.
+- Status synchronization: `TR-END-001` through `TR-END-005` are now covered;
+  `TR-END-006` remains the honest Sprint QA evidence contract until final sign-
+  off. No claim is made for Day 7 content, full terminal enumeration, release,
+  package, stage promotion, or Polish.
+- Next: run complete Sprint 7 smoke and team-QA objective checks, then stop at
+  the required owner-only narrative/readability review decision.
+
+## Session Extract - Sprint 7 QA approval 2026-08-14
+
+- Verdict: QA APPROVED. Andwey confirmed the required solo narrative/readability
+  review for the six closures and rain-stops epilogue in the active Codex task.
+- Objective verification: Python 261/261; focused SYS-ENDING 15/15; pinned
+  Ren'Py global 52/52 testcases and 431/431 assertions; lint/compile; Erii
+  content constraints; and diff check all pass. Test-evidence review: ADEQUATE.
+- Status alignment: SYS-ENDING is Complete; `TR-END-001` through `TR-END-006`
+  are covered; Sprint 7 is complete. Production stage is unchanged; runtime
+  implementation stays in `game/`, never an empty `src/` directory.
+- Next: create the local Sprint 7 close-out commit, then rerun Sprint 6 Day 7
+  story-readiness before implementation.
+
+<!-- QA RUN: 2026-08-14 | Sprint: sprint-007 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-007-2026-08-13.md -->

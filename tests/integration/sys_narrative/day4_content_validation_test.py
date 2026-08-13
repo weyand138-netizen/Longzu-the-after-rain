@@ -12,6 +12,8 @@ SCREENS = ROOT / "game" / "screens.rpy"
 TESTCASES = ROOT / "game" / "testcases.rpy"
 EVIDENCE = ROOT / "production" / "qa" / "evidence" / "day4-content-validation-2026-08-11" / "record.md"
 EVIDENCE_RUN = EVIDENCE.parent / "run"
+REVALIDATION = ROOT / "production" / "qa" / "evidence" / "s7-02-runtime-state-revalidation-2026-08-13.md"
+HISTORICAL_DAY4_SOURCE_SHA256 = "dc62786bf08623b243dca77a5e24e37c17084d39e37e3041985e3a9350fccaac"
 
 
 EXPECTED_ROUTE_CASES = (
@@ -83,10 +85,10 @@ class Day4ContentValidationTests(unittest.TestCase):
             re.DOTALL,
         )
         self.assertIsNotNone(contact_guard)
-        self.assertIn('"day2_save_second_token" in choice_history', contact_guard.group("guard"))
+        self.assertIn('"day2_save_second_token" in current_choice_history()', contact_guard.group("guard"))
         self.assertTrue(
-            '"day2_accept_alias" in choice_history' in contact_guard.group("guard")
-            or '"day2_admit_alias_unknown" in choice_history' in contact_guard.group("guard"),
+            '"day2_accept_alias" in current_choice_history()' in contact_guard.group("guard")
+            or '"day2_admit_alias_unknown" in current_choice_history()' in contact_guard.group("guard"),
             "Day 4 contact must require an approved alias outcome as well as the retained arcade token.",
         )
 
@@ -119,7 +121,10 @@ class Day4ContentValidationTests(unittest.TestCase):
         evidence = EVIDENCE.read_text(encoding="utf-8")
         recorded_hash = re.search(r"^\*\*Day 4 source SHA-256\*\*: `([0-9a-f]{64})`$", evidence, re.MULTILINE)
         self.assertIsNotNone(recorded_hash)
-        self.assertEqual(hashlib.sha256(DAY4_SOURCE.read_bytes()).hexdigest(), recorded_hash.group(1))
+        self.assertEqual(HISTORICAL_DAY4_SOURCE_SHA256, recorded_hash.group(1))
+        revalidation = REVALIDATION.read_text(encoding="utf-8")
+        self.assertIn(hashlib.sha256(DAY4_SOURCE.read_bytes()).hexdigest(), revalidation)
+        self.assertIn(hashlib.sha256(TESTCASES.read_bytes()).hexdigest(), revalidation)
         result = json.loads((EVIDENCE_RUN / "result.json").read_text(encoding="utf-8-sig"))
         self.assertEqual("[rpytest] Status: PASSED ", result["status_line"])
         self.assertEqual(
