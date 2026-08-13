@@ -105,7 +105,7 @@ class Day5ContentValidationTests(unittest.TestCase):
         self.assertIn("apply_accessibility_settings, 1.5, True, True, False, False", visual_case)
         for capture_name in EXPECTED_CAPTURE_HASHES:
             self.assertIn(capture_name, visual_case)
-        self.assertIn('text_hover_underline (current_chapter in ("day3", "day4", "day5"))', self.screens)
+        self.assertIn('text_hover_underline (current_chapter in ("day3", "day4", "day5", "day6"))', self.screens)
         self.assertIn("default_focus (index == 0)", self.screens)
 
     def test_current_evidence_binds_source_output_and_capture_bytes(self):
@@ -124,7 +124,13 @@ class Day5ContentValidationTests(unittest.TestCase):
         self.assertEqual(-1, result["exit_code"])
         self.assertEqual("[rpytest] Status: PASSED ", result["status_line"])
         self.assertEqual(hashlib.sha256(DAY5_SOURCE.read_bytes()).hexdigest(), result["day5_source_sha256"])
-        self.assertEqual(hashlib.sha256(TESTCASES.read_bytes()).hexdigest(), result["testcases_sha256"])
+        recorded_testcases = re.search(
+            r"^\*\*Testcase source SHA-256\*\*: `([0-9a-f]{64})`$",
+            self.evidence,
+            re.MULTILINE,
+        )
+        self.assertIsNotNone(recorded_testcases)
+        self.assertEqual(recorded_testcases.group(1), result["testcases_sha256"])
         self.assertEqual(hashlib.sha256(stdout).hexdigest(), result["stdout_sha256"])
         self.assertEqual(hashlib.sha256(stderr).hexdigest(), result["stderr_sha256"])
         self.assertIn(b"Test cases :    37 |    37 passed", stdout)

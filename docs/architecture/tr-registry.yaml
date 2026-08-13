@@ -97,6 +97,26 @@ entries:
     gdd: design/gdd/seven-day-chapter-script.md
     requirement: Day 5 story, source, asset, test, and QA evidence records identify one verified content generation and do not claim Day 6+, terminal, ending, or release work
     status: active
+  - id: TR-NAR-016
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Canonical Day 6 source declares safehouse-failure scenes, exact resource/cost/commitment choice bindings, and one guarded route commitment or fallback without entering Day 7 or ending scope
+    status: active
+  - id: TR-NAR-017
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 6 runtime assets are provenance-admitted with stable semantic paths and accessible bindings; missing or unregistered assets are not admitted
+    status: active
+  - id: TR-NAR-018
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 6 engine-route validation proves conditional repair, cost reconsideration, mutually exclusive route commitment, accessible presentation, and current source-hash evidence without Day 7 or ending expansion
+    status: active
+  - id: TR-NAR-019
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 6 story, source, asset, test, and QA evidence records identify one verified content generation and do not claim Day 7, terminal, ending, epilogue, or release work
+    status: active
   - id: TR-SAVE-001
     system: SYS-SAVE
     gdd: design/gdd/save-load-rollback.md

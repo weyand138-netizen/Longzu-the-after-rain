@@ -1,3 +1,8 @@
+default resource_service_exit = False
+default event_shared_cost_promised = False
+default event_note_preserved_by_erii = False
+
+
 label prologue_start:
     $ current_chapter = "prologue"
     scene bg rain_platform
@@ -22,6 +27,7 @@ label prologue_start:
             $ apply_choice("prologue_hurry_to_train", {})
             lm "先走。等安全了，我们再看。"
             narrator "绘梨衣点头，却弯腰把那张纸捡了起来。她把它折得很小，藏进袖口。"
+            $ event_note_preserved_by_erii = True
             narrator "路明非忽然意识到，“以后”可能不是一个可以随便使用的词。"
 
     narrator "列车进站的风从隧道里涌出来。绘梨衣抬头望着线路图，像在看一张没有图例的地图。"
@@ -61,6 +67,7 @@ label prologue_start:
         "记住维修门的位置":
             $ apply_choice("prologue_notice_service_exit", {"preparation": 1})
             narrator "封条是新的，锁却很旧。真要逃的时候，那里或许比站台更可靠。"
+            $ resource_service_exit = True
 
         "对照红泥，并把追踪方向指给她看":
             $ apply_choice("prologue_notice_tracker", {"truth": 1})
@@ -73,6 +80,7 @@ label prologue_start:
             $ apply_choice("prologue_promise_cost", {})
             lm "如果他们追上来，你不用听我的命令。我们一起决定。后果也一起担。"
             narrator "绘梨衣把他的手翻过来，将自己的手掌覆在上面。"
+            $ event_shared_cost_promised = True
             erii "嗯。"
 
     scene bg train_window

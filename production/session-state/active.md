@@ -180,3 +180,24 @@
   Day 6 as the only new scope.
 
 <!-- QA RUN: 2026-08-13 | Sprint: sprint-004 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-004-2026-08-13.md -->
+
+## Session Extract — Sprint 5 Day 6 QA close-out 2026-08-13
+
+- Verdict: QA APPROVED.
+- Status alignment: SYS-NARRATIVE Stories 016–019 are Complete; Sprint 5 is
+  `complete`. The solo human narrative/readability review is approved and the
+  Sprint 5 local close-out commit is now authorized.
+- Objective verification: full Python suite 246/246; pinned Ren'Py global suite
+  45/45 testcases and 386/386 assertions; `lint --compile`; Erii content
+  constraints; and `git diff --check` all PASS.
+- Evidence: Day 6 code review, smoke, traceability, and final verified
+  route/accessibility bundle are linked from
+  `production/qa/evidence/day6-traceability-2026-08-13.md`.
+- Runtime-root note: this Ren'Py project implements runtime content in `game/`;
+  no empty `src/` directory was created for gate compliance.
+- Human review: Andwey confirmed the four Day 6 narrative/readability criteria
+  in the active Codex task; the QA sign-off is APPROVED with no bug filed.
+- Required next action: create the Sprint 5 local close-out commit, then plan
+  Day 7 as the only new scope.
+
+<!-- QA RUN: 2026-08-13 | Sprint: sprint-005 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-005-2026-08-13.md -->

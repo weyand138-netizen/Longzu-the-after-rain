@@ -297,6 +297,92 @@ init python:
         event_contact_risk_handover_complete = contact_handover
         resource_single_ticket = single_ticket
 
+    def _focused_day6_choice_id():
+        """Observe a rendered Day 6 focus target without assigning focus."""
+
+        focused = renpy.display.focus.get_focused()
+        for choice_id in ("day1_choice_0", "day1_choice_1"):
+            widget = renpy.get_displayable("choice", choice_id)
+            if (
+                focused is widget
+                or getattr(focused, "child", None) is widget
+                or getattr(widget, "child", None) is focused
+            ):
+                return choice_id
+        return None
+
+    def _reset_day6_test_state():
+        """Reset Day 6 and its narrowly projected prologue facts."""
+
+        global resource_service_exit, event_shared_cost_promised
+        global event_note_preserved_by_erii, event_safehouse_failed
+        global event_achievement_read_note_recovered, cp_day6_note_recovery_complete
+        global event_service_exit_used, cp_day6_service_exit_complete
+        global event_backup_stays_abandoned, event_family_truth_stays_withheld
+        global event_cost_bearer_requested, event_erii_rejects_shifted_cost
+        global event_cost_reconsideration_requested, event_erii_rejects_shifted_cost_again
+        global event_shared_cost_acknowledged, event_prior_cost_promise_honored_without_shift
+        global cp_day6_direct_cost_complete, event_shifted_cost_consequence_visible
+        global event_shifted_cost_confirmed, event_independent_route_committed
+        global event_shared_route_committed, event_solo_route_committed
+        global event_no_continuing_contact_commitment, event_old_order_route_committed
+        global event_route_collapse, cp_day6_cost_reconsideration_complete
+        global agency_day6_cost_outcome, agency_day6_cost_reconsideration_outcome
+        global agency_day6_commitment_derivation_record, agency_day6_commitment_state
+        global critical_choice_interaction
+
+        resource_service_exit = False
+        event_shared_cost_promised = False
+        event_note_preserved_by_erii = False
+        event_safehouse_failed = False
+        event_achievement_read_note_recovered = False
+        cp_day6_note_recovery_complete = False
+        event_service_exit_used = False
+        cp_day6_service_exit_complete = False
+        event_backup_stays_abandoned = False
+        event_family_truth_stays_withheld = False
+        event_cost_bearer_requested = False
+        event_erii_rejects_shifted_cost = False
+        event_cost_reconsideration_requested = False
+        event_erii_rejects_shifted_cost_again = False
+        event_shared_cost_acknowledged = False
+        event_prior_cost_promise_honored_without_shift = False
+        cp_day6_direct_cost_complete = False
+        event_shifted_cost_consequence_visible = False
+        event_shifted_cost_confirmed = False
+        event_independent_route_committed = False
+        event_shared_route_committed = False
+        event_solo_route_committed = False
+        event_no_continuing_contact_commitment = False
+        event_old_order_route_committed = False
+        event_route_collapse = False
+        cp_day6_cost_reconsideration_complete = False
+        agency_day6_cost_outcome = None
+        agency_day6_cost_reconsideration_outcome = None
+        agency_day6_commitment_derivation_record = None
+        agency_day6_commitment_state = None
+        critical_choice_interaction = False
+
+    def _set_day6_route_context(answer, outcome, honored, overridden):
+        """Seed the closed Day 5 answer/outcome facts for a Day 6 route test."""
+
+        global agency_day5_response_answer, agency_day5_response_outcome
+        global event_route_preference_honored, event_route_preference_overridden_to_old_order
+
+        agency_day5_response_answer = answer
+        agency_day5_response_outcome = outcome
+        event_route_preference_honored = honored
+        event_route_preference_overridden_to_old_order = overridden
+
+    def _set_day6_preconditions(service_exit=False, shared_cost_promise=False, preserved_note=False):
+        """Seed only the Day 6 facts projected by the frozen prologue scope."""
+
+        global resource_service_exit, event_shared_cost_promised, event_note_preserved_by_erii
+
+        resource_service_exit = service_exit
+        event_shared_cost_promised = shared_cost_promise
+        event_note_preserved_by_erii = preserved_note
+
     class _ActionGateEngineTestAdapter(NoRollback):
         def __init__(self, phase):
             self.phase = phase
@@ -1363,6 +1449,207 @@ testcase day5_accessibility_visual_baselines:
     pause 0.1
     assert eval _focused_day5_choice_id() == "day1_choice_0"
     screenshot "visual/day5_response_1280x720_font_1_5_high_contrast.png"
+
+    run Function(apply_accessibility_settings, 1.0, False, False, False, False)
+
+testcase day6_backup_truth_fallback_contract:
+    description "An abandoned prepared backup and withheld archive expose only their legal repairs before a truthful fallback route."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(apply_choice, "day4_follow_one_route_no_backup", {})
+    run Function(apply_choice, "day5_give_safe_summary", {})
+    run Function(_set_day5_route_facts, False, False, False, False)
+    run Function(_set_day6_route_context, "continue_without_executable_route", "outcome_route_preference_honored_continue_without_executable_route", True, False)
+    run Function(_set_day6_preconditions, True, False, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    keysym "K_RETURN"
+    advance until screen "choice"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval agency_day6_commitment_state == "no_executable_route"
+    keysym "K_RETURN"
+    assert eval event_shared_cost_acknowledged is True
+    assert eval choice_history == ["day4_follow_one_route_no_backup", "day5_give_safe_summary", "day6_reopen_service_exit", "day6_disclose_withheld_archive", "day6_burn_old_identity", "day6_no_executable_route"]
+
+testcase day6_shared_commitment_contract:
+    description "A Day 5 shared answer plus two tickets and direct cost exposes only the shared commitment."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Function(_set_day6_route_context, "shared_escape", "outcome_route_preference_honored_shared_escape", True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval agency_day6_commitment_state == "shared_escape"
+    assert eval agency_day6_commitment_derivation_record["observable_action_or_object_ids"] == ("action_erii_confirms_two_tickets_and_shared_route",)
+    keysym "K_RETURN"
+    assert eval event_shared_cost_acknowledged is True
+    assert eval choice_history == ["day6_burn_old_identity", "day6_commit_shared_escape"]
+
+testcase day6_independent_commitment_contract:
+    description "A closed independent-contact answer with handover facts exposes only independent contact commitment."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(_set_day5_route_facts, False, True, True, False)
+    run Function(_set_day6_route_context, "independent_contact", "outcome_route_preference_honored_independent_contact", True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval agency_day6_commitment_state == "independent_contact"
+    keysym "K_RETURN"
+
+testcase day6_solo_commitment_contract:
+    description "A closed solo answer and a single ticket expose only solo commitment without a contact promise."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(_set_day5_route_facts, False, False, False, True)
+    run Function(_set_day6_route_context, "solo_departure", "outcome_route_preference_honored_solo_departure", True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval agency_day6_commitment_state == "solo_departure"
+    keysym "K_RETURN"
+
+testcase day6_shift_takeback_old_order_contract:
+    description "A visible shifted cost requires a second refusal before take-back and preserves the old-order override fact."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(apply_choice, "day2_assign_alias", {"understanding": 1, "autonomy": 1})
+    run Function(_set_day5_route_facts, False, False, False, False)
+    run Function(_set_day6_route_context, "independent_contact", "outcome_route_preference_overridden_to_old_order", False, True)
+    run Function(_set_day6_preconditions, False, True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    keysym "K_DOWN"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval event_shifted_cost_consequence_visible is True
+    assert eval event_cost_reconsideration_requested is True
+    assert eval event_erii_rejects_shifted_cost_again is True
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval agency_day6_commitment_state == "old_order_return"
+    keysym "K_RETURN"
+    assert eval has_unresolved_token("token_shift_promised_cost") is False
+    assert eval cp_day6_cost_reconsideration_complete is True
+    assert eval choice_history == ["day2_assign_alias", "day6_shift_cost_to_erii", "day6_take_cost_back", "day6_commit_old_order_return"]
+
+testcase day6_invalid_facts_hide_commitment_contract:
+    description "Contradictory closed Day 5 answer/outcome facts stop before any Day 6 commitment choice is exposed."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Function(_set_day6_route_context, "shared_escape", "outcome_route_preference_honored_independent_contact", True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    keysym "K_RETURN"
+    advance
+    assert eval agency_day6_commitment_state == "undetermined"
+    assert eval agency_day6_commitment_derivation_record["observable_action_or_object_ids"] == ()
+    assert eval agency_day6_commitment_derivation_record["unresolved_defect_ids"] == ("day5_answer_outcome_mismatch",)
+    assert eval event_independent_route_committed is False
+    assert eval event_shared_route_committed is False
+    assert eval event_solo_route_committed is False
+    assert eval event_old_order_route_committed is False
+    assert eval event_route_collapse is False
+
+testcase day6_keyboard_default_focus_and_traversal_contract:
+    description "Day 6 cost and commitment surfaces expose native keyboard focus and no quick-menu target."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Function(_set_day6_route_context, "shared_escape", "outcome_route_preference_honored_shared_escape", True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_0"
+    keysym "K_DOWN"
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_1"
+    keysym "K_UP"
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_0"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_0"
+
+testcase day6_accessibility_visual_baselines:
+    description "Day 6 cost and guarded route commitment surfaces remain focused, silent, and readable at both required baselines."
+
+    run Function(renpy.set_physical_size, (1280, 720))
+    run Function(setattr, renpy.game.preferences, "self_voicing", False)
+    assert eval renpy.game.preferences.self_voicing is False
+    run Function(apply_accessibility_settings, 1.0, False, True, False, False)
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Function(_set_day6_route_context, "shared_escape", "outcome_route_preference_honored_shared_escape", True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_0"
+    screenshot "visual/day6_cost_1280x720_keyboard_silent_reduced_motion.png"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_0"
+    screenshot "visual/day6_commitment_1280x720_keyboard_silent_reduced_motion.png"
+
+    run Function(apply_accessibility_settings, 1.5, True, True, False, False)
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(_reset_day6_test_state)
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Function(_set_day6_route_context, "shared_escape", "outcome_route_preference_honored_shared_escape", True, False)
+    run Jump("chapter_day6_no_safe_house")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_0"
+    screenshot "visual/day6_cost_1280x720_font_1_5_high_contrast.png"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day6_choice_id() == "day1_choice_0"
+    screenshot "visual/day6_commitment_1280x720_font_1_5_high_contrast.png"
 
     run Function(apply_accessibility_settings, 1.0, False, False, False, False)
 

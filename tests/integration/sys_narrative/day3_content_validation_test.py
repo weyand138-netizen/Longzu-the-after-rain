@@ -102,7 +102,7 @@ class Day3ContentValidationTests(unittest.TestCase):
         for capture in EXPECTED_CAPTURES:
             self.assertIn(capture, visual_case)
         self.assertIn("default_focus (index == 0)", self.screens)
-        self.assertIn('text_hover_underline (current_chapter in ("day3", "day4", "day5"))', self.screens)
+        self.assertIn('text_hover_underline (current_chapter in ("day3", "day4", "day5", "day6"))', self.screens)
         self.assertIn("text_size int(32 * accessibility_scale)", self.screens)
         self.assertIn('background Solid(("#000000" if accessibility_high_contrast', self.screens)
 

@@ -51,17 +51,15 @@ class Day5TraceabilityTests(unittest.TestCase):
         ):
             self.assertIn(path, self.traceability)
 
-    def test_story_and_sprint_statuses_agree_after_qa_approval(self):
+    def test_story_and_historical_qa_statuses_agree_after_qa_approval(self):
         for story_id in ("012", "013", "014", "015"):
             self.assertRegex(
                 self.epic,
                 r"\| {} \| .*? \| .*? \| Complete \|".format(story_id),
             )
         self.assertIn("**Status**: Complete", self.story)
-        sprint_three = self.sprint_status.split('id: "S4-03"', 1)[1].split('id: "S4-04"', 1)[0]
-        sprint_four = self.sprint_status.split('id: "S4-04"', 1)[1]
-        self.assertIn('status: done', sprint_three)
-        self.assertIn('status: done', sprint_four)
+        self.assertIn("## Verdict: APPROVED", self.qa_signoff)
+        self.assertIn("sprint: 5", self.sprint_status)
         self.assertIn('status: complete', self.sprint_status)
 
     def test_objective_smoke_and_human_review_close_the_qa_hand_off(self):

@@ -1,7 +1,7 @@
 # Asset and License Register
 
 **Last audited**: 2026-08-13
-**Audit scope**: Day 1, Day 3, Day 4, and Day 5 actual runtime references only.
+**Audit scope**: Day 1, Day 3, Day 4, Day 5, and Day 6 actual runtime references only.
 
 This register records provenance and the exact hash used for admission. It
 does not claim a final legal authorization beyond the stated source and licence
@@ -13,7 +13,7 @@ therefore identifies the source file that defines the admitted primitive.
 |---|---|---|---|---|---|---|---|
 | `FONT-SOURCEHAN-LITE-P0` | `game/assets/fonts/SourceHanSansLite.ttf` (referenced at runtime as `assets/fonts/SourceHanSansLite.ttf`) | Runtime file `game/assets/fonts/SourceHanSansLite.ttf`; SHA-256 `b2aaf73b7acc23d746b110f1caeaecc93d4292824979af44e96000200591b2a7`. Licence text: `docs/legal/fonts/SourceHanSansLite-OFL-1.1.txt`. | Ren'Py 8.5.3 SDK `sdk-fonts/SourceHanSansLite.ttf`; upstream family Adobe Source Han Sans | SIL Open Font License 1.1; reserved font name `Source`; bundled licence text retained | No | `a11y.day1.text-and-choice-copy`: readable dialogue/choice text is the decision-bearing, localizable semantic channel at all approved font scales. | **Present; admitted.** Source path, local hash, and bundled OFL text verified; release archive must retain this hash. |
 | `RUNTIME-SOLID-DAY1-WARM-ROOM` | Ren'Py image `bg warm_room` defined in `game/00_resources.rpy`; no standalone asset file | Project-authored source `game/00_resources.rpy`, `image bg warm_room = Solid("#4a3840")`; source SHA-256 `4333d936fbe481f61c4cb828e43e17057133ae5af99b79cdf76e76545ee49801` | Project code | Project-owned code; no third-party media incorporated | No | `a11y.day1.warm-room-decorative`: no causal or choice meaning is conveyed by the colour/background alone; the equivalent facts are visible/localizable text and keyboard-operable controls. | **Present; admitted as code-defined primitive.** |
-| `RUNTIME-UI-DAY1-CHOICE-SURFACE` | Ren'Py `say` and `choice` screens in `game/screens.rpy`; `Solid()`/textbutton primitives, no standalone asset file | Project-authored source `game/screens.rpy`; source SHA-256 `45f8315a4ee8af5191c523d1d29594147383759b50c5b773d89e0c73f96284ed` | Project code | Project-owned code; no third-party media incorporated | No | `a11y.day1.choice-surface`: `day1_choice_0`/`day1_choice_1` provide stable focus and caption semantics; high contrast adds a white/black focus state; quick-menu controls are absent during critical choices. | **Present; admitted as code-defined primitive.** Verified by the Day 1 accessibility evidence bundle. |
+| `RUNTIME-UI-DAY1-CHOICE-SURFACE` | Ren'Py `say` and `choice` screens in `game/screens.rpy`; `Solid()`/textbutton primitives, no standalone asset file | Project-authored source `game/screens.rpy`; source SHA-256 `72d963e5c0df442dec889d1024f82a8951af573575ad5ebd84a8c0e5a7e5a291` | Project code | Project-owned code; no third-party media incorporated | No | `a11y.day1.choice-surface`: `day1_choice_0`/`day1_choice_1` provide stable focus and caption semantics; high contrast adds a white/black focus state; quick-menu controls are absent during critical choices. | **Present; admitted as code-defined primitive.** Day 6 extends the same focus treatment to its choice surfaces; all global baselines are rerun before Sprint 5 hand-off. |
 
 ## Day 3 runtime reuse admission
 
@@ -60,6 +60,23 @@ semantic facts, not asset-file claims.
 | `RUNTIME-UI-DAY1-CHOICE-SURFACE` | Day 5 `say` and truth/response/liability/repair `choice` surfaces | `a11y.day5.choice-surface`: captions remain semantic and keyboard-operable; Story 014 verifies focus, high contrast, and absence of a quick-menu focus target. | **Present; admitted reuse pending Story 014 presentation verification.** |
 
 No Day 5 image, audio, video, character art, CG, prop, generated, or planned
+asset file has a runtime reference. Those asset categories remain not admitted.
+
+## Day 6 runtime reuse admission
+
+Day 6 adds no asset identity. The safehouse, service exit, route map, tickets,
+contact card, archive, and identity documents are visible narrative facts in
+text, not asset-file claims. Only the existing font, code-defined warm-room
+background, and code-defined choice surface are admitted for actual references
+in `game/chapters/day6.rpy`.
+
+| Asset ID | Day 6 runtime use | Day 6 accessibility binding | Review status |
+|---|---|---|---|
+| `FONT-SOURCEHAN-LITE-P0` | Day 6 safehouse, repair, cost, and commitment dialogue/choice captions | `a11y.day6.text-and-choice-copy`: all service-exit, truth, cost, and route facts remain visible/localizable text. | **Present; admitted reuse.** |
+| `RUNTIME-SOLID-DAY1-WARM-ROOM` | `scene bg warm_room` at `chapter_day6_no_safe_house` entry | `a11y.day6.warm-room-decorative`: background colour establishes no Day 6 resource, cost, consequence, or route fact. | **Present; admitted reuse.** |
+| `RUNTIME-UI-DAY1-CHOICE-SURFACE` | Day 6 backup/truth/cost/reconsideration/commitment choice surfaces | `a11y.day6.choice-surface`: captions remain semantic and keyboard-operable; Story 018 verifies focus, high contrast, and absence of a quick-menu focus target. | **Present; admitted reuse pending Story 018 presentation verification.** |
+
+No Day 6 image, audio, video, character art, CG, prop, generated, or planned
 asset file has a runtime reference. Those asset categories remain not admitted.
 
 ## Not admitted / not present

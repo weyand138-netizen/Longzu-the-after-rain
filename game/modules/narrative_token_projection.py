@@ -17,11 +17,16 @@ TOKEN_REVOKE_BY_CHOICE = {
     "day4_follow_one_route_no_backup": "token_abandon_backup_plan",
     "day5_give_safe_summary": "token_withhold_family_truth",
     "day5_replace_erii_response": "token_override_daily_choice",
+    "day6_abandon_backup": "token_abandon_backup_plan",
+    "day6_shift_cost_to_erii": "token_shift_promised_cost",
 }
 TOKEN_REPAIR_BY_CHOICE = {
     "day2_admit_alias_unknown": "token_silence_as_consent",
     "day5_repair_daily_choice": "token_override_daily_choice",
     "day5_repair_school_evidence": "token_hide_school_evidence",
+    "day6_reopen_service_exit": "token_abandon_backup_plan",
+    "day6_disclose_withheld_archive": "token_withhold_family_truth",
+    "day6_take_cost_back": "token_shift_promised_cost",
 }
 
 
