@@ -2,7 +2,7 @@
 
 **Date**: 2026-08-12
 **Source generation**: `game/chapters/day4.rpy` SHA-256 `dc62786bf08623b243dca77a5e24e37c17084d39e37e3041985e3a9350fccaac`
-**Shared choice-surface source**: `game/screens.rpy` SHA-256 `1778ee71ef4c48c206145a19b88a29b2389780a36bd21a61a13389a2916d0726`
+**Shared choice-surface source**: `game/screens.rpy` SHA-256 `45f8315a4ee8af5191c523d1d29594147383759b50c5b773d89e0c73f96284ed`
 
 ## Results
 

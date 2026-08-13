@@ -126,3 +126,57 @@
   empty `src/` directory is used for gate compliance.
 - Next: create the local Sprint 3 closure commit, then begin Day 5 as the only
   new Sprint 4 scope.
+
+## Session Extract — /story-done 2026-08-13
+
+- Verdict: COMPLETE
+- Story: `production/epics/sys-narrative/story-012-day5-authored-source.md` —
+  Day 5 Authored Source and Derived Route Answer
+- Verification: focused source/derivation tests 19/19; full Python baseline
+  211/211 before final hash assertion; Ren'Py lint/compile; content constraints;
+  `git diff --check`; code review approved.
+- Tech debt logged: None.
+- Next recommended: `production/epics/sys-narrative/story-013-day5-asset-admission.md`.
+
+## Session Extract — /story-done 2026-08-13
+
+- Verdict: COMPLETE
+- Story: `production/epics/sys-narrative/story-013-day5-asset-admission.md` —
+  Day 5 Asset Admission Records
+- Verification: Day 5 focused suite 22/22; inventory/legal hash and runtime-
+  reference audit pass; no external or planned asset admitted.
+- Tech debt logged: None.
+- Next recommended: `production/epics/sys-narrative/story-014-day5-content-validation.md`.
+
+## Session Extract — /story-done 2026-08-13
+
+- Verdict: COMPLETE
+- Story: `production/epics/sys-narrative/story-014-day5-content-validation.md` —
+  Day 5 Route, Accessibility, and Evidence Validation
+- Verification: reviewed source generation `9ec6fd…e432`; focused integration
+  4/4; complete Python suite 219/219; preserved Ren'Py global suite 37/37
+  testcases and 345/345 assertions; four hash-bound 1280x720 captures.
+- Review: approved after a narrow reaction-before-event observation remediation;
+  no frozen Day 5 design or scope changed.
+- Next recommended: Story 015 traceability, then Sprint 4 smoke and QA hand-off.
+
+## Session Extract — Sprint 4 Day 5 objective QA hand-off 2026-08-13
+
+- Verdict: QA APPROVED.
+- Status alignment: SYS-NARRATIVE Stories 012–015 are Complete; Sprint 4 is
+  `complete`. The solo human narrative/readability review is approved and the
+  Sprint 4 local close-out commit is now authorized.
+- Objective verification: full Python suite 223/223; pinned Ren'Py global suite
+  37/37 testcases and 345/345 assertions; `lint --compile`; Erii content
+  constraints; and `git diff --check` all PASS.
+- Evidence: Day 5 code review, smoke, traceability, verified route/accessibility
+  bundle, and pending QA hand-off are linked from
+  `production/qa/evidence/day5-traceability-2026-08-13.md`.
+- Runtime-root note: this Ren'Py project implements runtime content in `game/`;
+  no empty `src/` directory was created for gate compliance.
+- Human review: Andwey confirmed the four narrative/readability criteria in the
+  active Codex task; the QA sign-off is APPROVED with no bug filed.
+- Required next action: create the Sprint 4 local close-out commit, then plan
+  Day 6 as the only new scope.
+
+<!-- QA RUN: 2026-08-13 | Sprint: sprint-004 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-004-2026-08-13.md -->

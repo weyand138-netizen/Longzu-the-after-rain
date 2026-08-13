@@ -77,6 +77,26 @@ entries:
     gdd: design/gdd/seven-day-chapter-script.md
     requirement: Day 4 runtime assets are provenance-admitted with stable semantic paths and accessible bindings; missing or unregistered assets are not admitted
     status: active
+  - id: TR-NAR-012
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Canonical Day 5 authored source declares the family-archive scenes, exact choice/reaction/payoff bindings, and a resource-fact-only derived route answer without partial-manifest, terminal, or later-day expansion
+    status: active
+  - id: TR-NAR-013
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 5 runtime assets are provenance-admitted with stable semantic paths and accessible bindings; missing or unregistered assets are not admitted
+    status: active
+  - id: TR-NAR-014
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 5 engine-route validation proves canonical truth, liability, derived-response, and repair paths with accessible presentation and current source-hash evidence, without partial-manifest, terminal, or later-day expansion
+    status: active
+  - id: TR-NAR-015
+    system: SYS-NARRATIVE
+    gdd: design/gdd/seven-day-chapter-script.md
+    requirement: Day 5 story, source, asset, test, and QA evidence records identify one verified content generation and do not claim Day 6+, terminal, ending, or release work
+    status: active
   - id: TR-SAVE-001
     system: SYS-SAVE
     gdd: design/gdd/save-load-rollback.md

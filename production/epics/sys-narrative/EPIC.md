@@ -4,7 +4,7 @@
 > **GDD**: `design/gdd/seven-day-chapter-script.md`  
 > **Architecture Module**: SYS-NARRATIVE  
 > **Status**: Ready  
-> **Stories**: 11 stories
+> **Stories**: 15 stories
 
 ## Overview
 
@@ -29,6 +29,10 @@ Produce the 15 canonical narrative units as player-safe Ren'Py content, beginnin
 | TR-NAR-009 | Day 4 authored source, exact bindings, and player-safe source provenance | ADR-0003, ADR-0008, ADR-0006 |
 | TR-NAR-010 | Day 4 routes, accessibility evidence, and content-boundary validation | ADR-0003, ADR-0008 |
 | TR-NAR-011 | Day 4 asset admission and semantic accessibility bindings | ADR-0003, ADR-0008 |
+| TR-NAR-012 | Day 5 authored source, derived route answer, and player-safe provenance | ADR-0003, ADR-0008, ADR-0006 |
+| TR-NAR-013 | Day 5 asset admission and semantic accessibility bindings | ADR-0003, ADR-0008 |
+| TR-NAR-014 | Day 5 routes, accessibility evidence, and content-boundary validation | ADR-0003, ADR-0008 |
+| TR-NAR-015 | Day 5 story and evidence traceability | ADR-0003, ADR-0008 |
 
 ## Stories
 
@@ -45,6 +49,10 @@ Produce the 15 canonical narrative units as player-safe Ren'Py content, beginnin
 | 009 | [Day 4 authored source and causal bindings](story-009-day4-authored-source.md) | Config/Data | Complete | ADR-0008, ADR-0003, ADR-0006 |
 | 010 | [Day 4 route, accessibility, and evidence validation](story-010-day4-content-validation.md) | Integration | Complete | ADR-0003, ADR-0008 |
 | 011 | [Day 4 asset admission records](story-011-day4-asset-admission.md) | Config/Data | Complete | ADR-0003, ADR-0008 |
+| 012 | [Day 5 authored source and derived route answer](story-012-day5-authored-source.md) | Config/Data | Complete | ADR-0008, ADR-0003, ADR-0006 |
+| 013 | [Day 5 asset admission records](story-013-day5-asset-admission.md) | Config/Data | Complete | ADR-0003, ADR-0008 |
+| 014 | [Day 5 route, accessibility, and evidence validation](story-014-day5-content-validation.md) | Integration | Complete | ADR-0003, ADR-0008 |
+| 015 | [Day 5 story and evidence traceability](story-015-day5-traceability.md) | Config/Data | Complete | ADR-0003, ADR-0008 |
 
 Day 2 flow-manifest expansion is intentionally not a story in this batch:
 ADR-0009 permits exactly the Day 1 partial artifact and blocks a partial Day 2

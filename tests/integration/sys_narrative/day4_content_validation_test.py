@@ -105,7 +105,7 @@ class Day4ContentValidationTests(unittest.TestCase):
         self.assertIn("apply_accessibility_settings, 1.5, True, True, False, False", visual_case)
         for capture_name in EXPECTED_CAPTURE_NAMES:
             self.assertIn(capture_name, visual_case)
-        self.assertIn('text_hover_underline (current_chapter in ("day3", "day4"))', self.screens)
+        self.assertIn('text_hover_underline (current_chapter in ("day3", "day4", "day5"))', self.screens)
 
     def test_decision_facts_remain_textual_and_partial_manifest_scope_stays_day1_only(self):
         self.assertIn("scene_day4_route_answer", self.source)

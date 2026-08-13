@@ -237,6 +237,66 @@ init python:
         agency_day4_independent_contact_outcome = None
         critical_choice_interaction = False
 
+    def _focused_day5_choice_id():
+        """Observe a rendered Day 5 focus target without assigning focus."""
+
+        focused = renpy.display.focus.get_focused()
+        for choice_id in ("day1_choice_0", "day1_choice_1"):
+            widget = renpy.get_displayable("choice", choice_id)
+            if (
+                focused is widget
+                or getattr(focused, "child", None) is widget
+                or getattr(widget, "child", None) is focused
+            ):
+                return choice_id
+        return None
+
+    def _reset_day5_test_state():
+        """Reset Day 5 rollback fields that are not owned by reset_run_state."""
+
+        global event_full_archive_shared, cp_day5_full_archive_shared
+        global event_self_liability_disclosed, event_external_blame_only
+        global event_family_response_requested, event_erii_selects_route_response
+        global cp_day5_route_answer_expressed, event_route_preference_honored
+        global event_route_preference_overridden_to_old_order
+        global event_daily_override_unrepaired, event_school_evidence_stays_hidden
+        global day5_daily_override_was_unresolved, agency_day5_response_answer
+        global agency_day5_response_outcome, agency_day5_response_derivation_record
+        global critical_choice_interaction
+
+        event_full_archive_shared = False
+        cp_day5_full_archive_shared = False
+        event_self_liability_disclosed = False
+        event_external_blame_only = False
+        event_family_response_requested = False
+        event_erii_selects_route_response = False
+        cp_day5_route_answer_expressed = False
+        event_route_preference_honored = False
+        event_route_preference_overridden_to_old_order = False
+        event_daily_override_unrepaired = False
+        event_school_evidence_stays_hidden = False
+        day5_daily_override_was_unresolved = False
+        agency_day5_response_answer = None
+        agency_day5_response_outcome = None
+        agency_day5_response_derivation_record = None
+        critical_choice_interaction = False
+
+    def _set_day5_route_facts(
+        two_tickets=False,
+        contact_card=False,
+        contact_handover=False,
+        single_ticket=False,
+    ):
+        """Seed only the closed Day 4 observable route facts for a Day 5 test."""
+
+        global resource_two_tickets, resource_contact_card
+        global event_contact_risk_handover_complete, resource_single_ticket
+
+        resource_two_tickets = two_tickets
+        resource_contact_card = contact_card
+        event_contact_risk_handover_complete = contact_handover
+        resource_single_ticket = single_ticket
+
     class _ActionGateEngineTestAdapter(NoRollback):
         def __init__(self, phase):
             self.phase = phase
@@ -1021,6 +1081,288 @@ testcase day4_accessibility_visual_baselines:
     pause 0.1
     assert eval _focused_day4_choice_id() == "day1_choice_0"
     screenshot "visual/day4_contact_1280x720_font_1_5_high_contrast.png"
+
+    run Function(apply_accessibility_settings, 1.0, False, False, False, False)
+
+testcase day5_shared_honor_and_repair_route_contract:
+    description "A compatible shared Day 4 route honors Erii's answer and repairs only pre-existing Day 3 and daily overrides."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_assign_alias", {})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day4_buy_two_tickets_real_name", {"preparation": 1, "sacrifice": 1})
+    run Function(apply_choice, "day4_register_independent_contact", {"truth": 1})
+    run Function(_set_day5_route_facts, True, True, True, False)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    keysym "K_RETURN"
+    assert "她把原页、被划去的日期和没有答案的空白一并摊开，逐页看完后仍把它们留在自己面前。"
+    advance
+    assert eval event_full_archive_shared is True
+    assert eval cp_day5_full_archive_shared is True
+    assert eval current_chapter == "day5"
+    assert eval agency_day5_response_derivation_record["derivation_id"] == "erii_route_answer_derivation:v1"
+    assert eval agency_day5_response_derivation_record["transaction_id"] == "agency_day5_response"
+    assert eval agency_day5_response_derivation_record["input_fact_ids"] == ("resource_two_tickets", "resource_contact_card", "event_contact_risk_handover_complete", "resource_single_ticket")
+    assert eval agency_day5_response_derivation_record["selected_answer_state_id"] == "shared_escape"
+    assert eval agency_day5_response_derivation_record["observable_action_or_object_ids"] == ("action_erii_places_two_tickets_on_map",)
+    assert eval agency_day5_response_derivation_record["unresolved_defect_ids"] == ()
+    assert "她把两张票并排压在路线图上，没有把其中一张推回去。"
+    advance until screen "choice"
+    assert eval event_family_response_requested is True
+    assert eval event_erii_selects_route_response is True
+    assert eval cp_day5_route_answer_expressed is True
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    advance until screen "choice"
+    keysym "K_RETURN"
+    assert "路明非把自己的手移开，让她先收好票、卡或路线图，再把下一步写在她能看见的位置。"
+    advance until screen "choice"
+    assert eval event_route_preference_honored is True
+    assert eval agency_day5_response_outcome == "outcome_route_preference_honored_shared_escape"
+    keysym "K_RETURN"
+    assert "他在档案旁写下自己的名字和要承担的步骤，没有把那一栏留给她。她看完后，把纸留在两人之间。"
+    advance until screen "choice"
+    assert eval event_self_liability_disclosed is True
+    assert eval has_unresolved_token("token_hide_school_evidence") is True
+    keysym "K_RETURN"
+    assert "他把那几页被留下的记录补到档案里，承认先前只给过结论。她把两组纸放到同一盏灯下。"
+    advance until screen "choice"
+    assert eval has_unresolved_token("token_hide_school_evidence") is False
+    assert eval has_unresolved_token("token_override_daily_choice") is True
+    keysym "K_RETURN"
+    assert "他逐项承认自己替她安排过什么，把仍在生效的安排划掉，等她自己把纸重新摆好。"
+    assert eval choice_history == ["day2_assign_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact", "day5_share_full_archive", "day5_honor_erii_response", "day5_include_self_in_truth", "day5_repair_school_evidence", "day5_repair_daily_choice"]
+    assert eval current_axis_snapshot() == {"understanding": 1, "autonomy": 2, "truth": 2, "preparation": 3, "sacrifice": 2}
+    assert eval has_unresolved_token("token_hide_school_evidence") is False
+    assert eval has_unresolved_token("token_override_daily_choice") is False
+
+testcase day5_contact_replace_route_contract:
+    description "A compatible contact route permits a safe summary and an explicit replacement without a same-scene repair."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day4_follow_one_route_no_backup", {})
+    run Function(apply_choice, "day4_register_independent_contact", {"truth": 1})
+    run Function(_set_day5_route_facts, False, True, True, False)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    keysym "K_DOWN"
+    keysym "K_RETURN"
+    assert "他收起原页，只留下一个听上去足够安全的结论。她没有接那张被折小的纸。"
+    advance
+    assert eval agency_day5_response_answer == "independent_contact"
+    assert eval agency_day5_response_derivation_record["observable_action_or_object_ids"] == ("action_erii_secures_contact_card",)
+    assert eval has_unresolved_token("token_withhold_family_truth") is True
+    advance until screen "choice"
+    keysym "K_DOWN"
+    keysym "K_RETURN"
+    assert "他把纸张重新排成自己熟悉的顺序。她没有再把票、卡或路线图推回来。"
+    advance until screen "choice"
+    assert eval event_route_preference_overridden_to_old_order is True
+    assert eval agency_day5_response_outcome == "outcome_route_preference_overridden_to_old_order"
+    keysym "K_DOWN"
+    keysym "K_RETURN"
+    assert "他只说档案里的人和他们的命令。她听完，仍把空着的那一栏朝着他。"
+    advance until screen "choice"
+    assert eval event_external_blame_only is True
+    assert eval day5_daily_override_was_unresolved is False
+    assert eval event_daily_override_unrepaired is False
+    assert eval choice_history == ["day2_accept_alias", "day2_save_second_token", "day3_hide_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup", "day4_register_independent_contact", "day5_give_safe_summary", "day5_replace_erii_response", "day5_blame_family_only"]
+    assert eval has_unresolved_token("token_withhold_family_truth") is True
+    assert eval has_unresolved_token("token_override_daily_choice") is True
+    assert eval has_unresolved_token("token_hide_school_evidence") is True
+
+testcase day5_solo_route_answer_contract:
+    description "A compatible single-ticket route derives only solo departure from the closed Day 4 facts."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day4_buy_single_ticket_cash", {"preparation": 1})
+    run Function(apply_choice, "day4_decline_independent_contact", {})
+    run Function(_set_day5_route_facts, False, False, False, True)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    keysym "K_RETURN"
+    assert "她把原页、被划去的日期和没有答案的空白一并摊开，逐页看完后仍把它们留在自己面前。"
+    advance
+    assert eval agency_day5_response_answer == "solo_departure"
+    assert eval agency_day5_response_derivation_record["observable_action_or_object_ids"] == ("action_erii_places_single_ticket_in_document_case",)
+    advance until screen "choice"
+    keysym "K_RETURN"
+    assert "路明非把自己的手移开，让她先收好票、卡或路线图，再把下一步写在她能看见的位置。"
+    advance until screen "choice"
+    keysym "K_DOWN"
+    keysym "K_RETURN"
+    assert "他只说档案里的人和他们的命令。她听完，仍把空着的那一栏朝着他。"
+    advance until screen "choice"
+    assert eval agency_day5_response_outcome == "outcome_route_preference_honored_solo_departure"
+    assert eval event_external_blame_only is True
+
+testcase day5_continue_without_route_answer_contract:
+    description "A compatible no-backup route derives only continuation without an executable route."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_spend_both_tokens", {"sacrifice": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day4_follow_one_route_no_backup", {})
+    run Function(_set_day5_route_facts, False, False, False, False)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    keysym "K_DOWN"
+    keysym "K_RETURN"
+    assert "他收起原页，只留下一个听上去足够安全的结论。她没有接那张被折小的纸。"
+    advance
+    assert eval agency_day5_response_answer == "continue_without_executable_route"
+    assert eval agency_day5_response_derivation_record["observable_action_or_object_ids"] == ("action_erii_returns_empty_route_map",)
+    advance until screen "choice"
+    keysym "K_RETURN"
+    assert "路明非把自己的手移开，让她先收好票、卡或路线图，再把下一步写在她能看见的位置。"
+    advance until screen "choice"
+    keysym "K_RETURN"
+    assert "他在档案旁写下自己的名字和要承担的步骤，没有把那一栏留给她。她看完后，把纸留在两人之间。"
+    advance until screen "choice"
+    assert eval agency_day5_response_outcome == "outcome_route_preference_honored_continue_without_executable_route"
+    assert eval event_self_liability_disclosed is True
+
+testcase day5_invalid_route_facts_hide_response_contract:
+    description "Contradictory closed Day 4 route facts fail closed and expose no Day 5 response transaction."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_spend_both_tokens", {"sacrifice": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(_set_day5_route_facts, True, False, False, True)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    keysym "K_RETURN"
+    advance
+    assert eval agency_day5_response_answer == "undetermined"
+    assert eval agency_day5_response_derivation_record["observable_action_or_object_ids"] == ()
+    assert eval agency_day5_response_derivation_record["unresolved_defect_ids"] == ("contradictory_ticket_resources",)
+    assert eval event_family_response_requested is False
+    assert eval event_erii_selects_route_response is False
+    assert eval cp_day5_route_answer_expressed is False
+    assert eval agency_day5_response_outcome is None
+    advance until screen "choice"
+    keysym "K_DOWN"
+    keysym "K_RETURN"
+    assert "他只说档案里的人和他们的命令。她听完，仍把空着的那一栏朝着他。"
+    advance until screen "choice"
+    assert eval event_external_blame_only is True
+
+testcase day5_keyboard_default_focus_and_traversal_contract:
+    description "Day 5 truth and route-response surfaces expose native keyboard focus and no quick-menu target."
+
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_hide_school_evidence", {})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day4_buy_two_tickets_real_name", {"preparation": 1, "sacrifice": 1})
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    keysym "K_DOWN"
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_1"
+    keysym "K_UP"
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    keysym "K_RETURN"
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    keysym "K_DOWN"
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_1"
+
+testcase day5_accessibility_visual_baselines:
+    description "Day 5 truth and derived route-response surfaces remain focused, silent, and readable at both required baselines."
+
+    run Function(renpy.set_physical_size, (1280, 720))
+    run Function(setattr, renpy.game.preferences, "self_voicing", False)
+    assert eval renpy.game.preferences.self_voicing is False
+    run Function(apply_accessibility_settings, 1.0, False, True, False, False)
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_share_school_evidence", {"truth": 1})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day4_buy_two_tickets_real_name", {"preparation": 1, "sacrifice": 1})
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    screenshot "visual/day5_truth_1280x720_keyboard_silent_reduced_motion.png"
+    keysym "K_RETURN"
+    advance
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    screenshot "visual/day5_response_1280x720_keyboard_silent_reduced_motion.png"
+
+    run Function(apply_accessibility_settings, 1.5, True, True, False, False)
+    run Function(reset_run_state)
+    run Function(_reset_day4_test_state)
+    run Function(_reset_day5_test_state)
+    run Function(apply_choice, "day2_accept_alias", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day2_save_second_token", {"preparation": 1})
+    run Function(apply_choice, "day3_share_school_evidence", {"truth": 1})
+    run Function(apply_choice, "day3_honor_pause", {"understanding": 1, "autonomy": 1})
+    run Function(apply_choice, "day4_buy_two_tickets_real_name", {"preparation": 1, "sacrifice": 1})
+    run Function(_set_day5_route_facts, True, False, False, False)
+    run Jump("chapter_day5_family_lie")
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    screenshot "visual/day5_truth_1280x720_font_1_5_high_contrast.png"
+    keysym "K_RETURN"
+    advance
+    advance until screen "choice"
+    assert eval renpy.get_displayable("quick_menu", "quick_menu_root") is None
+    pause 0.1
+    assert eval _focused_day5_choice_id() == "day1_choice_0"
+    screenshot "visual/day5_response_1280x720_font_1_5_high_contrast.png"
 
     run Function(apply_accessibility_settings, 1.0, False, False, False, False)
 
