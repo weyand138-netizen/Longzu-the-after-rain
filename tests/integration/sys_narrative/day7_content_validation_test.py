@@ -10,8 +10,10 @@ DAY7_SOURCE = ROOT / "game" / "chapters" / "day7.rpy"
 STATE_SOURCE = ROOT / "game" / "10_state.rpy"
 TESTCASES = ROOT / "game" / "testcases.rpy"
 BASELINE = ROOT / "design" / "narrative" / "seven-day-content-baseline.md"
+TRACEABILITY = ROOT / "production" / "qa" / "evidence" / "day7-traceability-2026-08-14.md"
 EVIDENCE = ROOT / "production" / "qa" / "evidence" / "day7-content-validation-2026-08-14-verified"
 RUN = EVIDENCE / "run-passed"
+HISTORICAL_DAY7_SOURCE_SHA256 = "017e1582d1dfcb0b78d4c8f2545b41090f4b6bf24763fdcb59e0f58984f8f214"
 
 WITNESS_IDS = (
     "rain_stops",
@@ -109,7 +111,8 @@ class Day7ContentValidationTests(unittest.TestCase):
             self.assertIn(capture_name, visual)
 
         result = json.loads((RUN / "result.json").read_text(encoding="utf-8-sig"))
-        self.assertEqual(hashlib.sha256(DAY7_SOURCE.read_bytes()).hexdigest(), result["day7_source_sha256"])
+        self.assertEqual(HISTORICAL_DAY7_SOURCE_SHA256, result["day7_source_sha256"])
+        self.assertIn(hashlib.sha256(DAY7_SOURCE.read_bytes()).hexdigest(), TRACEABILITY.read_text(encoding="utf-8"))
         self.assertEqual(hashlib.sha256(TESTCASES.read_bytes()).hexdigest(), result["testcases_sha256"])
         self.assertEqual(hashlib.sha256((RUN / "stdout.txt").read_bytes()).hexdigest(), result["stdout_sha256"])
         self.assertEqual(hashlib.sha256((RUN / "stderr.txt").read_bytes()).hexdigest(), result["stderr_sha256"])

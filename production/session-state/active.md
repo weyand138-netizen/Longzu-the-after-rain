@@ -56,6 +56,23 @@
 - Next: implement prose-only additions, then run focused/full tests, review,
   story-done, smoke, and solo team QA.
 
+## Session Extract - Sprint 012 Story 029 completion 2026-08-14
+
+- Verdict: COMPLETE with automated evidence PASS and human review deferred.
+- Story 029 closed after readiness, implementation, code review, story-done,
+  smoke, and solo team-QA. Focused 3/3; full Python 300/300; Ren'Py global
+  56/56 testcases and 474/474 assertions; lint/compile, compileall, Erii
+  constraints, and diff check passed.
+- Final Day 7/endings source identities are `e8c802dfb3ffef5f3e234ce95b810d4af323d5f46c48420183251a43b1eef7b8` and
+  `136055f969ced13e5a1baa60c88b54714dd981ada4232440bfc4b2955bfe5a6c`.
+- The six ending IDs, resolver handoff, priority, canonical witness topology,
+  five-axis/token/qualification/predicate contract, completion boundary, and
+  Story 025 observer/written-note tail remain unchanged. No asset or stage
+  change was made; GUI/playtest/SAPI/semantic/copyright/subjective/
+  performance/正典 checks remain NOT RUN.
+- Next: create the local Sprint 012 close-out commit, then run the final
+  Production gate status review. Do not promote Polish.
+
 ## Session Extract - Sprint 011 Story 028 completion 2026-08-14
 
 - Verdict: COMPLETE with automated evidence PASS and human review deferred.
@@ -72,6 +89,19 @@
   subjective/performance/正典 checks remain NOT RUN; do not promote Polish.
 - Next: create the local Sprint 011 close-out commit, then plan Sprint 012
   (Day 7, six endings, and rain_stops tail) with a new QA plan before work.
+
+## Session Extract - Sprint 012 Story 029 readiness 2026-08-14
+
+- Verdict: READY. Stories 025 and 028 are Complete; Story 029 has the v1.4
+  baseline, approved prose-expansion design impact, ADR-0003/ADR-0006/ADR-0008
+  context, exact terminal boundary, measurable acceptance criteria, and a QA
+  plan before implementation.
+- Scope is limited to existing Day 7, six ending, and `rain_stops` epilogue
+  labels. No new choices, resolver rules, predicates, completion events,
+  assets, stage changes, playtest, SAPI, copyright, or subjective sign-off is
+  permitted.
+- Next: implement prose-only additions, then run focused/full tests, review,
+  story-done, smoke, and solo team QA.
 
 <!-- QA-PLAN: 2026-08-11 | System: sprint-002 | Plan written: production/qa/qa-plan-sprint-002-2026-08-11.md -->
 

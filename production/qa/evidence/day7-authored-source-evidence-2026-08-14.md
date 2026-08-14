@@ -5,7 +5,7 @@
 **Unit**: `chapter_day7_before_red_well`
 **Runtime source**: `game/chapters/day7.rpy`
 
-**Source SHA-256**: `017e1582d1dfcb0b78d4c8f2545b41090f4b6bf24763fdcb59e0f58984f8f214`
+**Source SHA-256**: `e8c802dfb3ffef5f3e234ce95b810d4af323d5f46c48420183251a43b1eef7b8`
 
 ## Contract evidence
 
