@@ -4,7 +4,7 @@
 > **GDD**: `design/gdd/seven-day-chapter-script.md`  
 > **Architecture Module**: SYS-NARRATIVE  
 > **Status**: Ready  
-> **Stories**: 23 stories
+> **Stories**: 25 stories
 
 ## Overview
 
@@ -69,6 +69,8 @@ Produce the 15 canonical narrative units as player-safe Ren'Py content, beginnin
 | 021 | [Day 7 asset admission records](story-021-day7-asset-admission.md) | Config/Data | Complete | ADR-0003, ADR-0008 |
 | 022 | [Day 7 handoff, accessibility, and evidence validation](story-022-day7-content-validation.md) | Integration | Complete | ADR-0003, ADR-0006, ADR-0008 |
 | 023 | [Day 7 story and evidence traceability](story-023-day7-traceability.md) | Config/Data | Complete | ADR-0003, ADR-0006, ADR-0008 |
+| 024 | [Production end-to-end orchestrator](story-024-production-end-to-end-orchestrator.md) | Integration | Complete | ADR-0003, ADR-0006, ADR-0008 |
+| 025 | [rain_stops years-later tail](story-025-rain-stops-years-later-tail.md) | Integration | Ready | ADR-0003, ADR-0006, ADR-0008 |
 
 Day 2 flow-manifest expansion is intentionally not a story in this batch:
 ADR-0009 permits exactly the Day 1 partial artifact and blocks a partial Day 2

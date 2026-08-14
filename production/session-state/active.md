@@ -46,6 +46,24 @@
 
 <!-- QA RUN: 2026-08-14 | Sprint: ad-hoc-production-orchestrator | Verdict: CONCERNS | Report: production/qa/qa-signoff-production-orchestrator-2026-08-14.md -->
 
+## Session Extract — /dev-story 2026-08-14
+
+- Story: `production/epics/sys-narrative/story-025-rain-stops-years-later-tail.md` — rain_stops Years-Later Tail
+- Files changed: `game/chapters/endings.rpy`, `tests/integration/sys_narrative/rain_stops_tail_test.py`
+- Scope: existing `epilogue_rain_stops_arcade` only; no new choice, state, canonical unit, or asset work
+- Test written: `tests/integration/sys_narrative/rain_stops_tail_test.py`
+- Blockers: automated review and QA evidence pending; human UX/版权/叙事 sign-off remains deferred
+- Next: `/code-review`, `/story-done`, smoke check, and team QA
+
+## Session Extract — /story-done 2026-08-14
+
+- Verdict: COMPLETE WITH CONDITIONS
+- Story: `production/epics/sys-narrative/story-025-rain-stops-years-later-tail.md` — rain_stops Years-Later Tail
+- Evidence: `production/qa/evidence/rain-stops-tail-2026-08-14.md`
+- QA: `production/qa/qa-signoff-sprint-008-2026-08-14.md`
+- Conditions: automated checks pass; GUI/playtest/SAPI/semantic/copyright/subjective review deferred
+- Next: local Story 025 close commit, then Sprint 009 prose expansion planning
+
 ## Session Extract — Sprint 3 S3-01 2026-08-11
 
 - Verdict: COMPLETE

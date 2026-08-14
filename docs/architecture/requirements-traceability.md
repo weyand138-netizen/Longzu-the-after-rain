@@ -1,6 +1,6 @@
 # Architecture Traceability Index
 
-Last Updated: 2026-08-10  
+Last Updated: 2026-08-14
 Engine: Ren'Py 8.5.3 / Python 3.12  
 Mode: `/architecture-review full`
 
@@ -49,6 +49,12 @@ None. ADR-0008 closes the SYS-CHOICE/SYS-NARRATIVE content-lock, CFG, terminal-c
 - `TR-ACCESS-001`: define input equivalence, self-voicing, captions, and settings authority.
 - `TR-TEST-001`: define evidence lifecycle, gate aggregation, and artifact ownership.
 
+## Active Design Change Impacts
+
+| Date | Change | TR-ID | ADR review | Status |
+|---|---|---|---|---|
+| 2026-08-14 | Extend the existing `rain_stops` epilogue after lights-out with a short years-later observer/note tail; preserve the 15-unit set and all ending/state contracts | `TR-NAR-001` | ADR-0003, ADR-0006, ADR-0008 — still valid | Design authorized for implementation; content-lock and human review remain downstream |
+
 ### Deferred
 
 - `TR-TENSION-001` and `TR-TENSION-002` remain outside the current P0 Production gate.
@@ -64,3 +70,4 @@ initial registry.
 |---|---:|---|
 | 2026-08-09 | 55.6% Covered; 27.8% Partial | Initial stable TR registry and full architecture review |
 | 2026-08-10 | 61.1% Covered; 27.8% Partial | ADR-0008 accepted; no current P0 traceability gap |
+| 2026-08-14 | 61.1% Covered; 27.8% Partial | Rain-stops epilogue design amendment recorded; no new TR-ID or canonical unit |

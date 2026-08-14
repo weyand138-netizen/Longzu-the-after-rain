@@ -94,4 +94,12 @@ label epilogue_rain_stops_arcade:
     narrator "门锁合上，他们一起回家；没有人宣布胜利，只有灯灭之后仍然可以继续过下去的晚上。"
     $ event_epilogue_lights_out_completed = True
     $ cp_epilogue_lights_out_complete = True
+
+    # story_025_tail_observer: ordinary neighborhood view, no named reunion.
+    narrator "【普通街坊观察】多年以后，小网吧还在街角开着；路过的街坊只把它当作一家安静的普通小店。"
+    narrator "偶尔有几个不具名的旧友来坐一会儿，普通顾客在熟悉的机台前等空位，谁也不需要把这些日子说成传奇。"
+
+    # story_025_tail_written_note: complex content is written, never erii speech.
+    narrator "【绘梨衣的书面手记】纸上留下几行简短的记录：今天的灯按时亮过，也按时熄灭；明天要做的事，仍然可以由自己写下。"
+    narrator "手记没有替任何人宣布答案，只把那些被认真保留下来的普通日子，一页一页放回桌面。"
     return

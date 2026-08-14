@@ -1,12 +1,12 @@
 # 七日内容基线
 
-> **Status**: Normative design baseline v1.2 — independent re-review blockers revised; pending re-review
+> **Status**: Normative design baseline v1.3 — independent re-review blockers revised; pending re-review
 > **Owner**: SYS-NARRATIVE
-> **Version**: `narrative_content_baseline:v1.2`
-> **Date**: 2026-07-29
+> **Version**: `narrative_content_baseline:v1.3`
+> **Date**: 2026-08-14
 > **Governing GDD**: [七日章节脚本](../gdd/seven-day-chapter-script.md)
 
-本文件冻结七日主线的内容身份、核心场景、正式玩家选择、agency transaction、路线资格、反证 token 与六结局见证。逐句对白、镜头和最终资产仍由 `game/chapters/`、Art Bible 与 `/asset-spec` 承担；这些下游交付不得改变本文件的稳定 ID、人物决定、因果方向或结局归宿。
+本文件冻结七日主线的内容身份、核心场景、正式玩家选择、agency transaction、路线资格、反证 token 与六结局见证。逐句对白、镜头和最终资产仍由 `game/chapters/`、Art Bible 与 `/asset-spec` 承担；这些下游交付不得改变本文件的稳定 ID、人物决定、因果方向或结局归宿。v1.3 只扩展既有 `rain_stops` 尾声的表现边界，不增加 canonical unit 或语义合同。
 
 ## Canonical Production Units
 
@@ -28,7 +28,7 @@
 14. `ending_unsent_postcard`
 15. `epilogue_rain_stops_arcade`
 
-Production manifest 的 `expected_units` 与 `scanned_units` 必须 exact-equal 该 tuple 对应的无重复集合；六个 ending units 与真结局可玩尾声均不可删除。“适用尾声”在本版本中只指 `rain_stops` 必须进入 `epilogue_rain_stops_arcade`，其他结局不得复用该尾声。
+Production manifest 的 `expected_units` 与 `scanned_units` 必须 exact-equal 该 tuple 对应的无重复集合；六个 ending units 与真结局可玩尾声均不可删除。“适用尾声”在本版本中只指 `rain_stops` 必须进入 `epilogue_rain_stops_arcade`，其他结局不得复用该尾声。v1.3 的多年以后短尾声仍属于该同一 unit，不能拆出第 16 个 unit。
 
 ## Character Constraint Catalog
 
@@ -40,6 +40,8 @@ Production manifest 的 `expected_units` 与 `scanned_units` 必须 exact-equal 
 | `character_lu_mingfei` | `source_game_concept_player_fantasy`、`source_project_nonnegotiable_rules` | 可以复述自己的理解，但必须允许绘梨衣确认、否认、拒绝或暂不回答；只知道已观察、验证或获得的事实；核心冲突是即时保护冲动与尊重自主之间的选择 | 替作者宣布正确选项；读取内部轴/token/qualification；无因获得家族全知信息；以旁白抹除自己的违背 | `approval_character_lu_mingfei_v1` |
 
 两个 approval records 均使用 `character_constraint_review:v1` checklist，固定检查 `speech`、`known_facts`、`motivation`、`relationship_baseline`、`forbidden_behavior` 五项；只有 source hash 匹配、五项均 `pass` 且 `unresolved_defect_ids=()` 时有效。
+
+尾声中的普通街坊观察者、非具名旧友与普通顾客是局外观察层的非 active-character 背景，不新增 character constraint record。绘梨衣复杂内容只能作为明确标记的书面手记出现，不能写成完整口语对白，也不能借书面手记解释隐藏规则、正确答案或结局条件。
 
 ## Chapter and Scene Beat Catalog
 
@@ -61,9 +63,26 @@ Production manifest 的 `expected_units` 与 `scanned_units` 必须 exact-equal 
 | `one_person_train` | `responsibility_ending_one_person_train` | `scene_ending_one_person_train` | 绘梨衣拥有单人离开方案，但理解或准备不足使两人失散 | End |
 | `golden_cage` | `responsibility_ending_golden_cage` | `scene_ending_golden_cage` | “安全”压过她已表达的决定；未解决 autonomy 违背将她送回旧秩序 | End |
 | `unsent_postcard` | `responsibility_ending_unsent_postcard` | `scene_ending_unsent_postcard` | 没有可执行路线，或关键真相/准备/代价崩塌；愿望纸与明信片形成完整悲剧闭环 | End |
-| True epilogue | `responsibility_epilogue_ordinary_future` | `scene_epilogue_first_guest`、`scene_epilogue_lights_out` | 可玩网吧日常；使用第二枚游戏币/昵称回声；完成“第一位客人”和“关灯回家”两个具体事件 | End |
+| True epilogue | `responsibility_epilogue_ordinary_future` | `scene_epilogue_first_guest`、`scene_epilogue_lights_out` | 可玩网吧日常；使用第二枚游戏币/昵称回声；完成“第一位客人”和“关灯回家”两个具体事件；之后可在同一 unit 内追加克制的多年以后观察与书面手记尾声 | End |
 
 Optional scenes 只能补充节奏、人物呼吸或已登记 payoff，不得新增 axis、token、qualification、ending source 或 active character。
+
+## `rain_stops` Epilogue Extension Boundary
+
+本版本只允许在现有 `scene_epilogue_lights_out` 完成后追加一段短尾声，且
+仍由 `responsibility_epilogue_ordinary_future` 负责。尾声保留两个结构元素：
+
+- 普通街坊对小网吧多年后仍作为普通生意存在的局外观察；只可使用少量非具名旧友和普通顾客作为背景，不确认任何新增重大世界状态。
+- 绘梨衣明确标注为“书面手记”的短段落；复杂内容只能属于纸面记录，不能以完整口语对白演出，也不能由 `erii` 对白承载。
+
+该扩展不新增 choice、reaction、payoff、event、axis、token、resource、
+qualification、ending predicate、resolver 输入、persistent 字段、成就、
+Gallery、stable label、canonical unit 或 completion boundary。现有
+`event_epilogue_first_guest_completed` 与 `event_epilogue_lights_out_completed`
+仍是唯一尾声 completion events，新增文字发生在 lights-out completion 之后。
+
+扩展只借鉴未确认同人改编参考的高层结构和主题，不逐句复制；夏弥、源氏兄弟、
+路鸣泽家庭化、怀孕、龙凤胎及其他额外正典事实均保持未确认。
 
 ## Choice, Reaction and Payoff Catalog
 

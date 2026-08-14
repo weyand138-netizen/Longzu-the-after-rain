@@ -36,7 +36,7 @@ SYS-CHOICE already commits authoritative choice records and SYS-NARRATIVE owns p
 
 ### Constraints
 
-- Exactly 15 canonical production units defined by `narrative_content_baseline:v1.2` are allowed.
+- Exactly 15 canonical production units defined by `narrative_content_baseline:v1.3` are allowed. The v1.3 amendment extends only the existing `rain_stops` epilogue within its existing unit; it does not add a unit, choice, join, witness, or terminal contract.
 - Every player-facing choice has one canonical ID, one immediate reaction identity, and a strictly later perceptible payoff or an explicitly recorded terminal payoff.
 - Narrative may not read/write persistent state, hidden axes/tokens, resolver internals, test fixtures, network state, or player-facing score hints.
 - Erii's complex intent is conveyed by approved action/object/context evidence rather than full spoken dialogue.
@@ -129,6 +129,15 @@ rollback-owned state                 witnesses                 package/evidence
 2. Add Day 1 source, bindings, and witnesses without changing the 15-unit contract.
 3. Reject content changes lacking a new content-lock hash, tests, and required reviews.
 
+### 2026-08-14 Amendment Check
+
+The `rain_stops` years-later tail is an in-unit, post-lights-out prose
+extension. It leaves the exact 15-unit manifest, canonical choices, joins,
+terminal witnesses, resolver inputs, and completion ownership unchanged.
+ADR-0008 remains **Accepted**; the amendment requires the existing source-hash,
+content-identity, Erii constraint, and human review gates to be rerun before
+the narrative expansion can be treated as final content.
+
 ## Validation Criteria
 
 - The scanner finds exactly 15 canonical units and no production-to-test-only edge.
@@ -141,4 +150,4 @@ rollback-owned state                 witnesses                 package/evidence
 - ADR-0001 through ADR-0007
 - `design/gdd/choice-and-causality-record.md`
 - `design/gdd/seven-day-chapter-script.md`
-- `design/narrative/seven-day-content-baseline.md`
+- `design/narrative/seven-day-content-baseline.md` (`narrative_content_baseline:v1.3`)

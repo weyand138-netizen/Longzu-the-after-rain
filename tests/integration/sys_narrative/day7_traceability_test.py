@@ -72,7 +72,9 @@ class Day7TraceabilityTests(unittest.TestCase):
         normalized = " ".join(self.traceability.split())
         self.assertIn("Stories 020-023 are Complete", normalized)
         self.assertIn("Sprint 6 is `complete`", normalized)
-        self.assertIn("status: complete", self.sprint_status)
+        # sprint-status.yaml is mutable current-state data; Sprint 6's stable
+        # completion claim lives in its own sprint record and QA evidence.
+        self.assertIn("[x] All Must Have tasks are complete", self.sprint)
 
     def test_objective_smoke_evidence_review_and_approved_qa_close_the_hand_off(self):
         self.assertIn("**Verdict**: PASS", self.smoke)
