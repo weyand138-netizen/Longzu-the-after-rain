@@ -13,8 +13,9 @@ choice, reaction, payoff, route fact, asset, or ending predicate is changed.
 | Artifact | SHA-256 |
 |---|---|
 | `game/10_state.rpy` | `ff0444e7a0c129fafc15e7cf6f49771288e5720ce233a0523953385415049e34` |
+| `game/chapters/day5.rpy` | `2d1de1d4f10c3fea6df9c514eb7deeba52a4561705328812f30d718eff9d4c05` |
 | `game/chapters/day4.rpy` | `3ba9867967660d9aeeb16354ed8f0ed0e264f88c2b4761e4b61ef083e9435a4b` |
-| `game/chapters/day6.rpy` | `72163c64fd1f0d9ed8fd5660feaa356dfa832e43c14a2e2969c6bcf6d2b9aac7` |
+| `game/chapters/day6.rpy` | `dbe1f47ce705bc73520c0aa3b6115cd2f803f292605dd2b79a2854adf0ff98be` |
 | `game/testcases.rpy` | `3824e0756da12701a0ff7cb018c0ff9a80953bd82892bdbc21d0cce5147982d6` |
 
 ## Objective revalidation

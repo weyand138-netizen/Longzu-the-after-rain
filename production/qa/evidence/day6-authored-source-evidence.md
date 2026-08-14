@@ -4,7 +4,9 @@
 **Unit**: `chapter_day6_no_safe_house`
 **Source**: `game/chapters/day6.rpy`
 
-**Source SHA-256**: `4571b38e0ad718d7ee0b2c581f4257c98e3f31fc948004408b204c6d3915f99e`
+**Source SHA-256**: `dbe1f47ce705bc73520c0aa3b6115cd2f803f292605dd2b79a2854adf0ff98be`
+
+**Historical prior generation SHA-256**: `4571b38e0ad718d7ee0b2c581f4257c98e3f31fc948004408b204c6d3915f99e`
 
 ## Player-Safe Catalog Inputs
 

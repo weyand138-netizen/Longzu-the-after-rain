@@ -380,7 +380,7 @@ class RainStopsTailTests(unittest.TestCase):
         self.assertRegex(baseline_hash, r"^[0-9a-f]{64}$")
         self.assertEqual(hashlib.sha256(BASELINE.read_bytes()).hexdigest(), baseline_hash)
         self.assertEqual(hashlib.sha256(ENDINGS_SOURCE.read_bytes()).hexdigest(), endings_hash)
-        self.assertIn("content_lock:player_visible:v4:2026-08-14", self.content_lock)
+        self.assertIn("content_lock:player_visible:v5:2026-08-14", self.content_lock)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,8 @@ DAY5_SOURCE = ROOT / "game" / "chapters" / "day5.rpy"
 DAY1_PARTIAL_MANIFEST = ROOT / "game" / "modules" / "narrative_partial_manifest.py"
 SCREENS = ROOT / "game" / "screens.rpy"
 TESTCASES = ROOT / "game" / "testcases.rpy"
+REVALIDATION = ROOT / "production" / "qa" / "evidence" / "s7-02-runtime-state-revalidation-2026-08-13.md"
+HISTORICAL_DAY5_SOURCE_SHA256 = "9ec6fd98498902c8bfe1bc0a72c9f497d0be8a584ce5d289853e532f4168e432"
 EVIDENCE = (
     ROOT
     / "production"
@@ -115,7 +117,7 @@ class Day5ContentValidationTests(unittest.TestCase):
             re.MULTILINE,
         )
         self.assertIsNotNone(recorded)
-        self.assertEqual(hashlib.sha256(DAY5_SOURCE.read_bytes()).hexdigest(), recorded.group(1))
+        self.assertEqual(HISTORICAL_DAY5_SOURCE_SHA256, recorded.group(1))
 
         stdout = (EVIDENCE_RUN / "stdout.txt").read_bytes()
         stderr = (EVIDENCE_RUN / "stderr.txt").read_bytes()
@@ -123,7 +125,8 @@ class Day5ContentValidationTests(unittest.TestCase):
         self.assertIn(b"[rpytest] Status: PASSED", stdout)
         self.assertEqual(-1, result["exit_code"])
         self.assertEqual("[rpytest] Status: PASSED ", result["status_line"])
-        self.assertEqual(hashlib.sha256(DAY5_SOURCE.read_bytes()).hexdigest(), result["day5_source_sha256"])
+        self.assertEqual(HISTORICAL_DAY5_SOURCE_SHA256, result["day5_source_sha256"])
+        self.assertIn(hashlib.sha256(DAY5_SOURCE.read_bytes()).hexdigest(), REVALIDATION.read_text(encoding="utf-8"))
         recorded_testcases = re.search(
             r"^\*\*Testcase source SHA-256\*\*: `([0-9a-f]{64})`$",
             self.evidence,

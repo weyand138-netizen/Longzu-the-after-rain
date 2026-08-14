@@ -45,6 +45,34 @@
 - Next: create the local Sprint 010 close-out commit, then plan Sprint 011
   (Day 5–6) with a new QA plan before implementation.
 
+## Session Extract - Sprint 011 Story 028 readiness 2026-08-14
+
+- Verdict: READY. Story 027 is Complete; Story 028 has the v1.4 baseline,
+  approved prose-expansion design impact, ADR-0003/ADR-0008 context, exact
+  scope, measurable acceptance criteria, and a QA plan before implementation.
+- Scope is limited to existing Day 5/Day 6 labels. No new choices, state
+  writes, routes, endings, assets, stage changes, playtest, SAPI, copyright,
+  or subjective sign-off is permitted.
+- Next: implement prose-only additions, then run focused/full tests, review,
+  story-done, smoke, and solo team QA.
+
+## Session Extract - Sprint 011 Story 028 completion 2026-08-14
+
+- Verdict: COMPLETE with automated evidence PASS and human review deferred.
+- Story 028 closed after readiness, implementation, code review, story-done,
+  smoke, and solo team-QA. Focused 3/3; full Python 297/297; Ren'Py global
+  56/56 testcases and 474/474 assertions; lint/compile, compileall, Erii
+  constraints, and diff check passed.
+- Final Day 5/Day 6 source identities are `2d1de1d4f10c3fea6df9c514eb7deeba52a4561705328812f30d718eff9d4c05` and
+  `dbe1f47ce705bc73520c0aa3b6115cd2f803f292605dd2b79a2854adf0ff98be`.
+  Direct source-generation and revalidation evidence were refreshed after the
+  final runtime-boundary correction; historical evidence remains identified.
+- No asset, stage, choice, state, qualification, repair, route, ending, or
+  hidden-rule change was made. GUI/playtest/SAPI/semantic/copyright/
+  subjective/performance/正典 checks remain NOT RUN; do not promote Polish.
+- Next: create the local Sprint 011 close-out commit, then plan Sprint 012
+  (Day 7, six endings, and rain_stops tail) with a new QA plan before work.
+
 <!-- QA-PLAN: 2026-08-11 | System: sprint-002 | Plan written: production/qa/qa-plan-sprint-002-2026-08-11.md -->
 
 <!-- QA-PLAN: 2026-08-11 | System: sprint-003 | Plan written: production/qa/qa-plan-sprint-003-2026-08-11.md -->

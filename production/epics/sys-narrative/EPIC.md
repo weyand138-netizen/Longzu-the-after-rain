@@ -73,6 +73,7 @@ Produce the 15 canonical narrative units as player-safe Ren'Py content, beginnin
 | 025 | [rain_stops years-later tail](story-025-rain-stops-years-later-tail.md) | Integration | Complete | ADR-0003, ADR-0006, ADR-0008 |
 | 026 | [Prologue and Day 1–2 prose expansion](story-026-prologue-day1-day2-prose-expansion.md) | Content | Complete | ADR-0003, ADR-0008 |
 | 027 | [Day 3–4 prose expansion](story-027-day3-day4-prose-expansion.md) | Content | Complete | ADR-0003, ADR-0008 |
+| 028 | [Day 5–6 prose expansion](story-028-day5-day6-prose-expansion.md) | Content | Complete | ADR-0003, ADR-0008 |
 
 Day 2 flow-manifest expansion is intentionally not a story in this batch:
 ADR-0009 permits exactly the Day 1 partial artifact and blocks a partial Day 2

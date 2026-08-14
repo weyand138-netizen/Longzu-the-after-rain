@@ -4,7 +4,7 @@
 **Unit**: `chapter_day5_family_lie`
 **Source**: `game/chapters/day5.rpy`
 
-**Source SHA-256**: `9ec6fd98498902c8bfe1bc0a72c9f497d0be8a584ce5d289853e532f4168e432`
+**Source SHA-256**: `2d1de1d4f10c3fea6df9c514eb7deeba52a4561705328812f30d718eff9d4c05`
 
 ## Player-Safe Catalog Inputs
 

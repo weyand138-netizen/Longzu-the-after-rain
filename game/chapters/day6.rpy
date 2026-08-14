@@ -104,10 +104,12 @@ label chapter_day6_no_safe_house:
     narrator "安全屋的门锁在雨停前先响了一次。屋内没有人进来，走廊尽头却亮起了本不该亮的灯。"
     narrator "绘梨衣把票、卡、路线图和那张折过的纸逐一放在桌上，没有替任何一件东西说它一定能救谁。"
     $ event_safehouse_failed = True
+    narrator "门外的声音只出现了一次，桌上的东西却因此都显出各自要承担的距离。"
     if event_note_preserved_by_erii:
         narrator "她从袖口取出那张被雨打湿的愿望纸。纸边已经干了，字仍在。路明非把它放回她手边，没有拿来替换任何路线。"
         $ event_achievement_read_note_recovered = True
         $ cp_day6_note_recovery_complete = True
+        narrator "她把纸边压平，仍让那行字停在自己的手边，没有把它变成谁都必须遵守的路线。"
 
     # scene_day6_backup_exit
     if has_unresolved_token("token_abandon_backup_plan"):
@@ -118,12 +120,14 @@ label chapter_day6_no_safe_house:
                 "重新打开此前记住的维修通道，并承担暴露位置的风险":
                     $ apply_choice("day6_reopen_service_exit", {"preparation": 1})
                     narrator "他撕下那道旧封条，把维修门的位置和暴露的风险一并写到地图边。绘梨衣看完，自己把路线图折到那一页。"
+                    narrator "被重新打开的门没有抹掉先前放弃它的痕迹，地图上两道线仍然并排存在。"
                     $ critical_choice_interaction = False
 
                 "承认备选已经被放弃，继续不把它伪装成还能使用":
                     $ apply_choice("day6_keep_backup_abandoned", {})
                     narrator "他没有去碰维修门的标记。绘梨衣把那处空白留在地图上，没有替他补成一条路。"
                     $ event_backup_stays_abandoned = True
+                    narrator "那处空白像一块没有封好的门缝，提醒两人它曾经可以被选择，却不再假装仍然可用。"
                     $ critical_choice_interaction = False
         else:
             $ critical_choice_interaction = True
@@ -132,6 +136,7 @@ label chapter_day6_no_safe_house:
                     $ apply_choice("day6_keep_backup_abandoned", {})
                     narrator "他把没有出口的那一边留在桌上。绘梨衣没有把空白说成安全，也没有替他画出不存在的门。"
                     $ event_backup_stays_abandoned = True
+                    narrator "没有出口的事实没有更好听的写法；她只把地图转回两人都能看见的方向。"
                     $ critical_choice_interaction = False
     elif resource_service_exit:
         narrator "维修门的位置还在地图上。它不是突然出现的希望，只是此前被记下、现在仍能选择承担的路线。"
@@ -142,11 +147,13 @@ label chapter_day6_no_safe_house:
                 narrator "他先打开维修门，再让她自己收好票、卡或地图。两人离开封锁区时，门后的灯没有替他们决定下一步。"
                 $ event_service_exit_used = True
                 $ cp_day6_service_exit_complete = True
+                narrator "维修门合上时，留下的不是保证，而是两人都看见过的那段短暂通路。"
                 $ critical_choice_interaction = False
 
             "把这条备选也留在封锁区，只走眼前没有准备的路":
                 $ apply_choice("day6_abandon_backup", {})
                 narrator "他把维修门的位置划出地图。绘梨衣看着那道划痕停了一会儿，随后把纸收回自己手边。"
+                narrator "划痕留在纸上，像一条被主动放弃、却不能从记忆里擦掉的边界。"
                 $ critical_choice_interaction = False
 
     if has_unresolved_token("token_withhold_family_truth"):
@@ -156,12 +163,14 @@ label chapter_day6_no_safe_house:
             "交出此前省略的原始页，承认已经失去提前准备的时间":
                 $ apply_choice("day6_disclose_withheld_archive", {"truth": 1})
                 narrator "他把原始页摊在她面前，也把来得太晚写在日期旁。绘梨衣逐行看完后，没有替他把迟到说成及时。"
+                narrator "迟到的纸页补回了来源，却没有把已经错过的准备时间一并补回。"
                 $ critical_choice_interaction = False
 
             "继续只留下安全化结论，不让她核对原始页":
                 $ apply_choice("day6_keep_archive_withheld", {})
                 narrator "他没有把原始页拿出来。绘梨衣只看着那份结论，手仍压在缺少来源的空白处。"
                 $ event_family_truth_stays_withheld = True
+                narrator "她没有把那份结论撕掉，只让缺少来源的空白继续留在它旁边。"
                 $ critical_choice_interaction = False
 
     # scene_day6_cost_inventory
@@ -171,6 +180,7 @@ label chapter_day6_no_safe_house:
     $ event_cost_bearer_requested = True
     narrator "绘梨衣把写着她名字的那一栏推开，没有替他接受任何把代价转给她的安排。"
     $ event_erii_rejects_shifted_cost = True
+    narrator "他把笔停在半空，第一次看清桌面上并没有一栏可以替谁自动承担后果。"
     $ critical_choice_interaction = True
 
     menu:
@@ -189,6 +199,7 @@ label chapter_day6_no_safe_house:
             narrator "他把需要付出的代价移到她的路线旁。纸张没有变轻，只是她的名字被写进了原本不属于她的那一栏。"
             $ event_shifted_cost_consequence_visible = True
             $ agency_day6_cost_outcome = "outcome_cost_shifted_to_erii"
+            narrator "那道被移过去的笔画没有让纸面变轻，只让两人都更清楚它是谁写下的。"
             $ critical_choice_interaction = False
 
             narrator "她把那一栏推回他面前，再一次摇头。被写下的后果已经摆在两人之间，不能靠沉默消失。"
@@ -202,6 +213,7 @@ label chapter_day6_no_safe_house:
                     $ event_shared_cost_acknowledged = True
                     $ cp_day6_cost_reconsideration_complete = True
                     $ agency_day6_cost_reconsideration_outcome = "outcome_cost_returned_to_lu"
+                    narrator "划回自己名下以后，先前那道越界的笔画仍在纸上，不能被当作没有发生。"
                     $ critical_choice_interaction = False
 
                 "维持由她承担的安排，把已经显出的后果留给她":
@@ -209,6 +221,7 @@ label chapter_day6_no_safe_house:
                     narrator "他没有划掉那一栏。绘梨衣把纸翻到背面，留下没有被共同承担的正面。"
                     $ event_shifted_cost_confirmed = True
                     $ agency_day6_cost_reconsideration_outcome = "outcome_cost_shift_confirmed"
+                    narrator "纸被翻到背面，代价却没有跟着翻过去；她留下的沉默成为桌面上最重的一项。"
                     $ critical_choice_interaction = False
 
     # scene_day6_route_commitment
@@ -228,6 +241,7 @@ label chapter_day6_no_safe_house:
         DAY6_SOURCE_SHA256,
     )
     $ agency_day6_commitment_state = agency_day6_commitment_derivation_record["selected_commitment_state_id"]
+    narrator "最后摆在桌上的不是一句保证，而是她仍愿意握住、或决定放开的那件东西。"
 
     if agency_day6_commitment_state == "independent_contact":
         narrator "她把联系人卡和风险说明收进自己的夹层，手没有离开卡边。"
@@ -237,6 +251,7 @@ label chapter_day6_no_safe_house:
                 $ apply_choice("day6_commit_independent_contact", {})
                 narrator "他没有再替她拿卡，只把安全屋外的时间和位置写给她看。她收好卡，先走到门边。"
                 $ event_independent_route_committed = True
+                narrator "门边的光先落在她手里的卡上，随后才照到他还没收起的纸。"
                 $ critical_choice_interaction = False
     elif agency_day6_commitment_state == "shared_escape":
         narrator "她把两张票并排放在路线图上，又把其中一张留在自己手边。"
@@ -246,6 +261,7 @@ label chapter_day6_no_safe_house:
                 $ apply_choice("day6_commit_shared_escape", {})
                 narrator "他把自己的票放在她那张旁边，没有替她收走路线图。她确认站名后，才把两张票一起放进夹层。"
                 $ event_shared_route_committed = True
+                narrator "两张票贴在一起，却没有把各自要承担的那一段路变成同一张纸。"
                 $ critical_choice_interaction = False
     elif agency_day6_commitment_state == "solo_departure":
         narrator "她把单人票放进自己的证件夹，联系人卡的位置仍是空的。"
@@ -256,6 +272,7 @@ label chapter_day6_no_safe_house:
                 narrator "他没有替她补上一张联系人卡。她收好单人票，自己把证件夹扣上。"
                 $ event_solo_route_committed = True
                 $ event_no_continuing_contact_commitment = True
+                narrator "证件夹扣上的声音很轻，空着的联系人位置却让这条路显得格外清楚。"
                 $ critical_choice_interaction = False
     elif agency_day6_commitment_state == "old_order_return":
         narrator "旧秩序的路线纸被放在桌上，压住了她先前自己收好的票、卡或地图。"
@@ -265,6 +282,7 @@ label chapter_day6_no_safe_house:
                 $ apply_choice("day6_commit_old_order_return", {})
                 narrator "他把旧路线带离桌面，却没有说那是她同意的事。绘梨衣没有伸手去拿那张被压住的纸。"
                 $ event_old_order_route_committed = True
+                narrator "被压住的纸没有被撕开，旧秩序因此仍在场，却不再冒充她的回答。"
                 $ critical_choice_interaction = False
     elif agency_day6_commitment_state == "no_executable_route":
         narrator "票、卡和地图之间没有一项能被诚实地叫作可执行路线。绘梨衣把空白留在两人之间。"
@@ -274,6 +292,7 @@ label chapter_day6_no_safe_house:
                 $ apply_choice("day6_no_executable_route", {})
                 narrator "他没有替她补上答案。两人把空白留在地图上，先离开这间已经失效的安全屋。"
                 $ event_route_collapse = True
+                narrator "离开时那张空白地图没有被带走，像一件不能执行却必须记住的东西。"
                 $ critical_choice_interaction = False
     elif agency_day6_commitment_state == "undetermined":
         narrator "票、卡和地图的记录对不上，他没有把任何一张纸推成她的答案。"

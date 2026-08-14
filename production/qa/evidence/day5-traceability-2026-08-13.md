@@ -2,7 +2,7 @@
 
 **Date**: 2026-08-13
 **Sprint item**: S4-04 - Day 5 story and evidence traceability
-**Generation anchor**: `game/chapters/day5.rpy` SHA-256 `9ec6fd98498902c8bfe1bc0a72c9f497d0be8a584ce5d289853e532f4168e432`
+**Generation anchor**: `game/chapters/day5.rpy` SHA-256 `2d1de1d4f10c3fea6df9c514eb7deeba52a4561705328812f30d718eff9d4c05`
 
 ## Link Matrix
 

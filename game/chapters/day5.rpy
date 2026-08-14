@@ -133,6 +133,7 @@ label chapter_day5_family_lie:
     # scene_day5_family_archive
     narrator "桌上的家族档案没有封口。绘梨衣把先前留下的车票、联系人卡、单人票，或空路线图放在一旁，再把档案推到灯下。"
     narrator "路明非看见她先确认手边还剩什么，再等他决定交出哪一部分。"
+    narrator "灯下的纸边把每一处折痕都照了出来；没有被说出口的那一页，也和已经交出的部分一样占着位置。"
 
     # scene_day5_truth_delivery
     $ critical_choice_interaction = True
@@ -172,6 +173,7 @@ label chapter_day5_family_lie:
         narrator "她把空路线图推回两人之间，手没有离开纸边。"
     else:
         narrator "手边的东西彼此对不上。绘梨衣没有把任何一张纸按成答案。"
+    narrator "她看着这些物件之间留下的空隙，等他先承认眼前能做的事，而不是替空隙补上名字。"
 
     if agency_day5_response_answer != "undetermined":
         $ event_family_response_requested = True
@@ -185,6 +187,7 @@ label chapter_day5_family_lie:
                 narrator "路明非把自己的手移开，让她先收好票、卡或路线图，再把下一步写在她能看见的位置。"
                 $ event_route_preference_honored = True
                 $ agency_day5_response_outcome = "outcome_route_preference_honored_" + agency_day5_response_answer
+                narrator "他等她把手边的东西收稳，才把自己的下一步写在没有遮住她视线的位置。"
                 $ critical_choice_interaction = False
 
             "用旧秩序的安全方案替换她刚刚放下的选择":
@@ -192,6 +195,7 @@ label chapter_day5_family_lie:
                 narrator "他把纸张重新排成自己熟悉的顺序。她没有再把票、卡或路线图推回来。"
                 $ event_route_preference_overridden_to_old_order = True
                 $ agency_day5_response_outcome = "outcome_route_preference_overridden_to_old_order"
+                narrator "重新排好的纸面看似整齐，却把她刚才留下的顺序压回了下面。"
                 $ critical_choice_interaction = False
 
     # scene_day5_shared_liability
@@ -201,12 +205,14 @@ label chapter_day5_family_lie:
             $ apply_choice("day5_include_self_in_truth", {"preparation": 1, "sacrifice": 1})
             narrator "他在档案旁写下自己的名字和要承担的步骤，没有把那一栏留给她。她看完后，把纸留在两人之间。"
             $ event_self_liability_disclosed = True
+            narrator "她的手指停在那一栏旁，没有替他把承认改写成一句轻松的话。"
             $ critical_choice_interaction = False
 
         "把责任都归到家族身上，不提自己的选择":
             $ apply_choice("day5_blame_family_only", {})
             narrator "他只说档案里的人和他们的命令。她听完，仍把空着的那一栏朝着他。"
             $ event_external_blame_only = True
+            narrator "空着的地方没有因为责任被移开就消失，反而把桌面分成两段。"
             $ critical_choice_interaction = False
 
     if has_unresolved_token("token_hide_school_evidence"):
@@ -215,11 +221,13 @@ label chapter_day5_family_lie:
             "先补交第三日没有交出的原始证据":
                 $ apply_choice("day5_repair_school_evidence", {})
                 narrator "他把那几页被留下的记录补到档案里，承认先前只给过结论。她把两组纸放到同一盏灯下。"
+                narrator "两组纸的日期终于挨在一起，迟到本身仍留在它们之间。"
                 $ critical_choice_interaction = False
 
             "继续只给结论，不补交原始证据":
                 $ apply_choice("day5_keep_school_evidence_hidden", {})
                 narrator "他没有把那几页拿出来。她把档案合上，却没有把它收走。"
+                narrator "合上的封面挡住了字，却没有挡住她知道那里仍缺了一段来源。"
                 $ critical_choice_interaction = False
 
     if day5_daily_override_was_unresolved:
@@ -228,12 +236,14 @@ label chapter_day5_family_lie:
             "承认此前替她安排的决定，并撤回仍在生效的替代方案":
                 $ apply_choice("day5_repair_daily_choice", {})
                 narrator "他逐项承认自己替她安排过什么，把仍在生效的安排划掉，等她自己把纸重新摆好。"
+                narrator "划去以后，纸面并没有恢复原样；她只把能由自己决定的那一格重新留给自己。"
                 $ critical_choice_interaction = False
 
             "维持此前替她安排的方案":
                 $ apply_choice("day5_keep_daily_override", {})
                 narrator "他没有改动那几项安排。她把手从纸边收回，留下一段没有被填上的空白。"
                 $ event_daily_override_unrepaired = True
+                narrator "那段空白没有被解释成同意，安静地留在两人都看得见的地方。"
                 $ critical_choice_interaction = False
 
     return

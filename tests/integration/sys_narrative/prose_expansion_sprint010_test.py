@@ -90,8 +90,8 @@ class ProseExpansionSprint010Tests(unittest.TestCase):
         self.assertIn("## Formal Prose Expansion Delivery Boundary", self.baseline)
         self.assertIn("| 010 |", self.baseline)
 
-    def test_content_lock_v4_binds_day3_day4_sources(self):
-        self.assertIn("content_lock:player_visible:v4:2026-08-14", self.lock)
+    def test_content_lock_v5_binds_day3_day4_sources(self):
+        self.assertIn("content_lock:player_visible:v5:2026-08-14", self.lock)
         for source_name, path in SOURCES.items():
             match = re.search(
                 r"\| `{}` \|.*?\|\s*(\d+)\s*\|\s*`([0-9a-f]{{64}})`\s*\|".format(re.escape(source_name)),
