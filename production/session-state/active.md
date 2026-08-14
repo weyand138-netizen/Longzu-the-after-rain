@@ -37,6 +37,15 @@
 
 <!-- QA RUN: 2026-08-11 | Sprint: sprint-003 | Verdict: CONCERNS | Report: production/qa/qa-signoff-sprint-003-2026-08-11.md -->
 
+## Session Extract — /story-done 2026-08-14
+
+- Verdict: COMPLETE
+- Story: `production/epics/sys-narrative/story-024-production-end-to-end-orchestrator.md` — Production End-to-End Orchestrator
+- Tech debt logged: None
+- Next recommended: Smoke check and team QA for the ad-hoc Production orchestrator change
+
+<!-- QA RUN: 2026-08-14 | Sprint: ad-hoc-production-orchestrator | Verdict: CONCERNS | Report: production/qa/qa-signoff-production-orchestrator-2026-08-14.md -->
+
 ## Session Extract — Sprint 3 S3-01 2026-08-11
 
 - Verdict: COMPLETE

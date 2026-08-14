@@ -14,11 +14,13 @@
 | Source | Locked player-visible boundary | Lines at lock | SHA-256 |
 |---|---|---:|---|
 | `game/screens.rpy` | 主菜单、快捷菜单、游戏菜单、存取档、设置、手册、章节完成、确认和通知文案；包含当前字体/字号呈现约束 | 284 | `a9306f29b5b60c922830f333a867081b0c2d09e2b96c80e25be2d2bcbf91e22c` |
-| `game/script.rpy` | 启动免责声明与入口可见文案 | 11 | `72f9bd53c52bf953cb1efd3b6f57310cf81ff9ede197dfbf23fd9b76b48f8f0b` |
+| `game/script.rpy` | 启动免责声明与入口可见文案 | 18 | `e8c0b143f937aff62f8cce2f3b43160ea4721f4c6edba0f5b0524bc89cf66f12` |
 | `game/chapters/prologue.rpy` | 序章旁白、角色对白、正式选项、章节完成文案 | 97 | `0120f229c00eb2e069712b3881f5134c5d4610f790b8adb133ebb0525d3c161a` |
 | `game/11_achievements.rpy` | 当前运行时成就标题/描述/玩家可见提示 | 86 | `0bd4b9b8b0d28f44e61fd2281a06ee884dc59e0921e092345465aca7a1a37b04` |
 | `design/narrative/seven-day-content-baseline.md` | 七日章节、choice、reaction、payoff、六结局与真结局尾声的 canonical player-facing content identity 和安全信息边界 | 356 | `2db74f5135321def9c722873ea7eafb42b8103602557b881390421fccdb82ac2` |
 | `design/narrative/achievement-catalog.md` | 成就目录的玩家可见分组、标题、描述、顺序与禁止暴露的内部语义 | 64 | `02b3aba5cb0f2b71eefbe49b364471fadc9369027e435b8cf50ac635400dd67e` |
+
+> **Story 024 非文案变更说明（2026-08-14）**：`game/script.rpy` 的 source identity/hash 因 Production 入口控制流改为调用唯一固定编排器而刷新；启动免责声明及入口相关玩家可见字符串与 HEAD 完全一致，未发生 copy change，因此 `Lock ID` 保持不变。`renpy.is_in_test()` 分支仅保留现有独立章节测试入口，不进入非测试 Production 路径。
 
 `design/ux/*.md` 和 `design/ux/interaction-patterns.md` 是 layout/state/semantic contract；其中出现的示例状态词只有在进入上述 production source 或另行登记的 catalog 后才是 runtime copy。未登记的 UX 示例不得直接进入 build。
 

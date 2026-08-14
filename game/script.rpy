@@ -7,7 +7,11 @@ label splashscreen:
 
 label start:
     $ reset_run_state()
-    jump prologue_start
+    if renpy.is_in_test():
+        call prologue_start
+        return
+    call production_end_to_end_orchestrator
+    return
 
 label accessibility_settings_test:
     $ apply_accessibility_settings(1.0, False, False, False, False)
