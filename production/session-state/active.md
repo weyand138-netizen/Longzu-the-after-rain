@@ -29,6 +29,22 @@
 
 <!-- QA RUN: 2026-08-11 | Sprint: sprint-002 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-002-2026-08-11.md -->
 
+## Session Extract - Sprint 010 Story 027 completion 2026-08-14
+
+- Verdict: COMPLETE with automated evidence PASS and human review deferred.
+- Story 027 closed after readiness, implementation, code review, story-done,
+  smoke, and solo team-QA. Focused 3/3; full Python 294/294; Ren'Py global
+  56/56 testcases and 474/474 assertions; lint/compile, compileall, Erii
+  constraints, and diff check passed.
+- Final Day 4 source identity is `3ba9867967660d9aeeb16354ed8f0ed0e264f88c2b4761e4b61ef083e9435a4b`.
+  The lock and direct runtime-state evidence were refreshed after the final
+  prose placement correction.
+- No asset, stage, choice, state, qualification, route, ending, or hidden-rule
+  change was made. GUI/playtest/SAPI/semantic/copyright/subjective/
+  performance/正典 checks remain NOT RUN; do not promote Polish.
+- Next: create the local Sprint 010 close-out commit, then plan Sprint 011
+  (Day 5–6) with a new QA plan before implementation.
+
 <!-- QA-PLAN: 2026-08-11 | System: sprint-002 | Plan written: production/qa/qa-plan-sprint-002-2026-08-11.md -->
 
 <!-- QA-PLAN: 2026-08-11 | System: sprint-003 | Plan written: production/qa/qa-plan-sprint-003-2026-08-11.md -->
@@ -89,6 +105,22 @@
 - Results: focused 3/3; full Python 291/291; Ren'Py 56/56 and 474/474; lint/content PASS
 - Conditions: GUI/playtest/SAPI/semantic/copyright/subjective review deferred; no Polish promotion
 - Next: local Sprint 009 close commit, then Sprint 010 Day 3–4 planning
+
+## Session Extract — /sprint-plan 2026-08-14
+
+- Sprint: `production/sprints/sprint-010.md` — Day 3–4 prose expansion
+- Story: `production/epics/sys-narrative/story-027-day3-day4-prose-expansion.md`
+- QA plan: `production/qa/qa-plan-sprint-010-2026-08-14.md`
+- Status: Ready for readiness/dev; focused test and QA plan created before implementation
+- Scope: existing Day 3 and Day 4 prose only; no new choice/state/asset/stage work
+
+## Session Extract — /dev-story 2026-08-14
+
+- Story: `production/epics/sys-narrative/story-027-day3-day4-prose-expansion.md`
+- Files: `game/chapters/day3.rpy`, `game/chapters/day4.rpy`
+- Test: `tests/integration/sys_narrative/prose_expansion_sprint010_test.py`
+- Constraint: prose-only additions around existing evidence/pause and route-preparation beats
+- Next: implement, run focused tests, then review/done/smoke/QA
 
 ## Session Extract — Sprint 3 S3-01 2026-08-11
 

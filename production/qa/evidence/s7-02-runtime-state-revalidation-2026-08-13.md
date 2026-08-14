@@ -4,16 +4,16 @@
 **Story:** S7-02 — Terminal Lifecycle and Completion Boundary
 **Reason:** Schema-2 integration moves all Day 4/Day 6 history membership
 reads from legacy standalone state to the validated `semantic_state` envelope.
-This is a runtime-state access correction only: no Day 4/Day 6 choice,
-reaction, payoff, route fact, authored player text, asset, or ending predicate
-is changed.
+This is a runtime-state access correction record whose Day 4 source identity is
+refreshed again for the later Sprint 010 prose-only expansion; no Day 4/Day 6
+choice, reaction, payoff, route fact, asset, or ending predicate is changed.
 
 ## Current source identities
 
 | Artifact | SHA-256 |
 |---|---|
 | `game/10_state.rpy` | `ff0444e7a0c129fafc15e7cf6f49771288e5720ce233a0523953385415049e34` |
-| `game/chapters/day4.rpy` | `dc1b96d37678e76f948ffc87d5193c27d155341b1dc6aba47f8c758bc95411c9` |
+| `game/chapters/day4.rpy` | `3ba9867967660d9aeeb16354ed8f0ed0e264f88c2b4761e4b61ef083e9435a4b` |
 | `game/chapters/day6.rpy` | `72163c64fd1f0d9ed8fd5660feaa356dfa832e43c14a2e2969c6bcf6d2b9aac7` |
 | `game/testcases.rpy` | `3824e0756da12701a0ff7cb018c0ff9a80953bd82892bdbc21d0cce5147982d6` |
 

@@ -105,7 +105,7 @@ class ProseExpansionSprint009Tests(unittest.TestCase):
         self.assertIn("Story 026", self.story)
 
     def test_current_content_lock_hashes_bind_all_sprint_sources(self):
-        self.assertIn("content_lock:player_visible:v3:2026-08-14", self.lock)
+        self.assertIn("content_lock:player_visible:v4:2026-08-14", self.lock)
         for source_name, path in SOURCES.items():
             pattern = r"\| `{}` \|.*?\|\s*(\d+)\s*\|\s*`([0-9a-f]{{64}})`\s*\|".format(
                 re.escape(source_name)

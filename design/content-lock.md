@@ -1,6 +1,6 @@
 # 玩家可见 Content Lock
 
-> **Lock ID**: `content_lock:player_visible:v3:2026-08-14`
+> **Lock ID**: `content_lock:player_visible:v4:2026-08-14`
 > **Status**: FROZEN FOR UX REVIEW
 > **Owner**: SYS-NARRATIVE for narrative copy; UX for screen copy; SYS-BUILD for hash/provenance enforcement
 > **Boundary**: this is a copy freeze, not an `Approved` decision for any UX screen or a claim that the narrative baseline has passed its independent re-review.
@@ -18,6 +18,8 @@
 | `game/chapters/prologue.rpy` | 序章旁白、角色对白、正式选项、章节完成文案 | 138 | `d5135e3c124c0cd6ee3455d78210fb45eba5e0e082402ade1961ee1a7b480895` |
 | `game/chapters/day1.rpy` | Day 1 衣物、食物、收据名字与既有正式选项的玩家可见文本 | 128 | `8172d12c3676e5b55487ffe76dbb1eb2cbec7e7fd74994e0f9ffe61c1afb01ba` |
 | `game/chapters/day2.rpy` | Day 2 昵称、游戏币和末机台场景的玩家可见文本 | 135 | `fafd4643d207450842c6bbfc0a2c57432a4cd006540c0672b035a0578ff02ec1` |
+| `game/chapters/day3.rpy` | Day 3 空教室证据、分享/隐瞒和 truth-pacing 场景的玩家可见文本 | 131 | `6bd6d5ed98983bf28027d96d5e61905a67053b2511ff9ca0a2d68cdedfddfb16` |
+| `game/chapters/day4.rpy` | Day 4 购票、路线准备、联系人和海边列车场景的玩家可见文本 | 196 | `3ba9867967660d9aeeb16354ed8f0ed0e264f88c2b4761e4b61ef083e9435a4b` |
 | `game/11_achievements.rpy` | 当前运行时成就标题/描述/玩家可见提示 | 86 | `0bd4b9b8b0d28f44e61fd2281a06ee884dc59e0921e092345465aca7a1a37b04` |
 | `game/chapters/endings.rpy` | 六个固定结局闭合与 `rain_stops` 既有 arcade epilogue 的玩家可见文本；Story 扩展只允许在现有 lights-out 之后追加受限短尾声 | 105 | `6f8ddcdde2fbd02e921d6b3d1564d63ca6a69bd2e15e8d4073327c95e0d0944a` |
 | `design/narrative/seven-day-content-baseline.md` | 七日章节、choice、reaction、payoff、六结局与真结局尾声的 canonical player-facing content identity 和安全信息边界 | 393 | `87e54f616076ef91883ebb687b05468978a7956ecc66bafad512c2797398a85f` |
@@ -28,6 +30,8 @@
 > **Story 025 设计变更说明（2026-08-14）**：Lock ID 递增为 v2，因为 `rain_stops` 的既有玩家可见尾声增加了受限的多年以后短尾声。新增内容只使用高层结构与主题，不逐句复制未确认同人参考；不新增 choice、route、ending、achievement、Gallery、persistent 字段或 canonical unit。实现后已刷新 `game/chapters/endings.rpy` 的 hash；仍须将人工 UX/版权/叙事签字列为未完成，不把该扩展宣称为最终文案批准。
 
 > **Sprint 009 文案变更说明（2026-08-14）**：Lock ID 递增为 v3，因为序章、Day 1 和 Day 2 在既有 labels 内增加了场景观察、动作、即时反应与已冻结 payoff 回收。choice/menu/axis/token/resource/route/ending/hidden-rule 合同未变；新增文本不含资产引用，不把人工 playtest、SAPI/semantic、版权或主观叙事评审宣称为完成。
+
+> **Sprint 010 文案变更说明（2026-08-14）**：Lock ID 递增为 v4，因为 Day 3 和 Day 4 在既有 labels 内增加了证据核对、暂停回应、票务准备和联系人风险观察。choice/menu/agency answer/qualification/route/ending/hidden-rule 合同未变；人工体验和最终叙事签字仍未运行。
 
 `design/ux/*.md` 和 `design/ux/interaction-patterns.md` 是 layout/state/semantic contract；其中出现的示例状态词只有在进入上述 production source 或另行登记的 catalog 后才是 runtime copy。未登记的 UX 示例不得直接进入 build。
 
