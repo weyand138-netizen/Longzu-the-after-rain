@@ -73,6 +73,18 @@
 - Next: create the local Sprint 012 close-out commit, then run the final
   Production gate status review. Do not promote Polish.
 
+## Session Extract - Final Production gate review 2026-08-14
+
+- Automated Production scope is complete through Story 029. Final gate report:
+  `production/gate-checks/production-to-polish-2026-08-14-final.md`.
+- Gate verdict: FAIL / NOT READY FOR POLISH. Python 300/300, focused 3/3,
+  Ren'Py 56/56 and 474/474, lint/compile, compileall, Erii constraints, diff
+  check, and content-lock v6 provenance pass.
+- Manual GUI/playtest, SAPI/semantic, copyright/source, subjective
+  readability, performance, and final narrative/正典 checks remain NOT RUN.
+  No Polish promotion and no `production/stage.txt` update is authorized.
+- Remaining work is consolidated in the final gate report's human checklist.
+
 ## Session Extract - Sprint 011 Story 028 completion 2026-08-14
 
 - Verdict: COMPLETE with automated evidence PASS and human review deferred.
