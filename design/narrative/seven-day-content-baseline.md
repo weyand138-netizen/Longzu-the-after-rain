@@ -2,11 +2,11 @@
 
 > **Status**: Normative design baseline v1.3 — independent re-review blockers revised; pending re-review
 > **Owner**: SYS-NARRATIVE
-> **Version**: `narrative_content_baseline:v1.3`
+> **Version**: `narrative_content_baseline:v1.4`
 > **Date**: 2026-08-14
 > **Governing GDD**: [七日章节脚本](../gdd/seven-day-chapter-script.md)
 
-本文件冻结七日主线的内容身份、核心场景、正式玩家选择、agency transaction、路线资格、反证 token 与六结局见证。逐句对白、镜头和最终资产仍由 `game/chapters/`、Art Bible 与 `/asset-spec` 承担；这些下游交付不得改变本文件的稳定 ID、人物决定、因果方向或结局归宿。v1.3 只扩展既有 `rain_stops` 尾声的表现边界，不增加 canonical unit 或语义合同。
+本文件冻结七日主线的内容身份、核心场景、正式玩家选择、agency transaction、路线资格、反证 token 与六结局见证。逐句对白、镜头和最终资产仍由 `game/chapters/`、Art Bible 与 `/asset-spec` 承担；这些下游交付不得改变本文件的稳定 ID、人物决定、因果方向或结局归宿。v1.4 只增加四个 prose-only delivery sprint 的篇幅边界，不增加 canonical unit 或语义合同；v1.3 的 `rain_stops` 尾声边界保持不变。
 
 ## Canonical Production Units
 
@@ -83,6 +83,24 @@ Gallery、stable label、canonical unit 或 completion boundary。现有
 
 扩展只借鉴未确认同人改编参考的高层结构和主题，不逐句复制；夏弥、源氏兄弟、
 路鸣泽家庭化、怀孕、龙凤胎及其他额外正典事实均保持未确认。
+
+## Formal Prose Expansion Delivery Boundary
+
+本基线的 15 个 canonical production units 不变。正文扩写按以下四个独立
+Sprint 交付，每一项只增加既有 unit 内的场景、动作、观察、即时反应和已
+冻结 payoff 回收：
+
+| Sprint | Scope | Allowed | Frozen |
+|---|---|---|---|
+| 009 | 序章、Day 1–2 | 站台/列车过渡、衣物/食物/收据、昵称/游戏币的可感知细节 | choice/menu、axis/token/resource、route/ending contract |
+| 010 | Day 3–4 | 空教室证据、暂停回应、购票/联系渠道的动作与后果观察 | choice/menu、agency answer IDs、qualification guards |
+| 011 | Day 5–6 | 档案交付、责任/代价、备用出口与承诺的场景呼吸 | choice/menu、token repair、route commitment/resolver input |
+| 012 | Day 7、六结局、`rain_stops` 尾声 | 回放、闭合前后观察、既有尾声的克制延展 | ending IDs/predicates, completion events, canonical boundary |
+
+正文扩写不得新建 canonical unit、active character、asset identity 或
+玩家可见的隐藏规则。每个 Sprint 必须刷新受影响 source hash，并通过
+focused/full Python、Ren'Py global、lint/compile、Erii 约束和 diff check；
+人工 playtest、SAPI/semantic、版权及主观叙事评审继续标为 NOT RUN。
 
 ## Choice, Reaction and Payoff Catalog
 

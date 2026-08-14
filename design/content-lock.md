@@ -1,6 +1,6 @@
 # 玩家可见 Content Lock
 
-> **Lock ID**: `content_lock:player_visible:v2:2026-08-14`
+> **Lock ID**: `content_lock:player_visible:v3:2026-08-14`
 > **Status**: FROZEN FOR UX REVIEW
 > **Owner**: SYS-NARRATIVE for narrative copy; UX for screen copy; SYS-BUILD for hash/provenance enforcement
 > **Boundary**: this is a copy freeze, not an `Approved` decision for any UX screen or a claim that the narrative baseline has passed its independent re-review.
@@ -15,15 +15,19 @@
 |---|---|---:|---|
 | `game/screens.rpy` | 主菜单、快捷菜单、游戏菜单、存取档、设置、手册、章节完成、确认和通知文案；包含当前字体/字号呈现约束 | 284 | `a9306f29b5b60c922830f333a867081b0c2d09e2b96c80e25be2d2bcbf91e22c` |
 | `game/script.rpy` | 启动免责声明与入口可见文案 | 18 | `e8c0b143f937aff62f8cce2f3b43160ea4721f4c6edba0f5b0524bc89cf66f12` |
-| `game/chapters/prologue.rpy` | 序章旁白、角色对白、正式选项、章节完成文案 | 97 | `0120f229c00eb2e069712b3881f5134c5d4610f790b8adb133ebb0525d3c161a` |
+| `game/chapters/prologue.rpy` | 序章旁白、角色对白、正式选项、章节完成文案 | 138 | `d5135e3c124c0cd6ee3455d78210fb45eba5e0e082402ade1961ee1a7b480895` |
+| `game/chapters/day1.rpy` | Day 1 衣物、食物、收据名字与既有正式选项的玩家可见文本 | 128 | `8172d12c3676e5b55487ffe76dbb1eb2cbec7e7fd74994e0f9ffe61c1afb01ba` |
+| `game/chapters/day2.rpy` | Day 2 昵称、游戏币和末机台场景的玩家可见文本 | 135 | `fafd4643d207450842c6bbfc0a2c57432a4cd006540c0672b035a0578ff02ec1` |
 | `game/11_achievements.rpy` | 当前运行时成就标题/描述/玩家可见提示 | 86 | `0bd4b9b8b0d28f44e61fd2281a06ee884dc59e0921e092345465aca7a1a37b04` |
 | `game/chapters/endings.rpy` | 六个固定结局闭合与 `rain_stops` 既有 arcade epilogue 的玩家可见文本；Story 扩展只允许在现有 lights-out 之后追加受限短尾声 | 105 | `6f8ddcdde2fbd02e921d6b3d1564d63ca6a69bd2e15e8d4073327c95e0d0944a` |
-| `design/narrative/seven-day-content-baseline.md` | 七日章节、choice、reaction、payoff、六结局与真结局尾声的 canonical player-facing content identity 和安全信息边界 | 375 | `1c20fe09a018c2c7d0016549040f9b84a9ee7bbd2c5125a39da487da2ff30750` |
+| `design/narrative/seven-day-content-baseline.md` | 七日章节、choice、reaction、payoff、六结局与真结局尾声的 canonical player-facing content identity 和安全信息边界 | 393 | `87e54f616076ef91883ebb687b05468978a7956ecc66bafad512c2797398a85f` |
 | `design/narrative/achievement-catalog.md` | 成就目录的玩家可见分组、标题、描述、顺序与禁止暴露的内部语义 | 64 | `02b3aba5cb0f2b71eefbe49b364471fadc9369027e435b8cf50ac635400dd67e` |
 
 > **Story 024 非文案变更说明（2026-08-14）**：`game/script.rpy` 的 source identity/hash 因 Production 入口控制流改为调用唯一固定编排器而刷新；启动免责声明及入口相关玩家可见字符串与 HEAD 完全一致，未发生 copy change。`renpy.is_in_test()` 分支仅保留现有独立章节测试入口，不进入非测试 Production 路径。
 
 > **Story 025 设计变更说明（2026-08-14）**：Lock ID 递增为 v2，因为 `rain_stops` 的既有玩家可见尾声增加了受限的多年以后短尾声。新增内容只使用高层结构与主题，不逐句复制未确认同人参考；不新增 choice、route、ending、achievement、Gallery、persistent 字段或 canonical unit。实现后已刷新 `game/chapters/endings.rpy` 的 hash；仍须将人工 UX/版权/叙事签字列为未完成，不把该扩展宣称为最终文案批准。
+
+> **Sprint 009 文案变更说明（2026-08-14）**：Lock ID 递增为 v3，因为序章、Day 1 和 Day 2 在既有 labels 内增加了场景观察、动作、即时反应与已冻结 payoff 回收。choice/menu/axis/token/resource/route/ending/hidden-rule 合同未变；新增文本不含资产引用，不把人工 playtest、SAPI/semantic、版权或主观叙事评审宣称为完成。
 
 `design/ux/*.md` 和 `design/ux/interaction-patterns.md` 是 layout/state/semantic contract；其中出现的示例状态词只有在进入上述 production source 或另行登记的 catalog 后才是 runtime copy。未登记的 UX 示例不得直接进入 build。
 

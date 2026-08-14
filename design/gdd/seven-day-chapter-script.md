@@ -11,6 +11,7 @@
 > **Creative Director Review (CD-GDD-ALIGN)**: 2026-07-29 — NEEDS REVISION；agency、payoff、qualification、terminal-class、CFG 与 oracle blockers revised, independent re-review required
 > **Journal Source Amendment**: 2026-08-04 — freezes `journal_chapter_catalog:v1` / `journal_memory_catalog:v1` ownership, 7×2 common-path truth approvals and no-history downstream boundary
 > **Design Change Amendment**: 2026-08-14 — baseline v1.3 extends only the existing `rain_stops` epilogue after lights-out with a short years-later tail; no new canonical unit or semantic contract
+> **Formal Prose Expansion Amendment**: 2026-08-14 — four prose-only delivery sprints expand existing units without changing stable IDs, mechanics, ending contracts, or asset scope
 
 ## Overview
 
@@ -33,7 +34,7 @@ SYS-NARRATIVE 不是额外玩法系统，而是七日视觉小说的章节、场
    - 叙事层：按序章、第一日至第七日、六个结局与尾声描述章节目标、场景顺序、人物行动和分支回收。
    - 记录层：用稳定 ID 冻结 chapter、scene、choice、reaction、payoff、event、resource、outcome、agency transaction、qualification source 与 ending witness records。
 
-   本 GDD 冻结系统合同；规范性配套文档 [七日内容基线](../narrative/seven-day-content-baseline.md) `narrative_content_baseline:v1.3` 冻结 15 个 production units、required scene beats、54 项正式玩家选择、9 项 agency transactions、7 项 repairable tokens、四项 route qualification bindings、六条完整 canonical ending histories 与 11 项 terminal cause-family production variants。Cause family 不是 SYS-ENDING equivalence-class identity；实际逐 class records 与 witnesses 必须由全图枚举生成。约 7–9 万字对白、旁白与具体演出脚本保留在 `game/chapters/` 的分章 `.rpy` 文件中。对白可以润色，但不得未经验证改变内容基线的稳定 ID、分支控制流、人物决定、registered outcome 或玩家安全核心含义。
+   本 GDD 冻结系统合同；规范性配套文档 [七日内容基线](../narrative/seven-day-content-baseline.md) `narrative_content_baseline:v1.4` 冻结 15 个 production units、required scene beats、54 项正式玩家选择、9 项 agency transactions、7 项 repairable tokens、四项 route qualification bindings、六条完整 canonical ending histories 与 11 项 terminal cause-family production variants。Cause family 不是 SYS-ENDING equivalence-class identity；实际逐 class records 与 witnesses 必须由全图枚举生成。约 7–9 万字对白、旁白与具体演出脚本保留在 `game/chapters/` 的分章 `.rpy` 文件中。对白可以润色，但不得未经验证改变内容基线的稳定 ID、分支控制流、人物决定、registered outcome 或玩家安全核心含义。
 
 2. **章节记录**
 
@@ -64,6 +65,20 @@ achievement, Gallery record, canonical unit, or canonical completion event.
 The input source for this amendment is an unconfirmed fan-adaptation reference.
 Only high-level structure and theme may inform the implementation; the project
 must not copy its wording or rely on its named-character/world-state claims.
+
+### Formal Prose Expansion Boundary
+
+To close the remaining authored-length gap, production proceeds through four
+independent prose-only sprints in this order: Prologue/Day 1–2, Day 3–4, Day
+5–6, and Day 7/six endings/`rain_stops` tail. Each sprint may enrich existing
+scene description, physical action, observation, immediate reaction, and
+already-frozen payoff recall. It must not add or alter choice IDs, menus,
+labels, axes, tokens, resources, qualifications, route guards, ending
+predicates, completion events, persistent fields, hidden numeric rules,
+canonical units, active-character constraints, or assets. Each sprint refreshes
+the affected source identities and runs the full automated QA chain before a
+local close commit. Human playtest, SAPI/semantic, copyright, subjective
+readability, and final narrative sign-off remain deferred.
 
 ### Journal Source Catalogs
 

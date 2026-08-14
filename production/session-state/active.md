@@ -64,6 +64,32 @@
 - Conditions: automated checks pass; GUI/playtest/SAPI/semantic/copyright/subjective review deferred
 - Next: local Story 025 close commit, then Sprint 009 prose expansion planning
 
+## Session Extract — /sprint-plan 2026-08-14
+
+- Sprint: `production/sprints/sprint-009.md` — Prologue and Day 1–2 prose expansion
+- Story: `production/epics/sys-narrative/story-026-prologue-day1-day2-prose-expansion.md`
+- QA plan: `production/qa/qa-plan-sprint-009-2026-08-14.md`
+- Status: Ready for readiness/dev; design boundary and focused test created before implementation
+- Scope: existing Prologue, Day 1 and Day 2 prose only; no new choice/state/asset/stage work
+
+## Session Extract — /dev-story 2026-08-14
+
+- Story: `production/epics/sys-narrative/story-026-prologue-day1-day2-prose-expansion.md`
+- Files in implementation scope: `game/chapters/prologue.rpy`, `game/chapters/day1.rpy`, `game/chapters/day2.rpy`
+- Test: `tests/integration/sys_narrative/prose_expansion_sprint009_test.py`
+- Constraints: prose-only additions around existing beats; no control/state/asset changes
+- Next: implement, run focused tests, then review/done/smoke/QA
+
+## Session Extract — /story-done 2026-08-14
+
+- Verdict: COMPLETE WITH CONDITIONS
+- Story: `production/epics/sys-narrative/story-026-prologue-day1-day2-prose-expansion.md`
+- Evidence: `production/qa/evidence/prose-expansion-sprint-009-2026-08-14.md`
+- QA: `production/qa/qa-signoff-sprint-009-2026-08-14.md`
+- Results: focused 3/3; full Python 291/291; Ren'Py 56/56 and 474/474; lint/content PASS
+- Conditions: GUI/playtest/SAPI/semantic/copyright/subjective review deferred; no Polish promotion
+- Next: local Sprint 009 close commit, then Sprint 010 Day 3–4 planning
+
 ## Session Extract — Sprint 3 S3-01 2026-08-11
 
 - Verdict: COMPLETE

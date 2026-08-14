@@ -3,7 +3,7 @@
 **Story**: `production/epics/sys-narrative/story-005-day2-content-validation.md`  
 **Requirement**: `TR-NAR-005`  
 **Recorded**: 2026-08-11  
-**Day 2 source SHA-256**: `b7d881615c80be39def7c3b44540b7e00800bd4c615fbf904e6445bcad9cddb0`
+**Day 2 source SHA-256**: `fafd4643d207450842c6bbfc0a2c57432a4cd006540c0672b035a0578ff02ec1`
 
 ## Preserved Engine Run
 
