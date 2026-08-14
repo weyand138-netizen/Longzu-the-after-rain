@@ -1,7 +1,7 @@
 # Asset and License Register
 
-**Last audited**: 2026-08-13
-**Audit scope**: Day 1, Day 3, Day 4, Day 5, and Day 6 actual runtime references only.
+**Last audited**: 2026-08-14
+**Audit scope**: Day 1, Day 3, Day 4, Day 5, Day 6, and Day 7 actual runtime references only.
 
 This register records provenance and the exact hash used for admission. It
 does not claim a final legal authorization beyond the stated source and licence
@@ -78,6 +78,24 @@ in `game/chapters/day6.rpy`.
 
 No Day 6 image, audio, video, character art, CG, prop, generated, or planned
 asset file has a runtime reference. Those asset categories remain not admitted.
+
+## Day 7 runtime reuse admission
+
+Day 7 adds no asset identity. The red well, wind, water, paper, routes, and
+names are visible narrative facts in text, not asset-file claims. Only the
+existing font, code-defined warm-room background, and code-defined `say`
+dialogue surface are admitted for actual references in `game/chapters/day7.rpy`.
+Day 7 invokes no `choice` surface.
+
+| Asset ID | Day 7 runtime use | Day 7 accessibility binding | Review status |
+|---|---|---|---|
+| `FONT-SOURCEHAN-LITE-P0` | Day 7 acknowledgement and resolver-handoff dialogue | `a11y.day7.text-copy`: all acknowledgement and handoff meaning remains visible/localizable text. | **Present; admitted reuse.** |
+| `RUNTIME-SOLID-DAY1-WARM-ROOM` | `scene bg warm_room` at `chapter_day7_before_red_well` entry | `a11y.day7.warm-room-decorative`: background colour conveys no Day 1-6 fact, terminal input, or ending result. | **Present; admitted reuse.** |
+| `RUNTIME-UI-DAY1-CHOICE-SURFACE` | Existing `say` dialogue screen only; no Day 7 `choice` surface | `a11y.day7.say-surface`: text remains readable and keyboard-advanceable; no quick-menu or visual-only interaction decides the handoff. | **Present; admitted reuse.** |
+
+No Day 7 image, audio, video, character art, CG, prop, generated, planned, or
+choice-only asset file has a runtime reference. Those asset categories remain
+not admitted.
 
 ## Not admitted / not present
 

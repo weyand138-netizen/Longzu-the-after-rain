@@ -325,3 +325,93 @@
   story-readiness before implementation.
 
 <!-- QA RUN: 2026-08-14 | Sprint: sprint-007 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-007-2026-08-13.md -->
+
+## Session Extract — Sprint 6 Story 020 completion 2026-08-14
+
+- Verdict: COMPLETE. S6-01 adds the exact locked Day 7 three-scene source in
+  `game/`, its source generation identity, a static source test, and real
+  Ren'Py success/failure handoff tests. No new Day 7 choice, axis, token,
+  qualification, resource, ending fact, resolver, lifecycle, persistence, or
+  completion ownership was introduced.
+- Objective verification: focused source suite 6/6; full Python 266/266 before
+  the final evidence-only binding update; pinned Ren'Py global 54/54 and
+  438/438; lint/compile; Erii content constraint; and diff check passed.
+- Code review: `sprint-006-s6-01-code-review-2026-08-14.md` APPROVED. Sprint
+  7 traceability was narrowly corrected to consult its own closed records now
+  that `sprint-status.yaml` truthfully reports active Sprint 6.
+- Next: S6-02 Day 7 asset admission, then S6-03 six-history and accessibility
+  validation. The project remains `Production`; `game/` is the runtime root.
+
+## Session Extract — Sprint 6 Story 021 completion 2026-08-14
+
+- Verdict: COMPLETE. S6-02 audits exactly three existing primitives: the local
+  OFL font, code-defined warm-room backing, and code-defined `say` screen. The
+  Day 7 source has one direct scene reference and no choice surface or new media
+  identity; inventory and legal records bind provenance, licence, SHA-256,
+  semantic path, and accessibility.
+- Objective verification: focused asset admission 3/3 PASS and diff check
+  PASS. No external/official/source-unknown material, download, or licence
+  decision is involved.
+- Next: S6-03 must replay all six canonical histories through the actual Day 7
+  handoff and produce the approved accessibility evidence. `game/` remains the
+  only Ren'Py runtime implementation root.
+
+## Session Extract - Sprint 6 Story 022 objective validation 2026-08-14
+
+- Objective verdict: PASS pending required owner-only narrative/readability and
+  visual-feel signoff. The six frozen histories route once through the actual
+  Day 7 handoff and preserve their exact choice histories and five-axis
+  snapshots. Golden Cage remains replace-only and `3/2/3/2/1`.
+- Evidence: focused Day 7 integration 4/4; full Python 274/274; pinned Ren'Py
+  global 56/56 testcases and 474/474 assertions; lint/compile; Erii content
+  constraints; and diff check all PASS. Evidence is bound at
+  `production/qa/evidence/day7-content-validation-2026-08-14-verified/`.
+- The only manual decision is whether the approach/recall reads as a comfortable
+  acknowledgment and consequence-bearing handoff at keyboard/silent/reduced-
+  motion and 1.5x/high-contrast/reduced-motion baselines. Runtime remains in
+  `game/`; no empty `src/` directory exists.
+- Next: obtain owner signoff before marking S6-03 Complete and unblocking S6-04
+  traceability. No stage change is authorized.
+
+## Session Extract - Sprint 6 Story 022 completion 2026-08-14
+
+- Verdict: COMPLETE. Andwey approved the required solo narrative/readability
+  and visual-feel review in the active Codex task. All four acceptance criteria
+  are now covered without a frozen-design, terminal, asset, or stage change.
+- Completion evidence: `tests/integration/sys_narrative/day7_content_validation_test.py`,
+  the real Ren'Py cases, and
+  `production/qa/evidence/day7-content-validation-2026-08-14-verified/`.
+- Next: run S6-04 story-readiness, then implement and validate the verified-
+  generation traceability matrix before Sprint 6 smoke and team-QA.
+
+## Session Extract - Sprint 6 Story 023 readiness 2026-08-14
+
+- Verdict: READY. Stories 020-022 are Complete; active `TR-NAR-023`, the
+  accepted ADRs, matching manifest version, measurable three-criterion scope,
+  and `game/` runtime convention provide complete implementation context.
+- Next: implement the source-tested Day 7 matrix. Final smoke and QA rows must
+  be supplied only by the actual Sprint 6 close-out checks, never preclaimed.
+
+## Session Extract - Sprint 6 Story 023 implementation 2026-08-14
+
+- S6-04 is In Progress. The matrix and `day7_traceability_test.py` now name
+  every required Day 7 source, asset, test, evidence, code-review, smoke, and
+  QA artifact, while the last three rows are honestly pending their real runs.
+- Next: perform S6-04 code review, then create actual smoke/evidence-review/
+  team-QA records and bind the final matrix before story completion.
+
+## Session Extract - Sprint 6 QA approval 2026-08-14
+
+- Verdict: QA APPROVED. Smoke, evidence review, and solo team-QA bind the
+  exact Day 7 generation; Python 278/278 and Ren'Py global 56/56 testcases,
+  474/474 assertions pass. Lint/compile, Erii constraints, and diff check pass.
+- Andwey's recorded Day 7 narrative/readability and visual-feel approval closes
+  the sole manual Sprint 6 requirement. No S1/S2 defect or QA condition remains.
+- Status alignment: Stories 020-023 and all S6 tasks are Complete; Sprint 6 is
+  complete. The `Production` stage is unchanged and `game/` remains the sole
+  runtime root; no empty `src/` directory exists.
+- Next: create the required local Sprint 6 close-out commit; do not push or
+  create a PR. Then begin the next authoritative Production sprint only after
+  checking `production/stage.txt` and the sprint plan.
+
+<!-- QA RUN: 2026-08-14 | Sprint: sprint-006 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-006-2026-08-14.md -->

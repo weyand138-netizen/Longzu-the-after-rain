@@ -40,8 +40,8 @@ full-manifest, release, or stage work.
 
 ## Scope Check
 
-**Verdict: CONCERNS — scope delta is 0%, but all Day 7 stories are blocked by
-the missing owned SYS-ENDING terminal adapter and real label targets.** See
+**Verdict: PASS — scope delta is 0%; the owned SYS-ENDING terminal adapter and
+real label targets were delivered and QA-approved in Sprint 7 (`71fbfc5`).** See
 `production/qa/evidence/scope-check-sprint-006-day7-2026-08-13.md`.
 
 ## Day 7 Source Contract
@@ -77,15 +77,15 @@ the missing owned SYS-ENDING terminal adapter and real label targets.** See
 | Risk | Probability | Impact | Mitigation |
 |---|---|---|---|
 | Narrative code could duplicate or bypass SYS-ENDING ownership. | Medium | High | Static scans require only the owned handoff and reject lifecycle/resolver/persistent writes. |
-| Missing target labels could tempt an empty placeholder. | High | High | Keep the stories blocked; deliver real SYS-ENDING targets first. |
+| Terminal target labels could tempt a local duplicate. | Low | High | Use only the QA-approved SYS-ENDING labels and the one owned handoff. |
 | Causal recall could misrepresent variable history or disclose hidden state. | Medium | High | Test exact common-path facts and player-safe text at both accessibility baselines. |
 
 ## Definition of Done
 
-- [ ] All Must Have tasks are complete after their blocking terminal dependency is delivered.
-- [ ] Day 7 has exactly one unit and three required scenes with zero new choice/state source facts.
-- [ ] It uses the one owned terminal handoff exactly once and fails closed.
-- [ ] Source identity, asset records, tests, evidence, review, smoke, and QA bind one generation.
-- [ ] All Python, global Ren'Py, lint/compile, and content-constraint checks pass.
-- [ ] No S1/S2 defect remains and no ending/epilogue/full-manifest/release claim is made.
-- [ ] A Sprint 6 QA plan exists before implementation begins.
+- [x] All Must Have tasks are complete; their terminal dependency was delivered in Sprint 7.
+- [x] Day 7 has exactly one unit and three required scenes with zero new choice/state source facts.
+- [x] It uses the one owned terminal handoff exactly once and fails closed.
+- [x] Source identity, asset records, tests, evidence, review, smoke, and QA bind one generation.
+- [x] All Python, global Ren'Py, lint/compile, and content-constraint checks pass.
+- [x] No S1/S2 defect remains and no ending/epilogue/full-manifest/release claim is made.
+- [x] A Sprint 6 QA plan exists before implementation begins.

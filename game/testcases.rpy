@@ -54,6 +54,7 @@ init python:
         persistent_boundary_unchanged,
         restore_ending_completion_snapshot,
     )
+    from modules.ending_rules import AXES, _PROJECTION_INDEX
 
     def _load_classification_test_record(**overrides):
         values = {
@@ -197,6 +198,93 @@ init python:
         candidate = build_fresh_persist_root()
         persistent.sys_persist_state = candidate
         persistent.settings = candidate["settings"]
+
+    def _capture_day7_failed_handoff(failure_kind):
+        """Exercise the real pre-entry boundary with invalid active-run state."""
+
+        global semantic_state, _day7_failed_handoff_result
+
+        _reset_s7_test_persistent_root()
+        reset_run_state()
+        if failure_kind == "type":
+            semantic_state = "invalid semantic state"
+        elif failure_kind == "value":
+            semantic_state["axes"]["truth"] = 4
+        else:
+            raise ValueError("unknown Day 7 failure fixture")
+        try:
+            prepare_day7_ending_jump()
+        except (TypeError, ValueError):
+            _day7_failed_handoff_result = (
+                ending_flow_state,
+                pending_ending_id,
+                ending_completion_event_record,
+                tuple(persistent.sys_persist_state["ending_ids"]),
+                tuple(persistent.sys_persist_state["achievement_ids"]),
+                tuple(persistent.sys_persist_state["seen_achievement_ids"]),
+                tuple(persistent.sys_persist_state["memory_ids"]),
+            )
+            return
+        raise AssertionError("invalid Day 7 state unexpectedly entered an ending")
+
+    DAY7_CANONICAL_WITNESSES = {
+        "rain_stops": (
+            ("prologue_read_note", "prologue_ask_destination", "prologue_accept_destination", "prologue_notice_tracker", "day1_accept_clothing", "day1_read_food_gesture", "day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact", "day5_share_full_archive", "day5_include_self_in_truth", "day5_honor_erii_response", "day6_burn_old_identity", "day6_commit_shared_escape"),
+            {"understanding": 3, "autonomy": 3, "truth": 3, "preparation": 3, "sacrifice": 3},
+        ),
+        "her_own_name": (
+            ("prologue_read_note", "prologue_ask_destination", "prologue_accept_destination", "prologue_notice_tracker", "day1_accept_clothing", "day1_read_food_gesture", "day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_follow_one_route_no_backup", "day4_register_independent_contact", "day5_share_full_archive", "day5_blame_family_only", "day5_honor_erii_response", "day6_keep_backup_abandoned", "day6_burn_old_identity", "day6_commit_independent_contact"),
+            {"understanding": 3, "autonomy": 3, "truth": 3, "preparation": 1, "sacrifice": 1},
+        ),
+        "see_the_sea": (
+            ("prologue_hurry_to_train", "prologue_ask_destination", "prologue_accept_destination", "prologue_promise_cost", "day1_accept_clothing", "day1_assume_food_consent", "day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_buy_two_tickets_real_name", "day4_register_independent_contact", "day5_share_full_archive", "day5_include_self_in_truth", "day5_honor_erii_response", "day6_burn_old_identity", "day6_commit_shared_escape"),
+            {"understanding": 2, "autonomy": 3, "truth": 3, "preparation": 3, "sacrifice": 3},
+        ),
+        "one_person_train": (
+            ("prologue_read_note", "prologue_ask_destination", "prologue_accept_destination", "prologue_promise_cost", "day1_accept_clothing", "day1_assume_food_consent", "day2_accept_alias", "day2_spend_both_tokens", "day3_share_school_evidence", "day3_honor_pause", "day4_buy_single_ticket_cash", "day5_give_safe_summary", "day5_blame_family_only", "day5_honor_erii_response", "day6_keep_archive_withheld", "day6_burn_old_identity", "day6_commit_solo_departure"),
+            {"understanding": 3, "autonomy": 3, "truth": 1, "preparation": 1, "sacrifice": 2},
+        ),
+        "golden_cage": (
+            ("prologue_hurry_to_train", "prologue_choose_route", "prologue_promise_cost", "day1_keep_first_override", "day1_read_food_gesture", "day2_accept_alias", "day2_save_second_token", "day3_share_school_evidence", "day3_honor_pause", "day4_buy_single_ticket_cash", "day4_register_independent_contact", "day5_share_full_archive", "day5_blame_family_only", "day5_replace_erii_response", "day5_keep_daily_override", "day6_burn_old_identity", "day6_commit_old_order_return"),
+            {"understanding": 3, "autonomy": 2, "truth": 3, "preparation": 2, "sacrifice": 1},
+        ),
+        "unsent_postcard": (
+            ("prologue_hurry_to_train", "prologue_choose_route", "prologue_promise_cost", "day1_keep_first_override", "day1_assume_food_consent", "day2_assign_alias", "day2_spend_both_tokens", "day3_hide_school_evidence", "day3_force_explanation", "day4_follow_one_route_no_backup", "day5_give_safe_summary", "day5_blame_family_only", "day5_honor_erii_response", "day5_keep_school_evidence_hidden", "day5_keep_daily_override", "day6_keep_backup_abandoned", "day6_keep_archive_withheld", "day6_shift_cost_to_erii", "day6_leave_cost_shifted", "day6_no_executable_route"),
+            {"understanding": 0, "autonomy": 1, "truth": 0, "preparation": 0, "sacrifice": 1},
+        ),
+    }
+
+    def _setup_day7_canonical_witness(ending_id):
+        """Replay one frozen witness through the public rollback-owned API."""
+
+        global critical_choice_interaction
+
+        history, expected_axes = DAY7_CANONICAL_WITNESSES[ending_id]
+        _reset_s7_test_persistent_root()
+        reset_run_state()
+        critical_choice_interaction = False
+        for choice_id in history:
+            deltas = {
+                axis: delta
+                for axis, delta in zip(AXES, _PROJECTION_INDEX[choice_id].axis_deltas)
+                if delta
+            }
+            apply_choice(choice_id, deltas)
+        if current_choice_history() != list(history) or current_axis_snapshot() != expected_axes:
+            raise AssertionError("canonical Day 7 witness did not replay exactly")
+
+    def _day7_quick_menu_is_not_focused():
+        """Ensure dialogue advance never leaves keyboard focus on quick-menu UI."""
+
+        quick_menu = renpy.get_displayable("quick_menu", "quick_menu_root")
+        focused = renpy.display.focus.get_focused()
+        if quick_menu is None:
+            return True
+        return not (
+            focused is quick_menu
+            or getattr(focused, "child", None) is quick_menu
+            or getattr(quick_menu, "child", None) is focused
+        )
 
     def _stage_s7_ending_label(ending_id):
         """Build a valid owned pending-ID fixture without re-resolving content."""
@@ -1882,6 +1970,115 @@ testcase ending_rain_stops_epilogue_contract:
     assert eval "rain_stops" in persistent.sys_persist_state["ending_ids"]
     assert eval event_epilogue_first_guest_completed is False
     assert eval event_epilogue_lights_out_completed is False
+
+testcase day7_authored_handoff_rain_stops:
+    description "The canonical Day 7 unit reaches the owned terminal boundary exactly once."
+
+    run Function(_reset_s7_test_persistent_root)
+    run Function(reset_run_state)
+    run Function(_apply_s7_rain_stops_witness)
+    run Jump("chapter_day7_before_red_well")
+    assert "红井前的风从潮湿的石阶间穿过去"
+    advance until "雨停在窗外。"
+    assert eval current_chapter == "day7"
+    assert eval ending_flow_state == "Ended"
+    assert eval pending_ending_id == "ending.rain_stops"
+    assert eval ending_completion_event_record is None
+
+
+testcase day7_authored_handoff_failure_closure:
+    description "Type and value failures remain before every terminal entry or persistence action."
+
+    run Function(_capture_day7_failed_handoff, "type")
+    assert eval _day7_failed_handoff_result == ("Active", None, None, (), (), (), ())
+    run Function(_capture_day7_failed_handoff, "value")
+    assert eval _day7_failed_handoff_result == ("Active", None, None, (), (), (), ())
+
+
+testcase day7_six_canonical_history_handoffs:
+    description "All frozen Day 1-6 histories preserve their exact snapshot through the real Day 7 handoff."
+
+    run Function(_setup_day7_canonical_witness, "rain_stops")
+    run Jump("chapter_day7_before_red_well")
+    advance until "雨停在窗外。"
+    assert eval current_choice_history() == list(DAY7_CANONICAL_WITNESSES["rain_stops"][0])
+    assert eval current_axis_snapshot() == DAY7_CANONICAL_WITNESSES["rain_stops"][1]
+    assert eval ending_flow_state == "Ended"
+    assert eval pending_ending_id == "ending.rain_stops"
+    assert eval ending_completion_event_record is None
+
+    run Function(_setup_day7_canonical_witness, "her_own_name")
+    run Jump("chapter_day7_before_red_well")
+    advance until "她把联系人卡和写着自己名字的纸放进外套口袋"
+    assert eval current_choice_history() == list(DAY7_CANONICAL_WITNESSES["her_own_name"][0])
+    assert eval current_axis_snapshot() == DAY7_CANONICAL_WITNESSES["her_own_name"][1]
+    assert eval ending_flow_state == "Ended"
+    assert eval pending_ending_id == "ending.her_own_name"
+    assert eval ending_completion_event_record is None
+
+    run Function(_setup_day7_canonical_witness, "see_the_sea")
+    run Jump("chapter_day7_before_red_well")
+    advance until "两张靠窗的票被并排放在桌上"
+    assert eval current_choice_history() == list(DAY7_CANONICAL_WITNESSES["see_the_sea"][0])
+    assert eval current_axis_snapshot() == DAY7_CANONICAL_WITNESSES["see_the_sea"][1]
+    assert eval ending_flow_state == "Ended"
+    assert eval pending_ending_id == "ending.see_the_sea"
+    assert eval ending_completion_event_record is None
+
+    run Function(_setup_day7_canonical_witness, "one_person_train")
+    run Jump("chapter_day7_before_red_well")
+    advance until "单人票在她手里，能离开的路线确实存在。"
+    assert eval current_choice_history() == list(DAY7_CANONICAL_WITNESSES["one_person_train"][0])
+    assert eval current_axis_snapshot() == DAY7_CANONICAL_WITNESSES["one_person_train"][1]
+    assert eval ending_flow_state == "Ended"
+    assert eval pending_ending_id == "ending.one_person_train"
+    assert eval ending_completion_event_record is None
+
+    run Function(_setup_day7_canonical_witness, "golden_cage")
+    run Jump("chapter_day7_before_red_well")
+    advance until "被称作安全的方案盖过了她已经说出的决定。"
+    assert eval current_choice_history() == list(DAY7_CANONICAL_WITNESSES["golden_cage"][0])
+    assert eval current_axis_snapshot() == DAY7_CANONICAL_WITNESSES["golden_cage"][1]
+    assert eval ending_flow_state == "Ended"
+    assert eval pending_ending_id == "ending.golden_cage"
+    assert eval ending_completion_event_record is None
+
+    run Function(_setup_day7_canonical_witness, "unsent_postcard")
+    run Jump("chapter_day7_before_red_well")
+    advance until "桌上没有一条还能执行的路线。"
+    assert eval current_choice_history() == list(DAY7_CANONICAL_WITNESSES["unsent_postcard"][0])
+    assert eval current_axis_snapshot() == DAY7_CANONICAL_WITNESSES["unsent_postcard"][1]
+    assert eval ending_flow_state == "Ended"
+    assert eval pending_ending_id == "ending.unsent_postcard"
+    assert eval ending_completion_event_record is None
+
+
+testcase day7_accessibility_visual_baselines:
+    description "Day 7 causal recall is readable and keyboard-advanceable at both approved baselines."
+
+    run Function(renpy.set_physical_size, (1280, 720))
+    run Function(setattr, renpy.game.preferences, "self_voicing", False)
+    run Function(apply_accessibility_settings, 1.0, False, True, False, False)
+    run Function(_setup_day7_canonical_witness, "rain_stops")
+    run Jump("chapter_day7_before_red_well")
+    advance until "路明非把前六日已经说出的话"
+    assert eval renpy.game.preferences.self_voicing is False
+    assert eval _day7_quick_menu_is_not_focused()
+    screenshot "visual/day7_causal_recall_1280x720_keyboard_silent_reduced_motion.png"
+    advance
+    assert "它们不替谁改写已经发生的事"
+
+    run Function(apply_accessibility_settings, 1.5, True, True, False, False)
+    run Function(_setup_day7_canonical_witness, "rain_stops")
+    run Jump("chapter_day7_before_red_well")
+    advance until "路明非把前六日已经说出的话"
+    assert eval renpy.game.preferences.self_voicing is False
+    assert eval _day7_quick_menu_is_not_focused()
+    screenshot "visual/day7_causal_recall_1280x720_font_1_5_high_contrast.png"
+    advance
+    assert "它们不替谁改写已经发生的事"
+    run Function(apply_accessibility_settings, 1.0, False, False, False, False)
+
 
 testcase action_gate_mutex_contract:
     description "Adapters publish the mutex before callbacks and gate screen/keyboard actions."

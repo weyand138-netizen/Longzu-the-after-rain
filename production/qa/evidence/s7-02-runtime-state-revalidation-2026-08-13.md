@@ -15,7 +15,7 @@ is changed.
 | `game/10_state.rpy` | `ff0444e7a0c129fafc15e7cf6f49771288e5720ce233a0523953385415049e34` |
 | `game/chapters/day4.rpy` | `dc1b96d37678e76f948ffc87d5193c27d155341b1dc6aba47f8c758bc95411c9` |
 | `game/chapters/day6.rpy` | `72163c64fd1f0d9ed8fd5660feaa356dfa832e43c14a2e2969c6bcf6d2b9aac7` |
-| `game/testcases.rpy` | `dad66f91ce769d1a2c56a5626b3a681a1ee4fdd35c18ad7b99d32b0a4e7199eb` |
+| `game/testcases.rpy` | `3824e0756da12701a0ff7cb018c0ff9a80953bd82892bdbc21d0cce5147982d6` |
 
 ## Objective revalidation
 
@@ -27,9 +27,10 @@ is changed.
   overwritten. Their original capture hashes continue to describe the same
   admitted visual surfaces; this state-only change adds no player-visible
   source or presentation primitive.
-- The shared testcase fixture was later extended by S7-03 terminal-flow cases.
-  This row binds its current source identity only; it does not rewrite the
-  historical Day 4/Day 6 capture evidence or their stated verification runs.
+- The shared testcase fixture was later extended by S7-03 terminal-flow cases
+  and S6-01's owned Day 7 handoff case. This row binds its current source
+  identity only; it does not rewrite the historical Day 4/Day 6 capture
+  evidence or their stated verification runs.
 
 ## Boundary confirmation
 

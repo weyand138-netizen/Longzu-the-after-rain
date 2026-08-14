@@ -74,3 +74,14 @@ its normal source, review, smoke, and QA flow. No stage promotion is proposed.
 **Scope Verdict: CONCERNS**
 **Scope delta: 0%; implementation readiness: blocked by an explicit existing
 terminal dependency.**
+
+## 2026-08-14 Dependency Revalidation
+
+Sprint 7 delivered and QA-approved the owned `day7_resolve_ending` adapter, its
+six stable targets, and the ADR-0006 completion boundary in local commit
+`71fbfc5`. The dependency described above is therefore historical evidence, not
+a current blocker. The Day 7 scope remains unchanged: it may make exactly one
+owned handoff and must neither select nor complete an ending locally.
+
+**Current Scope Verdict: PASS**
+**Scope delta: 0%; implementation readiness: ready for Story 020.**

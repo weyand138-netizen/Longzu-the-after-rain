@@ -14,6 +14,7 @@ TR_REGISTRY = ROOT / "docs" / "architecture" / "tr-registry.yaml"
 TRACEABILITY = ROOT / "production" / "qa" / "evidence" / "sprint-007-terminal-traceability-2026-08-13.md"
 STORY = ROOT / "production" / "epics" / "sys-ending" / "story-004-terminal-validation-and-traceability.md"
 READINESS = ROOT / "production" / "qa" / "evidence" / "story-readiness-s7-04-2026-08-13.md"
+QA_SIGNOFF = ROOT / "production" / "qa" / "qa-signoff-sprint-007-2026-08-13.md"
 
 SOURCES = (
     ROOT / "game" / "modules" / "ending_rules.py",
@@ -36,6 +37,7 @@ class TerminalTraceabilityTests(unittest.TestCase):
         cls.traceability = TRACEABILITY.read_text(encoding="utf-8")
         cls.story = STORY.read_text(encoding="utf-8")
         cls.readiness = READINESS.read_text(encoding="utf-8")
+        cls.qa_signoff = QA_SIGNOFF.read_text(encoding="utf-8")
 
     def test_sources_and_exact_hashes_bind_one_terminal_generation(self):
         for source in SOURCES:
@@ -49,13 +51,12 @@ class TerminalTraceabilityTests(unittest.TestCase):
         self.assertRegex(self.epic, r"Story 001.*?\| Complete \|")
         self.assertRegex(self.epic, r"Story 002.*?\| Complete \|")
         self.assertRegex(self.epic, r"Story 003.*?\| Complete \|")
-        for sprint_id in ("S7-01", "S7-02", "S7-03"):
-            self.assertIsNotNone(
-                re.search(r'id: "{}".*?status: complete'.format(sprint_id), self.status, re.DOTALL)
-            )
-        self.assertIsNotNone(
-            re.search(r'id: "S7-04".*?status: (ready|in_progress|complete)', self.status, re.DOTALL)
-        )
+        # sprint-status.yaml intentionally describes the active sprint. Sprint 7
+        # closes in its own Definition of Done and approved QA record before
+        # Sprint 6 resumes.
+        self.assertIn("[x] All Must Have stories pass readiness, dev, code review, and story-done.", self.sprint)
+        self.assertIn("[x] Full Python, global Ren'Py, lint/compile, constraints, smoke, and team QA", self.sprint)
+        self.assertIn("## Verdict: APPROVED", self.qa_signoff)
         self.assertIn("**Status**: Complete", self.story)
         self.assertIn("**Verdict**: READY", self.readiness)
 

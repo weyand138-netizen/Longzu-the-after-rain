@@ -65,10 +65,10 @@ Produce the 15 canonical narrative units as player-safe Ren'Py content, beginnin
 | 017 | [Day 6 asset admission records](story-017-day6-asset-admission.md) | Config/Data | Complete | ADR-0003, ADR-0008 |
 | 018 | [Day 6 route, accessibility, and evidence validation](story-018-day6-content-validation.md) | Integration | Complete | ADR-0003, ADR-0008 |
 | 019 | [Day 6 story and evidence traceability](story-019-day6-traceability.md) | Config/Data | Complete | ADR-0003, ADR-0008 |
-| 020 | [Day 7 authored source and resolver handoff](story-020-day7-authored-source.md) | Config/Data | Blocked | ADR-0003, ADR-0006, ADR-0008 |
-| 021 | [Day 7 asset admission records](story-021-day7-asset-admission.md) | Config/Data | Blocked | ADR-0003, ADR-0008 |
-| 022 | [Day 7 handoff, accessibility, and evidence validation](story-022-day7-content-validation.md) | Integration | Blocked | ADR-0003, ADR-0006, ADR-0008 |
-| 023 | [Day 7 story and evidence traceability](story-023-day7-traceability.md) | Config/Data | Blocked | ADR-0003, ADR-0006, ADR-0008 |
+| 020 | [Day 7 authored source and resolver handoff](story-020-day7-authored-source.md) | Config/Data | Complete | ADR-0003, ADR-0006, ADR-0008 |
+| 021 | [Day 7 asset admission records](story-021-day7-asset-admission.md) | Config/Data | Complete | ADR-0003, ADR-0008 |
+| 022 | [Day 7 handoff, accessibility, and evidence validation](story-022-day7-content-validation.md) | Integration | Complete | ADR-0003, ADR-0006, ADR-0008 |
+| 023 | [Day 7 story and evidence traceability](story-023-day7-traceability.md) | Config/Data | Complete | ADR-0003, ADR-0006, ADR-0008 |
 
 Day 2 flow-manifest expansion is intentionally not a story in this batch:
 ADR-0009 permits exactly the Day 1 partial artifact and blocks a partial Day 2

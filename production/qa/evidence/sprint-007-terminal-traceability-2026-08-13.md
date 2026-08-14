@@ -34,7 +34,7 @@
 | `tests/test_ending_rules.py` | `e4efc2550a4649aa9cfcd1ebe3e187ce433a7ccff5cfb00ac06c5ecb989eabe2` |
 | `tests/integration/sys_ending/terminal_lifecycle_source_test.py` | `429ef4f80d5d36481a5496d4cd8cfff1251415d2a71d715eeddbaff9a7a8e488` |
 | `tests/integration/sys_ending/ending_closure_source_test.py` | `7910d0ea0a7e59298cb9739ed2898ce09264b1b09885794142cf3857312ecd5d` |
-| `tests/integration/sys_ending/terminal_traceability_test.py` | `a006420b49968a209112a4c01670fcf0d892c33414163b225f97bcf88190bfc8` |
+| `tests/integration/sys_ending/terminal_traceability_test.py` | `73ccd2e5ddffb38b0683c4bf56cd5d14921d581a926283bae7d3fc38417acd10` |
 
 ## Status and Scope Boundary
 

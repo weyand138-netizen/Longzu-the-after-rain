@@ -131,6 +131,30 @@ No Day 6 image, audio, video, character art, CG, prop, generated, or planned
 file is present or admitted. Intended background and prop files listed below
 remain not admitted and must not be treated as Day 6 runtime references.
 
+## Day 7 audit result
+
+**Date**: 2026-08-14
+**Scope**: Sprint 6 / S6-02 actual runtime references in
+`game/chapters/day7.rpy`, `game/00_resources.rpy`, `game/screens.rpy`, and
+`game/assets/`.
+
+Day 7 introduces no binary, external, generated, image, audio, video,
+character-art, CG, or prop asset. Its only direct scene reference is
+`bg warm_room`; the red well, wind, water, paper, visible routes, and names are
+narrative text and semantic facts, not asset-file claims. The dialogue is
+rendered through the existing `say` screen and admitted font; Day 7 has no
+choice surface at all.
+
+| Existing asset ID | Day 7 production role | Verified runtime path | Source / SHA-256 | Day 7 accessibility semantic binding | Admission status |
+|---|---|---|---|---|---|
+| `font_source_han_sans_lite` | All Day 7 acknowledgement and handoff dialogue text | `game/assets/fonts/SourceHanSansLite.ttf`, loaded by `game/screens.rpy` as `assets/fonts/SourceHanSansLite.ttf` | `FONT-SOURCEHAN-LITE-P0`; `b2aaf73b7acc23d746b110f1caeaecc93d4292824979af44e96000200591b2a7` | `a11y.day7.text-copy`: Day 1-6 acknowledgement and the resolver handoff are visible/localizable text; no semantic outcome depends on a visual asset. | **Present; admitted reuse.** |
+| `runtime_solid_day1_warm_room` | Decorative backing for `chapter_day7_before_red_well` | Ren'Py image `bg warm_room` from `game/00_resources.rpy` (`Solid("#4a3840")`); no file path | `RUNTIME-SOLID-DAY1-WARM-ROOM`; source-file SHA-256 `4333d936fbe481f61c4cb828e43e17057133ae5af99b79cdf76e76545ee49801` | `a11y.day7.warm-room-decorative`: background colour establishes no Day 1-6 fact, terminal input, or ending result; those remain text and the owned resolver boundary. | **Present; admitted reuse.** |
+| `runtime_ui_day1_choice_surface` | Existing `say` dialogue screen used by the Day 7 text-only unit; no Day 7 `choice` surface is invoked | Ren'Py `say` screen in `game/screens.rpy`; `Solid()`/text primitives, no image file | `RUNTIME-UI-DAY1-CHOICE-SURFACE`; source-file SHA-256 `72d963e5c0df442dec889d1024f82a8951af573575ad5ebd84a8c0e5a7e5a291` | `a11y.day7.say-surface`: text remains readable, keyboard-advanceable, and semantically complete at the approved accessibility baselines; no quick-menu target or visual-only input decides the handoff. | **Present; admitted reuse.** |
+
+No Day 7 image, audio, video, character art, CG, prop, generated, planned, or
+choice-only identity is present or admitted. Intended files listed below remain
+not admitted and must not be treated as Day 7 runtime references.
+
 ## Admission checklist
 
 1. Confirm the asset strengthens an observable fact or a concrete everyday-life contrast.
