@@ -13,7 +13,7 @@
 
 | Source | Locked player-visible boundary | Lines at lock | SHA-256 |
 |---|---|---:|---|
-| `game/screens.rpy` | 主菜单、快捷菜单、游戏菜单、存取档、设置、手册、章节完成、确认和通知文案；包含当前字体/字号呈现约束 | 284 | `a9306f29b5b60c922830f333a867081b0c2d09e2b96c80e25be2d2bcbf91e22c` |
+| `game/screens.rpy` | 主菜单、快捷菜单、游戏菜单、存取档、设置、手册、章节完成、确认和通知文案；包含当前字体/字号呈现约束 | 377 | `72d963e5c0df442dec889d1024f82a8951af573575ad5ebd84a8c0e5a7e5a291` |
 | `game/script.rpy` | 启动免责声明与入口可见文案 | 18 | `e8c0b143f937aff62f8cce2f3b43160ea4721f4c6edba0f5b0524bc89cf66f12` |
 | `game/chapters/prologue.rpy` | 序章旁白、角色对白、正式选项、章节完成文案 | 138 | `d5135e3c124c0cd6ee3455d78210fb45eba5e0e082402ade1961ee1a7b480895` |
 | `game/chapters/day1.rpy` | Day 1 衣物、食物、收据名字与既有正式选项的玩家可见文本 | 128 | `8172d12c3676e5b55487ffe76dbb1eb2cbec7e7fd74994e0f9ffe61c1afb01ba` |
@@ -23,7 +23,7 @@
 | `game/chapters/day5.rpy` | Day 5 家族档案、路线回应、责任与修复场景的玩家可见文本 | 249 | `2d1de1d4f10c3fea6df9c514eb7deeba52a4561705328812f30d718eff9d4c05` |
 | `game/chapters/day6.rpy` | Day 6 安全屋失效、代价承担与路线承诺场景的玩家可见文本 | 300 | `dbe1f47ce705bc73520c0aa3b6115cd2f803f292605dd2b79a2854adf0ff98be` |
 | `game/chapters/day7.rpy` | Day 7 红井前因果回收与唯一 ending handoff 的玩家可见文本 | 50 | `e8c802dfb3ffef5f3e234ce95b810d4af323d5f46c48420183251a43b1eef7b8` |
-| `game/11_achievements.rpy` | 当前运行时成就标题/描述/玩家可见提示 | 86 | `0bd4b9b8b0d28f44e61fd2281a06ee884dc59e0921e092345465aca7a1a37b04` |
+| `game/11_achievements.rpy` | 当前运行时成就标题/描述/玩家可见提示 | 47 | `18bca7c444314b451f41ab094656f6f8346273ae5a2b22c0fc58dfe8eca5d17c` |
 | `game/chapters/endings.rpy` | 六个固定结局闭合与 `rain_stops` 既有 arcade epilogue 的玩家可见文本；Story 扩展只允许在现有 lights-out 之后追加受限短尾声 | 113 | `136055f969ced13e5a1baa60c88b54714dd981ada4232440bfc4b2955bfe5a6c` |
 | `design/narrative/seven-day-content-baseline.md` | 七日章节、choice、reaction、payoff、六结局与真结局尾声的 canonical player-facing content identity 和安全信息边界 | 393 | `87e54f616076ef91883ebb687b05468978a7956ecc66bafad512c2797398a85f` |
 | `design/narrative/achievement-catalog.md` | 成就目录的玩家可见分组、标题、描述、顺序与禁止暴露的内部语义 | 64 | `02b3aba5cb0f2b71eefbe49b364471fadc9369027e435b8cf50ac635400dd67e` |
@@ -39,6 +39,8 @@
 > **Sprint 011 文案变更说明（2026-08-14）**：Lock ID 递增为 v5，因为 Day 5 和 Day 6 在既有 labels 内增加了档案来源、路线回应、安全屋失效、代价承担与承诺观察。choice/menu/agency answer/qualification/route/ending/hidden-rule 合同未变；人工体验和最终叙事签字仍未运行。
 
 > **Sprint 012 文案变更说明（2026-08-14）**：Lock ID 递增为 v6，因为 Day 7、六个既有 ending 与 `rain_stops` 既有尾声在既有 labels 内增加了因果回收、即时后果和普通生活观察。ending ID/resolver/priority/canonical witness/五轴/token/qualification/predicate/completion boundary 未变；人工体验和最终叙事签字仍未运行。
+
+> **Sprint 013 source identity refresh（2026-08-16）**：以可信提交 `ff00c7a` 为基线，对 `game/screens.rpy` 与 `game/11_achievements.rpy` 做玩家可见文本语义 diff；工作树相对该 HEAD 的 copy delta 为 **0**。本次仅刷新两行的当前行数与 SHA-256，登记为结构/实现 identity refresh，不回退现有实现、不递增 Lock ID、不改变玩家可见文案，也不把旧 v6 hash 当作可恢复源。定点 UX/content/source-manifest 检查需在当前自动化预检中重跑；人工 GUI、SAPI、语义、性能和最终 archive 仍属于未来 Production RC 收尾 Sprint。
 
 `design/ux/*.md` 和 `design/ux/interaction-patterns.md` 是 layout/state/semantic contract；其中出现的示例状态词只有在进入上述 production source 或另行登记的 catalog 后才是 runtime copy。未登记的 UX 示例不得直接进入 build。
 

@@ -1,0 +1,5 @@
+[rpytest] Ren'Py: Ren'Py 8.5.3.26051504
+[rpytest] PASSED  global
+[rpytest] Test cases :    56 |    56 passed |     0 failed
+[rpytest] Assertions :   474 |   474 passed |     0 failed
+[rpytest] Status: PASSED

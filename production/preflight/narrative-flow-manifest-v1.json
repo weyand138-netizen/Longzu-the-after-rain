@@ -1,0 +1,55 @@
+{
+  "manifest_id": "narrative_flow_manifest:v1",
+  "candidate_identity": "506dcf75c0ab5bc207a5e57cee673da2d9cd3687707922b7334692b39a14c09d",
+  "candidate_type": "non-formal-asset-automation-preflight",
+  "source_head": "ff00c7aff4c1ff5f5c12c85cab43a0d8c4e1c9aa",
+  "partial_manifest_admitted": false,
+  "runtime_authority": "ADR-0010 single static Production traversal owner",
+  "resolver_handoff": {
+    "caller": "day7_resolve_ending",
+    "resolver": "resolve_ending_record",
+    "call_count": 1,
+    "label_map": "ENDING_LABEL_MAP",
+    "ending_count": 6
+  },
+  "canonical_units": [
+    {"id": "chapter_prologue_rain_platform", "source": "game/chapters/prologue.rpy", "successor": "chapter_day1_her_own_name", "terminal": false},
+    {"id": "chapter_day1_her_own_name", "source": "game/chapters/day1.rpy", "successor": "chapter_day2_two_game_tokens", "terminal": false},
+    {"id": "chapter_day2_two_game_tokens", "source": "game/chapters/day2.rpy", "successor": "chapter_day3_empty_school", "terminal": false},
+    {"id": "chapter_day3_empty_school", "source": "game/chapters/day3.rpy", "successor": "chapter_day4_seaside_train", "terminal": false},
+    {"id": "chapter_day4_seaside_train", "source": "game/chapters/day4.rpy", "successor": "chapter_day5_family_lie", "terminal": false},
+    {"id": "chapter_day5_family_lie", "source": "game/chapters/day5.rpy", "successor": "chapter_day6_no_safe_house", "terminal": false},
+    {"id": "chapter_day6_no_safe_house", "source": "game/chapters/day6.rpy", "successor": "chapter_day7_before_red_well", "terminal": false},
+    {"id": "chapter_day7_before_red_well", "source": "game/chapters/day7.rpy", "successor": "ending_resolver_handoff", "terminal": false},
+    {"id": "ending_rain_stops", "source": "game/chapters/endings.rpy", "successor": "epilogue_rain_stops_arcade", "terminal": true},
+    {"id": "ending_her_own_name", "source": "game/chapters/endings.rpy", "successor": "normal_return", "terminal": true},
+    {"id": "ending_see_the_sea", "source": "game/chapters/endings.rpy", "successor": "normal_return", "terminal": true},
+    {"id": "ending_one_person_train", "source": "game/chapters/endings.rpy", "successor": "normal_return", "terminal": true},
+    {"id": "ending_golden_cage", "source": "game/chapters/endings.rpy", "successor": "normal_return", "terminal": true},
+    {"id": "ending_unsent_postcard", "source": "game/chapters/endings.rpy", "successor": "normal_return", "terminal": true},
+    {"id": "epilogue_rain_stops_arcade", "source": "game/chapters/endings.rpy", "successor": "normal_return", "terminal": true}
+  ],
+  "ending_label_map": [
+    ["rain_stops", "ending_rain_stops"],
+    ["her_own_name", "ending_her_own_name"],
+    ["see_the_sea", "ending_see_the_sea"],
+    ["one_person_train", "ending_one_person_train"],
+    ["golden_cage", "ending_golden_cage"],
+    ["unsent_postcard", "ending_unsent_postcard"]
+  ],
+  "automated_contracts": {
+    "seven_day_flow": "PASS when static/pure/engine contracts pass",
+    "six_endings": "PASS when ENDING_LABEL_MAP and resolver contracts pass",
+    "save_persistence": "PASS when persistence contracts pass",
+    "accessibility": "PASS when automated accessibility contracts pass",
+    "external_evidence": {
+      "gui_flow": "BLOCKED_INPUT",
+      "human_witnesses": "BLOCKED_INPUT",
+      "sapi_transcript": "BLOCKED_INPUT",
+      "semantic_review": "BLOCKED_INPUT",
+      "player_comprehension": "BLOCKED_INPUT",
+      "performance": "REPORT_ONLY",
+      "archive": "BLOCKED_INPUT"
+    }
+  }
+}

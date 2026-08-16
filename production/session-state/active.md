@@ -121,6 +121,109 @@
 
 <!-- QA-PLAN: 2026-08-11 | System: sprint-003 | Plan refreshed: production/qa/qa-plan-sprint-003-2026-08-11.md -->
 
+<!-- QA-PLAN: 2026-08-15 | System: sprint-013 | Plan written: production/qa/qa-plan-sprint-013-2026-08-15.md -->
+
+## Session Extract — Sprint 013 N13-01 preflight and topology closure 2026-08-15
+
+- Status: `BLOCKED_INPUT`; static topology code checks are current and pass,
+  but the current content-lock has drift in `game/screens.rpy` and
+  `game/11_achievements.rpy`.
+- Candidate identity is `UNBOUND`: no current `candidate_manifest:v1`, no
+  complete `narrative_flow_manifest:v1`, and no current non-test GUI trace.
+- Automated evidence: Sprint 013 topology 3/4 (the lock-drift assertion is
+  the expected blocker), existing orchestrator 3/3, Ren'Py 56/56 and 474/474,
+  lint/compile and content constraints pass.
+- Evidence: `production/qa/evidence/sprint-013-n13-01-2026-08-15/record.md`.
+- No formal game asset was created, generated, purchased, replaced, admitted,
+  or connected.
+
+## Session Extract — Sprint 013 N13-02 actual Day 1-Day 7 flow 2026-08-15
+
+- Status: `BLOCKED_INPUT`; N13-01 remains blocked by content-lock drift and
+  missing SYS-BUILD candidate identity.
+- Structural Day 1-Day 7 test: 2/3 passed; the current lock identity assertion
+  failed on `game/screens.rpy` and `game/11_achievements.rpy`.
+- Ren'Py global suite: 56/56 testcases and 474/474 assertions; not promoted to
+  human-flow evidence.
+- No current non-test GUI inputs, choice history, checkpoint trace, or raw
+  capture was produced. No old evidence was reused.
+- Evidence: `production/qa/evidence/sprint-013-n13-02-2026-08-15/record.md`.
+- No formal game asset was created, generated, purchased, replaced, admitted,
+  or connected.
+
+## Session Extract — Sprint 013 N13-03 six ending witnesses 2026-08-15
+
+- Status: `BLOCKED_INPUT`; N13-01 and N13-02 remain blocked and no current
+  candidate identity or approved checkpoint exists.
+- Static witness replay contract: six IDs/map/entry-completion/rain-only-tail
+  checks pass; current lock identity assertion fails for the two drifted rows.
+- Ren'Py global suite: 56/56 testcases and 474/474 assertions; this is not a
+  human witness or terminal cause review.
+- Six ending session records are explicitly blocked; no direct state injection,
+  old save, screenshot, summary or automated result is promoted.
+- Evidence: `production/qa/evidence/sprint-013-n13-03-2026-08-15/record.md`.
+- No formal game asset was created, generated, purchased, replaced, admitted,
+  or connected.
+
+## Session Extract — Sprint 013 N13-04 persistence flow 2026-08-15
+
+- Status: `BLOCKED_INPUT`; current candidate identity, Day 1-Day 7 raw flow and
+  six ending witnesses are unavailable.
+- Focused persistence/achievement suite: 31/32 passed; one current lock
+  identity assertion blocked on `game/screens.rpy` and
+  `game/11_achievements.rpy` drift.
+- Ren'Py global suite: 56/56 testcases and 474/474 assertions. Unit/integration
+  contracts are not player save/load evidence.
+- No current save payload/hash, state diff, load trace, journal capture,
+  achievement notification record or clean-player observation was created.
+- Evidence: `production/qa/evidence/sprint-013-n13-04-2026-08-15/record.md`.
+- No formal game asset was created, generated, purchased, replaced, admitted,
+  or connected.
+
+## Session Extract — Sprint 013 N13-05 keyboard/mouse/accessibility 2026-08-15
+
+- Status: `BLOCKED_INPUT`; N13-02/N13-04 and candidate identity remain blocked.
+- Current automated accessibility run retained raw stdout/stderr, result,
+  SAPI capability preflight, saves and two generated screenshots; it is marked
+  `AUTOMATED_ONLY`, not human validation.
+- Focused matrix/accessibility checks: 7/8 passed; content-lock identity check
+  failed on the two drifted rows. Current environment observed as Windows 11
+  `10.0.22631` + Ren'Py `8.5.3.26051504`.
+- No human keyboard-only walk, mouse parity walk, full 1280x720 matrix,
+  target-hardware capture, or reviewer checklist was available.
+- Evidence: `production/qa/evidence/sprint-013-n13-05-2026-08-15/record.md`.
+- No formal game asset was created, generated, purchased, replaced, admitted,
+  or connected.
+
+## Session Extract — Sprint 013 N13-06 SAPI/transcript 2026-08-15
+
+- Status: `BLOCKED_INPUT / UNVERIFIED_NONVISUAL`; current preflight enumerated
+  3 voices, including Simplified Chinese, but produced no raw transcript.
+- Focused contract tests: 3/5 passed; failures are the missing transcript and
+  content-lock drift. The preflight JSON SHA-256 is recorded.
+- No announcement count, focus/action order, no-auto-action trace, Chinese
+  listening rubric or human adjudication is available.
+- No capability enumeration, old transcript, summary or screenshot is
+  promoted to SAPI PASS.
+- Evidence: `production/qa/evidence/sprint-013-n13-06-2026-08-15/record.md`.
+- No formal game asset was created, generated, purchased, replaced, admitted,
+  or connected.
+
+## Session Extract — Sprint 013 N13-07 semantic equivalence 2026-08-15
+
+- Status: `BLOCKED_INPUT`; upstream current accessibility/transcript and ending
+  evidence remain blocked.
+- Semantic contract source checks pass; focused trace suite is 3/5, with
+  failures for current lock drift and missing paired review captures.
+- No paired sound/quiet, color/non-color, full/reduced-motion/high-contrast
+  raw captures, transcript binding, independent reviewer answers, rubric,
+  signature or adjudication exists.
+- No screenshot similarity, automated result or source assertion is promoted
+  to human semantic PASS.
+- Evidence: `production/qa/evidence/sprint-013-n13-07-2026-08-15/record.md`.
+- No formal game asset was created, generated, purchased, replaced, admitted,
+  or connected.
+
 <!-- QA RUN: 2026-08-11 | Sprint: sprint-003 | Verdict: CONCERNS | Report: production/qa/qa-signoff-sprint-003-2026-08-11.md -->
 
 ## Session Extract — /story-done 2026-08-14
@@ -570,3 +673,49 @@
   checking `production/stage.txt` and the sprint plan.
 
 <!-- QA RUN: 2026-08-14 | Sprint: sprint-006 | Verdict: PASS | Report: production/qa/qa-signoff-sprint-006-2026-08-14.md -->
+
+## Session Extract — Sprint 013 N13-08 2026-08-15
+
+- Verdict: `BLOCKED_INPUT`. The current no-debug orchestrator guard passed 1/1, but the required current clean-player playtest dossier, raw player answers, observer notes, six witness links, and bound candidate are absent.
+- Evidence: `production/qa/evidence/sprint-013-n13-08-2026-08-15/`; session record `production/session-logs/playtest-sprint-013-n13-08.md`.
+- No automated output, prior summary, screenshot, or formal asset was used as a substitute for human playtest evidence. Sprint 013 remains in Production; `production/stage.txt` was not modified.
+
+## Session Extract — Sprint 013 N13-09 2026-08-15
+
+- Verdict: `REPORT_ONLY` / `BLOCKED_INPUT`. `benchmark_protocol:v1` and deterministic pure protocol coverage were recorded, but no current candidate, target hardware/renderer identity, warm-up policy, or raw engine samples were supplied.
+- Evidence: `production/qa/evidence/sprint-013-n13-09-2026-08-15/`; performance session record `production/session-logs/playtest-sprint-013-n13-09.md`.
+- No engine timing or resource PASS is claimed. No benchmark harness or formal asset entered the runtime/archive; `production/stage.txt` remains unchanged.
+
+## Session Extract — Sprint 013 N13-10 2026-08-15
+
+- Verdict: `BLOCKED_INPUT`. No actual DOCX source exists in the workspace, so provenance, permission, and owner decision remain open. Static legal documents were checked only for boundary wording; they were not treated as copyright clearance.
+- Evidence: `production/qa/evidence/sprint-013-n13-10-2026-08-15/`; session record `production/session-logs/playtest-sprint-013-n13-10.md`.
+- No formal asset was created/admitted and `production/stage.txt` was not modified.
+
+## Session Extract — Sprint 013 N13-11 2026-08-15
+
+- Verdict: `BLOCKED_INPUT`. N13-05 through N13-10 are not all current and candidate identity is `UNBOUND`; therefore no package runner, staging tree, archive, archive hash, or exclusion report was invoked or generated.
+- Evidence: `production/qa/evidence/sprint-013-n13-11-2026-08-15/`; session record `production/session-logs/playtest-sprint-013-n13-11.md`.
+- Pure build-evidence helper tests passed only their deterministic contracts. No old archive or formal asset was reused; `production/stage.txt` remains unchanged.
+
+## Session Extract — Sprint 013 N13-12 2026-08-15
+
+- Verdict: `BLOCKED_INPUT / FAIL-CLOSED`. Gate aggregation automation passed its strict blocker contract, but N13-01 through N13-11 are not all complete/current, so the final Production → Polish verdict is not PASS.
+- Smoke check and team QA were intentionally deferred under the sprint rule requiring all Must Have completion first. Final report: `production/gate-checks/production-to-polish-2026-08-15-final.md`.
+- `production/stage.txt` remains `Production` and was not modified. No formal game asset was created, generated, purchased, replaced, admitted, or connected.
+
+## Session Extract — Sprint 013 smoke / team QA / evidence review 2026-08-15
+
+- Smoke result: `FAIL`. Python unittest discovery ran 341 tests with 16 failures; current raw outputs and hashes are under `production/qa/evidence/sprint-013-smoke-2026-08-15/`. Ren'Py global, lint/compile, content constraints and diff check passed.
+- Team QA result: `FAIL / BLOCKED` at strategy phase. Because smoke failed, test-plan generation, manual QA execution and QA sign-off were not entered; no QA approval is claimed. Strategy: `production/qa/qa-strategy-sprint-013-2026-08-15.md`.
+- Evidence review result: `MISSING / INCOMPLETE`; no bound candidate identity, archive/exclusion inspection, raw transcript or complete manual dossier. Review: `production/qa/evidence-review-sprint-013-2026-08-15.md`.
+- No formal assets were touched, `production/stage.txt` remains `Production`, and Polish was not advanced.
+## Session Extract — Sprint 013 automation preflight update 2026-08-16
+
+- Trusted baseline remains `HEAD ff00c7a`; the previous 346-test run with 19 failures was classified as external-evidence/content-lock boundary failures, not as 19 code regressions.
+- Current P13-01 through P13-06 automation preflight work is complete: content-lock/source identity, ADR-0010/topology, candidate and complete narrative-flow manifest, automated seven-day/six-ending/save/accessibility contracts, regression/smoke/evidence checks, and the explicit RC closeout runner.
+- Candidate identity: `506dcf75c0ab5bc207a5e57cee673da2d9cd3687707922b7334692b39a14c09d`, bound to source head `ff00c7aff4c1ff5f5c12c85cab43a0d8c4e1c9aa`; `release_candidate: false` and formal asset scope excluded.
+- Ordinary Python regression is green at 350/350 through both plain discovery and the established `tests` discovery. Ren'Py global is 56/56 with 474/474 assertions; lint/compile, content constraints, and diff check pass.
+- `game/screens.rpy` and `game/11_achievements.rpy` have zero Sprint 013 player-visible semantic copy delta versus trusted HEAD; current line/hash identity rows are refreshed under content-lock v6. No rollback or v7 increment was made.
+- ADR-0010 is Accepted for Story 024, exact 15 canonical units, and the unique resolver handoff. GUI, human witness, SAPI, semantic, playtest, formal performance, owner, archive, final QA, and Production → Polish inputs remain deferred RC evidence.
+- The explicit `production-closeout` runner returns `BLOCKED_INPUT` (performance `REPORT_ONLY`) only when deliberately run as final; it does not alter `production/stage.txt`, which remains `Production`.
