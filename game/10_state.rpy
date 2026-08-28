@@ -37,8 +37,12 @@ init python:
     ENDING_FLOW_SENTINEL = "ending_flow:v1"
     ACTIVE_ENDING_LIFECYCLE = "Active"
     ENDED_ENDING_LIFECYCLE = "Ended"
-    _RUN_MAP_TYPE = type({})
-    _RUN_LIST_TYPE = type([])
+    # Ren'Py turns rollback-owned containers into these exact subclasses when
+    # it restores a player save. Keep accepting only the two engine-owned
+    # representations, rather than treating a valid restored state as a
+    # malformed save and returning the player to the title page.
+    _RUN_MAP_TYPES = (dict, renpy.revertable.RevertableDict)
+    _RUN_LIST_TYPES = (list, renpy.revertable.RevertableList)
     _SEMANTIC_STATE_KEYS = ("schema_version", "axes", "choice_history")
     _ENDING_LABEL_MAP_ITEMS = (
         ("rain_stops", "ending_rain_stops"),
@@ -58,13 +62,33 @@ init python:
         }
 
     def _require_exact_string(value, field_name):
-        if type(value) is not str:
-            raise TypeError("{} must be an exact string".format(field_name))
+        # Ren'Py restores rollback-owned scalar values as string subclasses.
+        # Accept that engine representation while still rejecting all
+        # non-string values at the persisted-state boundary.
+        if not isinstance(value, str):
+            raise TypeError("{} must be a string".format(field_name))
         if not value:
             raise ValueError("{} must be non-empty".format(field_name))
 
+    def _normalise_loaded_runtime_sentinel(value, expected, field_name):
+        """Restore a migrated guard without weakening saved-state validation.
+
+        Older player saves can omit a ``default``-backed guard scalar when
+        Ren'Py reconstructs the store. The guard is redundant: the semantic
+        envelope and ending lifecycle below remain the authoritative state.
+        Only an omitted value is migrated; supplied non-string or unsupported
+        guard values are still rejected.
+        """
+
+        if value is None:
+            return expected
+        _require_exact_string(value, field_name)
+        if value != expected:
+            raise ValueError("{} is unsupported".format(field_name))
+        return expected
+
     def _validate_axis_values(axes):
-        if type(axes) is not _RUN_MAP_TYPE:
+        if type(axes) not in _RUN_MAP_TYPES:
             raise TypeError("semantic_state.axes must be an exact RunMap")
         if tuple(axes.keys()) != AXES:
             raise ValueError("semantic_state.axes keys are invalid")
@@ -78,11 +102,11 @@ init python:
     def validate_active_semantic_state(sentinel, state):
         """Validate the live schema-2 envelope without normalising it."""
 
-        if type(sentinel) is not str:
-            raise TypeError("state_schema_sentinel must be an exact string")
+        if not isinstance(sentinel, str):
+            raise TypeError("state_schema_sentinel must be a string")
         if sentinel != STATE_SCHEMA_SENTINEL:
             raise ValueError("state_schema_sentinel is unsupported")
-        if type(state) is not _RUN_MAP_TYPE:
+        if type(state) not in _RUN_MAP_TYPES:
             raise TypeError("semantic_state must be an exact RunMap")
         if tuple(state.keys()) != _SEMANTIC_STATE_KEYS:
             raise ValueError("semantic_state keys are invalid")
@@ -92,11 +116,11 @@ init python:
             raise ValueError("semantic_state schema is unsupported")
         _validate_axis_values(state["axes"])
         history = state["choice_history"]
-        if type(history) is not _RUN_LIST_TYPE:
+        if type(history) not in _RUN_LIST_TYPES:
             raise TypeError("semantic_state.choice_history must be an exact RunList")
         for choice_id in history:
-            if type(choice_id) is not str:
-                raise TypeError("choice_history must contain exact strings")
+            if not isinstance(choice_id, str):
+                raise TypeError("choice_history must contain strings")
             if not choice_id:
                 raise ValueError("choice_history cannot contain empty IDs")
             if choice_id not in _PROJECTION_INDEX:
@@ -111,11 +135,11 @@ init python:
     def validate_axis_deltas(axis_deltas):
         """Validate the sparse positive-evidence payload and return its size."""
 
-        if type(axis_deltas) is not _RUN_MAP_TYPE:
+        if type(axis_deltas) not in _RUN_MAP_TYPES:
             raise TypeError("axis_deltas must be an exact RunMap")
         for axis in axis_deltas:
-            if type(axis) is not str:
-                raise TypeError("axis_deltas keys must be exact strings")
+            if not isinstance(axis, str):
+                raise TypeError("axis_deltas keys must be strings")
             if axis not in AXES:
                 raise ValueError("axis_deltas contains an unknown axis")
         for axis in AXES:
@@ -127,8 +151,8 @@ init python:
         return len(axis_deltas)
 
     def _validate_choice_id(choice_id):
-        if type(choice_id) is not str:
-            raise TypeError("choice_id must be an exact string")
+        if not isinstance(choice_id, str):
+            raise TypeError("choice_id must be a string")
         if not choice_id:
             raise ValueError("choice_id must be non-empty")
 
@@ -148,6 +172,40 @@ init python:
         save_contract_sentinel = "save_contract:v1"
         save_catalog_generation_id = CATALOG_GENERATION_ID
         current_chapter = "prologue"
+
+    def normalise_loaded_runtime_sentinels():
+        """Migrate absent, non-authoritative save guards after a load."""
+
+        global semantic_state, state_schema_sentinel, ending_flow_sentinel
+        global ending_flow_state
+
+        state_schema_sentinel = _normalise_loaded_runtime_sentinel(
+            state_schema_sentinel,
+            STATE_SCHEMA_SENTINEL,
+            "state_schema_sentinel",
+        )
+        ending_flow_sentinel = _normalise_loaded_runtime_sentinel(
+            ending_flow_sentinel,
+            ENDING_FLOW_SENTINEL,
+            "ending_flow_sentinel",
+        )
+        # Schema-2 did not exist in legacy active-run saves. Their restored
+        # narrative frame is still valid, but the new semantic envelope is
+        # absent. There is exactly one safe migration only before terminal
+        # flow has started: initialise the empty schema-2 envelope and retain
+        # the loaded narrative position unchanged.
+        if semantic_state is None:
+            if pending_ending_id is not None or ending_completion_event_record is not None:
+                raise ValueError("semantic_state is missing for terminal state")
+            semantic_state = _new_semantic_state()
+        # A missing lifecycle can be migrated only for a run that has no
+        # pending ending and no completion event. That combination has exactly
+        # one valid lifecycle: Active. Any terminal-shaped combination remains
+        # invalid until its real lifecycle value is present.
+        if ending_flow_state is None:
+            if pending_ending_id is not None or ending_completion_event_record is not None:
+                raise ValueError("ending_flow_state is missing for terminal state")
+            ending_flow_state = ACTIVE_ENDING_LIFECYCLE
 
     def apply_choice(choice_id, axis_deltas):
         """Atomically append one declared choice and its sparse axis evidence."""
@@ -209,12 +267,12 @@ init python:
     def validate_ending_lifecycle(sentinel, lifecycle, pending_id):
         """Validate the frozen rollback-owned terminal-flow combinations."""
 
-        if type(sentinel) is not str:
-            raise TypeError("ending_flow_sentinel must be an exact string")
+        if not isinstance(sentinel, str):
+            raise TypeError("ending_flow_sentinel must be a string")
         if sentinel != ENDING_FLOW_SENTINEL:
             raise ValueError("ending_flow_sentinel is unsupported")
-        if type(lifecycle) is not str:
-            raise TypeError("ending_flow_state must be an exact string")
+        if not isinstance(lifecycle, str):
+            raise TypeError("ending_flow_state must be a string")
         if lifecycle not in (ACTIVE_ENDING_LIFECYCLE, ENDED_ENDING_LIFECYCLE):
             raise ValueError("ending_flow_state is invalid")
         if pending_id is not None:
@@ -431,6 +489,7 @@ label day7_resolve_ending:
 label after_load:
     python:
         try:
+            normalise_loaded_runtime_sentinels()
             validate_active_semantic_state(state_schema_sentinel, semantic_state)
             validate_ending_lifecycle(
                 ending_flow_sentinel, ending_flow_state, pending_ending_id

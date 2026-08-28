@@ -6,6 +6,10 @@ define config.screen_width = 1920
 define config.screen_height = 1080
 define config.physical_width = 1280
 define config.physical_height = 720
+# Ren'Py defaults this to 400 MiB, which can retain almost every decoded
+# runtime texture. 128 MiB covers the active scene and nearby predictions
+# while evicting portraits and backgrounds from completed scenes.
+define config.image_cache_size_mb = 128
 define config.window = "auto"
 define config.rollback_enabled = True
 define config.quicksave_slots = 3
