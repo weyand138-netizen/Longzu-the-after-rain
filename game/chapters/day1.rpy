@@ -18,16 +18,6 @@ init python:
             "payoff_day1_safe_clothing_day5",
         ),
         (
-            "day1_repair_first_destination",
-            "reaction_day1_repair_first_destination",
-            "payoff_repair_first_destination",
-        ),
-        (
-            "day1_keep_first_override",
-            "reaction_day1_keep_first_override",
-            "payoff_keep_first_override",
-        ),
-        (
             "day1_read_food_gesture",
             "reaction_day1_read_food_gesture",
             "payoff_day1_food_day5",

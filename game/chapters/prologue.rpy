@@ -8,77 +8,62 @@ label prologue_start:
     scene bg rain_platform
     with dissolve_slow
 
-    narrator "雨把站台上的灯切成许多段。每一段都落在积水里，像一条走不通的路。"
-    narrator "我把湿透的车票攥在掌心。广播正在报下一班车，身后的人群不时望向我们；我分不清他们真的是在等车，还是在等我先动。"
-    narrator "绘梨衣没有催我，只是轻轻拉住我的袖口。"
-    narrator "她低头看着脚边，一张被雨打湿的纸贴在排水沟旁。"
+    narrator "雨把站台上的灯切成许多段，积水也映照这两人的倒影。"
+    show crowd rain_platform left_near as prologue_rain_platform_crowd_left_near
+    show crowd rain_platform left_far as prologue_rain_platform_crowd_left_far
+    show crowd rain_platform right_far as prologue_rain_platform_crowd_right_far
+    show crowd rain_platform right_near as prologue_rain_platform_crowd_right_near
+    narrator "我把湿透的车票攥在掌心。广播正在报下一班车，身后的人群不时望向我们；他们真的是在等车吗。"
+    narrator "绘梨衣没有在意人群，只是轻轻拉住我的袖口。"
     show char erii paper_observation as erii_paper_observation
     if not persistent.sys_persist_state["settings"]["reduced_motion"]:
         with dissolve_slow
-    narrator "雨水从站棚边缘一滴一滴落下，打在纸面上使墨迹散开。我先看见那些空白，再看见仍能辨认的几笔。"
-    narrator "人群向检票口挪动时，没人注意我和她停在排水沟旁。广播重复了一遍车次，我得尽快作出选择。"
-    narrator "我把车票翻过来看了一下，背面只有售票机留下的浅色条纹。这张纸或许有些重要。"
-    narrator "绘梨衣的袖口被雨打湿了一圈。她没有去擦，只把目光留在纸上；我看不出她在等什么，却明白这几行字不是我能先替她解释的。"
-    narrator "雨水沿着我手背往下淌，纸页贴在排水沟边缘。我可以伸手把它捡起，却不能在捡起之前决定它对她意味着什么。"
-    narrator "我蹲下来时，裤脚很快吸满了水。排水沟里卷着几张广告纸，边缘被铁栅栏卡住，只有这张纸没有完全陷进去。它离雨棚只差半步，像是刚被谁从口袋里拿出来，又在松手时错过了能遮住雨的地方。"
-    narrator "我先看纸的折痕。横向两道，竖向一道，折得并不整齐；左上角有被指腹按过的浅灰色。那些痕迹不能告诉我她什么时候写下它，也不能告诉我她为什么没有把它收好，可我能看见它不是今晚才随手从售票机旁撕下来的。"
-    narrator "站棚上的灯又闪了一下。水面里晃出我的脸，也晃出她站在我身后的影子。她没有靠得更近，只用鞋尖抵住一块松动的地砖，像是怕我一伸手就把纸冲进沟里。这个动作很小，我便把手伸得慢了一点。"
-    narrator "我想起以前替人做决定时常用的说法：这种事有什么好问的，先拿了再说。那句说法到了嘴边又停住。纸能不能拿是一回事，拿起来以后要不要读、读到哪里、要不要交给她，都是另一回事；我不能因为自己害怕雨把它冲走，就把后面的每一步也一起拿走。"
-    narrator "检票口那边有人拖着行李箱跑过，轮子碾过积水，溅起的水花打在我手腕上。绘梨衣缩了缩手，却没有替我把纸按住。我看见她把手收回袖口，便也没有去碰她的手。雨声把这一小段停顿撑得很长，长到我能听见自己呼吸里不太稳的气。"
-    narrator "纸上的墨被雨稀释成深浅不一的蓝黑色。有几处笔画被水拖得很长，像写字的人中途停过笔。我分辨不出那是名字、日期还是一段被划掉的话，只能把那些线条和她刚才望向它的方向一起记下。"
-    narrator "我抬头问了一句：\"要我拿吗？\""
-    narrator "绘梨衣没有马上出声。她先看着纸，又看向我伸开的手掌，最后把食指向下点了一下。那不是我熟悉的完整回答，但她的指尖确实落在纸的方向，我便等到她点完，才把纸从水边托起来。"
-    narrator "湿纸比我想象中更薄，贴在指腹上几乎没有重量。我没有立刻展开它，只把它平放在车票上，免得折痕再被雨撕开。她看见以后，肩膀没有再绷得那么紧；我不把这当成放心，只当成她看见纸暂时没有被我抢走。"
-    narrator "雨棚外的风卷进来，纸角又要翻起。她伸手压住一角，我压住另一角。直到风过去，我们才各自收回手。那一瞬间我能确定的只有一件事：这张纸还在我们眼前，谁也没有替谁把它藏起来。"
-    narrator "我把纸举到灯下。站台的白光很冷，照得墨迹比刚才清楚一点，也照得空白格外明显。我没有问她为什么空着，更没有说我能替她补完。她把视线停在那些空白上，我便把纸停在原处，让她先决定要不要看。"
-    narrator "远处的检票闸机吐出一声短促的提示音。人群已经散得差不多，广播开始念最后一次候车提醒。我知道再等下去会错过车，也知道把纸塞回口袋并不能让问题消失。我的手还在发冷，却终于分清了催促和替她决定不是同一件事。"
-    narrator "我把车票垫在下面，问她：\"现在读，还是等上车？\""
-    narrator "她看着我，没有点头，也没有摇头，只把纸边往我这边推了一点。这个动作不够让我替她把所有字念出来，却足够让我把选择留在眼前。于是我没有再催，只把纸护在掌心里，等她下一次看向它。"
-    narrator "我把纸放在车票上，车票下面又垫着自己的手。雨从站棚外斜着打进来，落到纸上之前先打湿我的指节。这样做没有让纸变得安全，只让它在这段时间里不至于被风掀走。我能承担的是这一点，不是替她决定纸上的愿望应该先完成哪一项。"
-    narrator "她看见我把纸护住，慢慢蹲下来，和我隔着一段积水。她没有伸手来拿，也没有叫我把纸交出去。她只是把视线停在最下面那片还算清楚的字迹旁边。我顺着她看的位置看过去，依然没有念，因为我不知道她是要我读、要我记，还是只想确认它没有坏。"
-    narrator "我问：\"这一行，要我读吗？\""
-    narrator "她用拇指擦掉纸角的一滴水，随后把指尖停在那行字的开头。她没有抬头。我等了一会儿，才把声音放轻，按着还能辨认的部分读出几个字。读到被雨冲散的地方，我停下来。她没有催我继续，手指仍留在纸上。"
-    narrator "我没有拿笔替缺掉的笔画补上。墨迹一旦被我添过，就会变成我写下的字，而不是她曾经留下的东西。于是我只把看不清的地方留白，连同这场雨、这座站台和她停在纸边的指尖一起记住。"
-    narrator "站台的广播每隔半分钟就重复一次。同样的女声念着车次、方向和请勿逗留，听久了像在替任何犹豫的人下最后通牒。我知道列车不会因为我们多看一眼纸就等我，也知道把广播当成理由并不能让后果归到别人身上。"
-    narrator "我想起很久以前自己总把选择分成“来得及”和“来不及”。来得及就不问，来不及也不问，反正最后都能怪给时间。绘梨衣没有逼我承认这一点，她只是和我一起待在这张湿纸旁；反而让我没有办法继续用时间掩饰自己想赶紧逃开的冲动。"
-    narrator "她把袖口拉下来遮住手背，雨水从布料边缘滴下。她的目光终于从纸上移到我脸上，又移到线路图的方向。我看见这个顺序，不把它当成指令。纸还在这里，线路图也还在那边；她只是让我看见两件事同时存在。"
-    narrator "我说：\"纸我先拿着。你想看，随时拿回去。\""
-    narrator "她没有伸手来接。她把手放回膝上，轻轻点了一下。那一声确认只够让我继续把纸放在眼前，不够让我决定它以后归谁。我把手指松开一点，让纸边仍然露在外面，而不是藏进我自己的口袋。"
-    narrator "列车进站的灯从雨幕后面亮起来，先照亮铁轨，再照亮站台边的人群。有人开始推着行李往前，我和她却还没动。水面里的灯影被脚步踩碎，我抬头时看见她正在看那些离开的人。她没有跟过去，也没有拉住我。"
-    narrator "我问：\"要现在上车吗？\""
-    narrator "她先看车门，又看纸，最后把手指朝线路图的方向抬了一点。我没有从这一点动作里得出答案，只知道下一步仍然要问。于是我站起身，把纸和车票一起托平，等她自己从湿地砖上站起来。"
+    narrator "她低头看着脚边，一张被雨打湿的纸贴在地面上。"
     hide erii_paper_observation
     show char lu mingfei look_erii as lu_mingfei_paper_observation
-    if not persistent.sys_persist_state["settings"]["reduced_motion"]:
-        with dissolve_slow
     show char lu mingfei paper_observation as lu_mingfei_paper_observation
-    if not persistent.sys_persist_state["settings"]["reduced_motion"]:
-        with dissolve_slow
     hide lu_mingfei_paper_observation
     show char lu mingfei neutral as lu_mingfei_dialogue
     show char erii neutral as erii_dialogue
+    show char lu mingfei paper_side as lu_mingfei_dialogue
+    narrator "雨水从站棚边缘一滴一滴落下，打在纸面上使墨迹散开。看着纸上我仍能辨认的几笔。"
+
+    narrator "没人关心我们的注意力在一张纸上。广播重复了一遍车次，我们得尽快上车了。"
+    show char lu mingfei pick_up_wish_paper as lu_mingfei_dialogue
     if not persistent.sys_persist_state["settings"]["reduced_motion"]:
         with dissolve_slow
-
+    narrator "我把这张被打湿了的纸捡了起来。这张纸或许有些重要。"
+    narrator "绘梨衣的袖口被雨打湿了一圈。她没有在意袖口，只把目光留在纸上。"
+    narrator "站棚上的灯又闪了一下。水面里晃出我的脸，也晃出她站在我身后的影子。她没有靠得更近，只用鞋尖抵住一块松动的地砖，像是怕我一伸手就把纸冲进沟里。这个动作很小，我便把手伸得慢了一点。"
+    narrator "常言道：管他的，先拿了再说。"
+    show char lu mingfei inspect_wish_paper as lu_mingfei_dialogue
+    narrator "纸上的墨被雨稀释成深浅不一的蓝黑色。有几处笔画被水拖得很长，应该是写字的人中途停过笔。我不知道那是名字、日期还是一段被划掉的话。"
+    show char lu mingfei offer_wish_paper as lu_mingfei_dialogue
+    narrator "我抬头问了一句：\"这是你的吗？\""
+    narrator "绘梨衣没有马上出声。她先看着纸，又看向我伸开的手掌，最后把食指向下点了一下。那不是我熟悉的完整回答，但她的指尖确实落在纸的方向，应该是她的吧。"
+    narrator "我把纸举到灯下。站台的白光很冷，照得墨迹比刚才清楚一点，也照得空白格外明显。我没有问她为什么空着，更没有说我能替她补完。她把视线停在那些空白上，我便把纸停在原处，等着她的回应。"
+    narrator "抬头看一眼远处的检票闸机。人群已经散得差不多，广播开始念最后一次候车提醒。不能再等了得尽快上车"
+    narrator "我把车票垫在下面，看向她问到：\"现在仔细看看，还是先上车再说？\""
+    narrator "她看着我，没有点头，也没有摇头，只把纸边往我这边推了一点。"
     menu:
         "先读那张被雨打湿的纸":
             $ apply_choice("prologue_read_note", {"understanding": 1})
             show prop wish_paper as prologue_wish_paper_detail
             if not persistent.sys_persist_state["settings"]["reduced_motion"]:
                 with dissolve_slow
-            narrator "纸上没有求救，也没有路线。只有七件小事，字迹被水晕开了一半。看起来像是愿望清单"
-            narrator "最下面一行还能认出来：想在没有人认识我们的地方，玩一整晚游戏。"
+            narrator "纸上只有七个计划，字迹被水晕开了一半。看起来像是愿望清单"
+            narrator "最下面一行还能依稀认出：在没有人认识我们的地方，玩一整晚游戏。"
             lm "这是你写的？"
             erii "嗯。"
             hide prologue_wish_paper_detail
             if not persistent.sys_persist_state["settings"]["reduced_motion"]:
                 with dissolve_slow
             narrator "她点点头，又用指尖指向纸上几行没有完成的空白。"
-            narrator "那张纸像是她自己的愿望，我应该怎么办。"
+            narrator "那张纸像是她的愿望，我应该怎么办。"
             narrator "我没有急着把纸拿近。水迹把日期和地点冲成模糊的一团，剩下的字却都指向一些小事。"
-            narrator "我看见一枚游戏币、一盏不必整夜亮着的灯，还有一行被她反复描过的字：我们应该怎么办。"
+            narrator "一枚游戏币、一盏不必整夜亮着的灯，还有一行被她反复涂黑的段落。"
             narrator "绘梨衣用指尖沿着空白轻轻抚摸了一下，又迅速把手收回。她没有解释纸上的内容，看着我的眼睛摇了摇头。"
-            narrator "我把那一页停在雨棚的光里，没有替她念出被水冲掉的部分。能读出的字已经足够让我知道，这不是一张等我填写答案的纸。"
+            narrator "我把那一页停在雨棚的光里，没有替她念出被水冲掉的部分。能读出的字已经足够让我知道，这不是一张等我补充空白的纸。"
 
         "先催她上车，离开这里再说":
             $ apply_choice("prologue_hurry_to_train", {})
@@ -251,8 +236,7 @@ label prologue_start:
     narrator "车停了一次，门开了又关。绘梨衣没有动。站台上的人影从窗外过去，雨伞一把把收拢。门重新合上时，她才把路线图压进夹层。我听见夹层扣住的声音，没有把它解释成最终决定，只把下一站仍然留给我们。"
 
     $ unlock_memory("PROLOGUE")
-    $ renpy.save_persistent()
-
+    call notification_presentation_safe_boundary
     call screen chapter_complete(
         "序章完成",
         "请谨慎选择",

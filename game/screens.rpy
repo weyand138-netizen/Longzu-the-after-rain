@@ -138,14 +138,25 @@ screen say(who, what):
         $ auto_forward_enabled = renpy.game.preferences.afm_enable
         $ auto_forward_speed = _current_auto_forward_speed()
         hbox:
+            id "auto_speed_controls"
             xalign 0.93
             yalign 0.91
-            spacing 8
-            textbutton "自动：[('开' if auto_forward_enabled else '关')]" action Function(toggle_auto_forward)
+            spacing 16
             for speed in AUTO_FORWARD_SPEEDS:
                 textbutton "[speed]X":
+                    id "auto_speed_{}".format(speed)
                     action Function(set_auto_forward_speed, speed)
                     selected (auto_forward_enabled and auto_forward_speed == speed)
+                    background None
+                    hover_background None
+                    selected_background None
+                    selected_hover_background None
+                    padding (0, 0)
+                    text_size int(22 * accessibility_scale)
+                    text_color ("#ffffff" if accessibility_high_contrast else "#8dcbd6")
+                    text_hover_color "#ffffff"
+                    text_selected_color ("#ffffff" if accessibility_high_contrast else "#f4d7c0")
+                    text_selected_hover_color "#ffffff"
 
 screen choice(items):
     $ accessibility_settings = persistent.sys_persist_state["settings"]
@@ -186,6 +197,8 @@ screen quick_menu():
         spacing 8
 
         textbutton "回退" action Rollback()
+        $ auto_forward_enabled = renpy.game.preferences.afm_enable
+        textbutton "自动：[('开' if auto_forward_enabled else '关')]" id "quick_auto_forward" action Function(toggle_auto_forward)
         textbutton "保存" action ShowMenu("save")
         textbutton "读取" action ShowMenu("load")
         textbutton "设置" action ShowMenu("preferences")
@@ -231,9 +244,16 @@ screen main_menu():
         # testcase entry can invoke this screen directly, where a normal Jump
         # is the safe equivalent because there is no menu context to leave.
         textbutton "开始" id "main_start" action If(renpy.context()._main_menu, Start("begin_game"), Jump("begin_game"))
-        textbutton "读取存档" id "main_load" action ShowMenu("load")
+        # The title page is a `call screen` route. Open a title-owned Load
+        # surface so its Back action can replace this screen directly instead
+        # of relying on Return()'s game-menu context inference.
+        textbutton "读取存档" id "main_load" action Show("title_load")
         textbutton "制作说明" id "main_about" action Show("production_notes")
-        textbutton "设置" id "main_settings" action ShowMenu("preferences")
+        textbutton "设置" id "main_settings" action Show(
+            "preferences",
+            return_action=Show("main_menu"),
+            show_title_return=False,
+        )
         textbutton "退出" id "main_quit" action Quit(confirm=True)
 
     frame:
@@ -271,7 +291,7 @@ screen production_notes():
                 action Hide("production_notes")
                 xalign 1.0
 
-screen game_menu(title, show_return=True, return_to_title=False):
+screen game_menu(title, show_return=True, return_action=Return()):
     tag menu
     add Solid("#101a28")
 
@@ -291,38 +311,36 @@ screen game_menu(title, show_return=True, return_to_title=False):
             transclude
 
     if show_return:
-        if return_to_title:
-            hbox:
-                xalign 0.90
-                yalign 0.90
-                spacing 14
-
-                textbutton "返回标题页" id "settings_return_to_title":
-                    xsize 230
-                    action MainMenu(confirm=True)
-                textbutton "返回" id "game_menu_return":
-                    xsize 170
-                    action Return()
-        else:
-            textbutton "返回" id "game_menu_return":
-                xalign 0.92
-                yalign 0.90
-                action Return()
+        textbutton "返回" id "game_menu_return":
+            xalign 0.92
+            yalign 0.90
+            action return_action
 
 screen save():
+    tag menu
     # This state belongs to the top-level screen. `manual_slot_browser` is
     # used below, and SetScreenVariable intentionally targets this caller.
     default selected_slot = None
     use game_menu("保存", show_return=False):
-        use manual_slot_browser("save", selected_slot)
+        use manual_slot_browser("save", selected_slot, Return())
 
 screen load():
+    tag menu
     # Keep the load selection in the same top-level scope as save selection.
     default selected_slot = None
     use game_menu("读取", show_return=False):
-        use manual_slot_browser("load", selected_slot)
+        use manual_slot_browser("load", selected_slot, Return())
 
-screen manual_slot_browser(mode, selected_slot):
+screen title_load():
+    # This distinct top-level screen belongs to the title-page route. Its
+    # explicit destination avoids Return()'s game-menu context inference.
+    tag menu
+    # Keep the load selection in the same top-level scope as save selection.
+    default selected_slot = None
+    use game_menu("读取", show_return=False):
+        use manual_slot_browser("load", selected_slot, Show("main_menu"))
+
+screen manual_slot_browser(mode, selected_slot, return_action):
     $ selected_loadable = selected_slot is not None and FileLoadable(selected_slot, page="1")
     $ completed_endings = completed_ending_ids()
 
@@ -401,7 +419,7 @@ screen manual_slot_browser(mode, selected_slot):
                     sensitive selected_loadable
             textbutton "返回":
                 id "slot_browser_return"
-                action Return()
+                action return_action
 
 screen ending_tree_progress(completed_endings):
     $ reduced_motion = persistent.sys_persist_state["settings"]["reduced_motion"]
@@ -432,15 +450,16 @@ screen ending_tree_progress(completed_endings):
                     else:
                         add "ui life_tree" at life_tree_lit_pulse xalign 0.5 yalign 0.5 zoom 0.115
 
-screen preferences():
+screen preferences(return_action=Return(), show_title_return=True):
+    tag menu
     default settings_font_scale = persistent.sys_persist_state["settings"]["font_scale"]
     default settings_high_contrast = persistent.sys_persist_state["settings"]["high_contrast"]
     default settings_reduced_motion = persistent.sys_persist_state["settings"]["reduced_motion"]
     default settings_flash_effects = persistent.sys_persist_state["settings"]["flash_effects_enabled"]
     default settings_screen_shake = persistent.sys_persist_state["settings"]["screen_shake_enabled"]
-    key "K_ESCAPE" action Return()
+    key "K_ESCAPE" action return_action
 
-    use game_menu("设置", return_to_title=not main_menu):
+    use game_menu("设置", show_return=False):
         hbox:
             xfill True
             spacing 64
@@ -463,6 +482,28 @@ screen preferences():
                     spacing 14
                     textbutton "窗口" style "settings_option_button" xsize 250 action Preference("display", "window")
                     textbutton "全屏" style "settings_option_button" xsize 250 action Preference("display", "fullscreen")
+
+                null height 8
+                text "游戏主音量" style "settings_section_title"
+                hbox:
+                    spacing 14
+                    bar value AudioGameVolumeValue() id "audio_game_volume" xsize 410 ysize 34
+                    textbutton "静音游戏音频" id "audio_game_mute" style "settings_option_button" xsize 260 action Function(audio_settings_toggle_game_mute) selected audio_settings_game_muted()
+                hbox:
+                    spacing 14
+                    text "音乐" xsize 96
+                    bar value Preference("music volume") id "audio_music_volume" xsize 300 ysize 34
+                    textbutton "静音音乐" id "audio_music_mute" style "settings_option_button" xsize 260 action Preference("music mute", "toggle")
+                hbox:
+                    spacing 14
+                    text "环境" xsize 96
+                    bar value Preference("mixer ambience volume") id "audio_ambience_volume" xsize 300 ysize 34
+                    textbutton "静音环境" id "audio_ambience_mute" style "settings_option_button" xsize 260 action Preference("mixer ambience mute", "toggle")
+                hbox:
+                    spacing 14
+                    text "音效" xsize 96
+                    bar value Preference("sound volume") id "audio_sfx_volume" xsize 300 ysize 34
+                    textbutton "静音音效" id "audio_sfx_mute" style "settings_option_button" xsize 260 action Preference("sound mute", "toggle")
 
             vbox:
                 xsize 700
@@ -504,6 +545,19 @@ screen preferences():
                     settings_flash_effects,
                     settings_screen_shake,
                 )
+
+    hbox:
+        xalign 0.90
+        yalign 0.90
+        spacing 14
+
+        if show_title_return:
+            textbutton "返回标题页" id "settings_return_to_title":
+                xsize 230
+                action MainMenu(confirm=True)
+        textbutton "返回" id "settings_return":
+            xsize 170
+            action return_action
 screen focus_graph_bindings(graph):
     key "focus_graph_next" action Function(graph.move, 1)
     key "focus_graph_previous" action Function(graph.move, -1)
@@ -538,8 +592,16 @@ screen chapter_complete(title, message):
                 outlines []
                 text_align 0.5
                 xalign 0.5
+            if notification_current_presentation_receipt():
+                text "新记录已收录。":
+                    id "notification_summary_receipt"
+                    size 24
+                    color "#5b3d48"
+                    outlines []
+                    xalign 0.5
             textbutton "继续旅程":
-                action Return()
+                id "chapter_complete_continue"
+                action [Function(notification_clear_presentation_receipt), Return()]
                 xalign 0.5
 
 screen ending_complete(title, message):
@@ -572,8 +634,16 @@ screen ending_complete(title, message):
                     outlines []
                     text_align 0.5
                     xalign 0.5
+                if notification_current_presentation_receipt():
+                    text "新记录已收录。":
+                        id "notification_summary_receipt"
+                        size 24
+                        color "#5b3d48"
+                        outlines []
+                        xalign 0.5
             textbutton "回到标题":
-                action MainMenu(confirm=False)
+                id "ending_complete_return"
+                action [Function(notification_clear_presentation_receipt), MainMenu(confirm=False)]
                 xalign 1.0
                 yalign 1.0
 

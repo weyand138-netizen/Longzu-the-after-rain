@@ -1,11 +1,15 @@
 """Durable SYS-PERSIST ending-completion boundary."""
 
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 from .ending_rules import ENDING_PRIORITY
-from .persist_batch import APPLIED_FLUSHED, COMMIT_STATUS_UNKNOWN
-from .persist_schema import snapshot_persist_root, validate_persist_root
+from .notification_durable_batch import (
+    DUPLICATE_NOOP,
+    DurableNotificationResult,
+)
+from .persist_batch import APPLIED_FLUSHED
+from .persist_schema import validate_persist_root
 
 
 @dataclass(frozen=True)
@@ -30,6 +34,7 @@ class EndingCompletionResult:
     event: EndingCompletionEvent | None
     resolver_calls: int
     completion_calls: int
+    notification_result: DurableNotificationResult | None = None
 
 
 def commit_ending_completion(
@@ -39,18 +44,35 @@ def commit_ending_completion(
     checkpoint_id: str,
     checkpoint_occurrence_id: str,
     catalog_generation_id: str,
-    replace_root: Callable[[dict[str, Any]], Any],
-    flush: Callable[[], Any],
+    notification_result: DurableNotificationResult,
 ) -> EndingCompletionResult:
-    """Emit one completion event and persist ending membership exactly once."""
+    """Build an exact completion event from the 10_state-owned durable result.
+
+    This pure projection deliberately cannot replace or flush a root. The sole
+    runtime persistence owner has already committed (or classified) the ending
+    membership before it calls here.
+    """
 
     validate_persist_root(root)
     if ending_id not in ENDING_PRIORITY:
         raise ValueError("unknown ending")
     if any(type(value) is not str or not value for value in (checkpoint_id, checkpoint_occurrence_id, catalog_generation_id)):
         raise TypeError("completion identity fields must be non-empty strings")
-    if ending_id in root["ending_ids"]:
-        return EndingCompletionResult("DUPLICATE_NOOP", None, 0, 0)
+    if type(notification_result) is not DurableNotificationResult:
+        raise TypeError("notification_result must be a DurableNotificationResult")
+    if notification_result.checkpoint_occurrence_id != checkpoint_occurrence_id:
+        raise ValueError("durable result does not match the completion occurrence")
+    if notification_result.collection_epoch_id != root["collection_epoch_id"]:
+        raise ValueError("durable result does not match the collection epoch")
+    if notification_result.status not in (APPLIED_FLUSHED, DUPLICATE_NOOP):
+        return EndingCompletionResult(notification_result.status, None, 0, 0, notification_result)
+    if ending_id not in root["ending_ids"]:
+        raise ValueError("durable ending result lacks root membership")
+    if notification_result.status == APPLIED_FLUSHED:
+        if notification_result.added_ending_ids != (ending_id,) or notification_result.raw_group is None:
+            raise ValueError("applied ending result does not prove exactly one new ending")
+    elif notification_result.added_ending_ids or notification_result.raw_group is not None:
+        raise ValueError("duplicate ending result must not expose a raw notification group")
     event = EndingCompletionEvent(
         ending_id,
         f"ending_completed:{ending_id}",
@@ -60,11 +82,13 @@ def commit_ending_completion(
         catalog_generation_id,
         True,
     )
-    candidate = snapshot_persist_root(root)
-    candidate["ending_ids"] = sorted((*candidate["ending_ids"], ending_id))
-    replace_root(candidate)
-    flush()
-    return EndingCompletionResult(APPLIED_FLUSHED, event, 0, 1)
+    return EndingCompletionResult(
+        notification_result.status,
+        event,
+        0,
+        1 if notification_result.status == APPLIED_FLUSHED else 0,
+        notification_result,
+    )
 
 
 def completion_before_terminal(root: dict[str, Any], ending_id: str) -> bool:

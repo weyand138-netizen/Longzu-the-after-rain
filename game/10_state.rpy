@@ -9,8 +9,17 @@ default ending_flow_state = None
 default pending_ending_id = None
 default ending_completion_event_record = None
 
+python early:
+    # This registration must exist before Ren'Py consumes any startup
+    # persistent payload.  The callback is pure and has no presentation or
+    # live-notification authority.
+    from modules.persist_merge import merge_sys_persist_state
+
+    renpy.register_persistent("sys_persist_state", merge_sys_persist_state)
+
 init python:
     import builtins
+    import threading
 
     from modules.accessibility_focus import FocusAwareGraph
     from modules.control_catalog import CATALOG_GENERATION_ID
@@ -28,8 +37,24 @@ init python:
         resolve_ending_record,
     )
     from modules.narrative_token_projection import has_unresolved_token as _has_unresolved_token
+    from modules.durable_flush_bridge import DurableFlushBridge
+    from modules.notification_durable_batch import (
+        DUPLICATE_NOOP,
+        NotificationMembershipOperationCoordinator,
+    )
+    from modules.persist_batch import (
+        APPLIED_FLUSHED,
+        COMMIT_STATUS_UNKNOWN,
+        PERSIST_FLUSH_FAILED_SAFE,
+        REJECTED_REENTRANT,
+    )
+    from modules.persist_merge import (
+        STARTUP_PERSIST_READY,
+        classify_startup_persist_root,
+    )
     from modules.persist_schema import (
         build_fresh_persist_root,
+        snapshot_persist_root,
         validate_persist_root,
     )
 
@@ -53,6 +78,9 @@ init python:
         ("unsent_postcard", "ending_unsent_postcard"),
     )
     ENDING_LABEL_MAP = dict(_ENDING_LABEL_MAP_ITEMS)
+    _NOTIFICATION_MEMBERSHIP_SESSION_KEY = "longzu.persist_notification_membership:v1"
+    _notification_membership_record_creation_lock = threading.RLock()
+    _durable_flush_bridge = DurableFlushBridge()
 
     def _new_semantic_state():
         return {
@@ -159,6 +187,7 @@ init python:
     def reset_run_state():
         """Create the only supported new-game semantic/lifecycle envelope."""
 
+        notification_begin_new_run()
         global current_chapter, save_contract_sentinel, save_catalog_generation_id
         global semantic_state, state_schema_sentinel, ending_flow_sentinel
         global ending_flow_state, pending_ending_id, ending_completion_event_record
@@ -339,8 +368,69 @@ init python:
         persistent.sys_persist_state = candidate_root
         persistent.settings = candidate_root["settings"]
 
-    def _flush_persistent_root():
-        renpy.save_persistent()
+    def _notification_membership_session_record():
+        """Return the one session-local serialisation record for root writes."""
+
+        # Session creation is separately locked so two first callers cannot
+        # manufacture independent coordinators and lose one of their batches.
+        with _notification_membership_record_creation_lock:
+            record = renpy.session.get(_NOTIFICATION_MEMBERSHIP_SESSION_KEY)
+            if record is None:
+                operation_lock = threading.RLock()
+                record = {
+                    "operation_lock": operation_lock,
+                    "coordinator": NotificationMembershipOperationCoordinator(
+                        lambda: persistent.sys_persist_state,
+                        _replace_persistent_root,
+                        _durable_flush_bridge,
+                        operation_lock=operation_lock,
+                    ),
+                }
+                renpy.session[_NOTIFICATION_MEMBERSHIP_SESSION_KEY] = record
+            if (
+                type(record) is not dict
+                or tuple(record.keys()) != ("operation_lock", "coordinator")
+                or not isinstance(record["coordinator"], NotificationMembershipOperationCoordinator)
+            ):
+                raise RuntimeError("notification membership session owner is malformed")
+            return record
+
+    def _notification_membership_coordinator():
+        """Return the one session-local owner of notification-capable writes."""
+
+        return _notification_membership_session_record()["coordinator"]
+
+    def commit_notification_membership(
+        checkpoint_occurrence_id,
+        achievement_ids=(),
+        ending_ids=(),
+        memory_ids=(),
+    ):
+        """Commit one catalog-authorized membership batch through 10_state only."""
+
+        return _notification_membership_coordinator().commit(
+            checkpoint_occurrence_id=checkpoint_occurrence_id,
+            achievement_ids=achievement_ids,
+            ending_ids=ending_ids,
+            memory_ids=memory_ids,
+        )
+
+    def mark_persisted_achievements_seen(achievement_ids):
+        """Acknowledge existing achievement memberships through SYS-PERSIST.
+
+        Seen state is a canonical-root change, but never a new membership or
+        a presentation instruction. The coordinator therefore applies the
+        same operation lock and durable bridge while returning no raw group.
+        """
+
+        return _notification_membership_coordinator().mark_achievements_seen(
+            achievement_ids=achievement_ids,
+        )
+
+    def notification_membership_commit_diagnostics():
+        """Developer-only detached unknown-commit roots; never a recovery action."""
+
+        return _notification_membership_coordinator().frozen_root_copies()
 
     def validate_ending_completion_state(lifecycle, pending_id, event, root):
         """Validate the rollback-owned completion event against durable state."""
@@ -413,6 +503,12 @@ init python:
         if ending_completion_event_record is not None:
             _validate_existing_completion_event(ending_id, completion_checkpoint)
             return "DUPLICATE_NOOP"
+        durable_result = commit_notification_membership(
+            completion_checkpoint + ":1",
+            ending_ids=(ending_id,),
+        )
+        if durable_result.status not in (APPLIED_FLUSHED, DUPLICATE_NOOP):
+            return durable_result.status
         root = persistent.sys_persist_state
         result = _project_ending_completion(
             root,
@@ -420,21 +516,20 @@ init python:
             checkpoint_id=completion_checkpoint,
             checkpoint_occurrence_id=completion_checkpoint + ":1",
             catalog_generation_id=root["catalog_generation_id"],
-            replace_root=_replace_persistent_root,
-            flush=_flush_persistent_root,
+            notification_result=durable_result,
         )
         event = result.event
         if event is None:
-            event = EndingCompletionEvent(
-                ending_id,
-                "ending_completed:" + ending_id,
-                completion_checkpoint,
-                completion_checkpoint + ":1",
-                root["collection_epoch_id"],
-                root["catalog_generation_id"],
-                True,
-            )
+            raise RuntimeError("durable ending completion lacks its exact event")
+        if durable_result.status == DUPLICATE_NOOP:
+            # Persistent membership can outlive the rollback-owned event record
+            # after a pre-completion rollback. Reconstruct exactly that missing
+            # record without writing or producing a new notification raw group.
+            ending_completion_event_record = event
+            return "DUPLICATE_NOOP"
         ending_completion_event_record = event
+        if result.notification_result is not None:
+            queue_live_notification_group(result.notification_result)
         return result.status
 
     def apply_accessibility_settings(
@@ -449,7 +544,50 @@ init python:
         allowed_scales = (0.8, 1.0, 1.2, 1.5, 2.0)
         if font_scale not in allowed_scales:
             raise ValueError("Unsupported font scale: {!r}".format(font_scale))
+        record = _notification_membership_session_record()
+        coordinator = record["coordinator"]
+        # Reserve before waiting for the root transaction lock. A second
+        # accessibility request must be rejected at its entry boundary while
+        # this request waits behind an existing durable flush; it must never
+        # become a queued later root write.
+        if not coordinator.begin_external_operation():
+            return REJECTED_REENTRANT
+        try:
+            with record["operation_lock"]:
+                # A membership flush with an unknown outcome freezes every
+                # later root write, including SYS-ACCESS settings. Recheck
+                # only after acquiring the transaction lock: a prior owner
+                # can freeze while this reserved request is waiting.
+                if coordinator.write_frozen:
+                    return COMMIT_STATUS_UNKNOWN
+                return _apply_accessibility_settings_admitted(
+                    coordinator,
+                    font_scale,
+                    high_contrast,
+                    reduced_motion,
+                    flash_effects_enabled,
+                    screen_shake_enabled,
+                )
+        finally:
+            coordinator.end_external_operation()
+
+    def _apply_accessibility_settings_admitted(
+        coordinator,
+        font_scale,
+        high_contrast,
+        reduced_motion,
+        flash_effects_enabled,
+        screen_shake_enabled,
+    ):
+        """Perform a settings batch after the shared owner admits its body."""
+
         current = persistent.sys_persist_state
+        previous = snapshot_persist_root(current)
+        preflight = _durable_flush_bridge.preflight()
+        if not preflight.ready:
+            # Preflight has proved that this operation cannot start a write,
+            # so it is the only settings-path safe failure.
+            return PERSIST_FLUSH_FAILED_SAFE
         candidate = build_fresh_persist_root()
         for field in (
             "schema_version",
@@ -470,9 +608,21 @@ init python:
         candidate["settings"]["flash_effects_enabled"] = flash_effects_enabled
         candidate["settings"]["screen_shake_enabled"] = screen_shake_enabled
         validate_persist_root(candidate)
-        persistent.sys_persist_state = candidate
-        persistent.settings = candidate["settings"]
-        renpy.save_persistent()
+        try:
+            # The callbacks receive a detached candidate. If either one
+            # raises, we cannot prove whether the persistent root changed,
+            # so the session-wide owner freezes before any later write.
+            _replace_persistent_root(snapshot_persist_root(candidate))
+            flush_result = _durable_flush_bridge.flush_after_replacement(
+                preflight,
+                snapshot_persist_root(candidate),
+            )
+            if not flush_result.verified:
+                raise OSError("durable flush bridge could not verify the candidate")
+        except Exception:
+            coordinator.freeze_unknown_root_write(previous, candidate)
+            return COMMIT_STATUS_UNKNOWN
+        return APPLIED_FLUSHED
 
 default persistent.sys_persist_state = build_fresh_persist_root()
 
@@ -489,23 +639,35 @@ label day7_resolve_ending:
 label after_load:
     python:
         try:
-            normalise_loaded_runtime_sentinels()
-            validate_active_semantic_state(state_schema_sentinel, semantic_state)
-            validate_ending_lifecycle(
-                ending_flow_sentinel, ending_flow_state, pending_ending_id
+            # The exact merge marker is classified before any default/root
+            # validation or subsystem read.  A merge/recovery load is never a
+            # live notification path and therefore reaches the blocking-safe
+            # boundary without a projection or presentation call.
+            _after_load_persist_status = classify_startup_persist_root(
+                persistent.sys_persist_state
             )
-            validate_ending_completion_state(
-                ending_flow_state,
-                pending_ending_id,
-                ending_completion_event_record,
-                persistent.sys_persist_state,
-            )
-            _after_load_terminal_state_valid = True
+            if _after_load_persist_status != STARTUP_PERSIST_READY:
+                _after_load_terminal_state_valid = False
+            else:
+                normalise_loaded_runtime_sentinels()
+                validate_active_semantic_state(state_schema_sentinel, semantic_state)
+                validate_ending_lifecycle(
+                    ending_flow_sentinel, ending_flow_state, pending_ending_id
+                )
+                validate_ending_completion_state(
+                    ending_flow_state,
+                    pending_ending_id,
+                    ending_completion_event_record,
+                    persistent.sys_persist_state,
+                )
+                _after_load_terminal_state_valid = True
         except (TypeError, ValueError):
             _after_load_terminal_state_valid = False
     if not _after_load_terminal_state_valid:
         jump ending_resolution_safe_boundary
+    $ notification_after_load_semantic_validation_succeeded()
     return
 
 label ending_resolution_safe_boundary:
+    $ notification_enter_blocking_safe_exit()
     $ renpy.full_restart()

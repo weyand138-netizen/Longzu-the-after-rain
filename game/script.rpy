@@ -60,6 +60,9 @@ label start:
 
 
 label launch_title_page:
+    # Title entry is a high-level lifecycle boundary: it stops every prior
+    # narrative layer before the separately admitted title context begins.
+    $ audio_scene_enter_title()
     $ main_menu_weather = select_main_menu_weather()
     $ prepare_main_menu_weather(main_menu_weather)
     call screen main_menu
