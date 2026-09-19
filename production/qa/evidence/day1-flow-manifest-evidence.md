@@ -9,7 +9,7 @@
 
 - `artifact_kind`: `partial_day1`
 - `source_unit_id`: `chapter_day1_her_own_name`
-- **Source SHA-256**: `7bcf51ae66b558703b453125bd7f804346895ce7d24757be3fd0b643dfdf8aa9`
+- **Source SHA-256**: `8172d12c3676e5b55487ffe76dbb1eb2cbec7e7fd74994e0f9ffe61c1afb01ba`
 - `day1_handoff_node_id`: `node_day1_handoff`
 - `full_production_manifest`: `false`
 - `terminal_witness_coverage`: `not_applicable`

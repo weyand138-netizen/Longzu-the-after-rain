@@ -1,0 +1,22 @@
+﻿{
+    "engine":  "Ren\u0027Py 8.5.3.26051504",
+    "project":  "E:\\Longzu",
+    "day6_source_sha256":  "4571b38e0ad718d7ee0b2c581f4257c98e3f31fc948004408b204c6d3915f99e",
+    "testcases_sha256":  "fb519258adcb0175589cf54c6cdb34cbbdc5a838eeb4a768ead95f88802c6b4a",
+    "arguments":  [
+                      "E:\\Longzu\\.tools\\renpy-8.5.3-sdk\\renpy.py",
+                      "E:\\Longzu",
+                      "test",
+                      "global",
+                      "--savedir",
+                      "E:\\Longzu\\production\\qa\\evidence\\day6-content-validation-2026-08-13-final-verified\\run-passed\\saves",
+                      "--report-detailed",
+                      "--overwrite-screenshots"
+                  ],
+    "started_utc":  "2026-08-13T04:08:08.3531887Z",
+    "finished_utc":  "2026-08-13T04:08:26.6926481Z",
+    "exit_code":  -1,
+    "status_line":  "[rpytest] Status: PASSED ",
+    "stdout_sha256":  "1985670b9f4353886286aa2a9d316cf95b544bc98a8d343aee068f5b255d6616",
+    "stderr_sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

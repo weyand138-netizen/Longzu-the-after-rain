@@ -7,7 +7,7 @@
 
 ## Owner Source Record
 
-**Source SHA-256**: `b7d881615c80be39def7c3b44540b7e00800bd4c615fbf904e6445bcad9cddb0`
+**Source SHA-256**: `fafd4643d207450842c6bbfc0a2c57432a4cd006540c0672b035a0578ff02ec1`
 
 The record binds the Day 2 authored source to its three required scenes, the
 five canonical choice/reaction/payoff identities, and the history-derived

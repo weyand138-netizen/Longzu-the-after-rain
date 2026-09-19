@@ -97,7 +97,7 @@ class Day2ContentValidationTests(unittest.TestCase):
             self.assertIn(choice_id, self.testcases)
         day2_cases = self.testcases[
             self.testcases.index("testcase day2_accept_alias_save_token_route_contract:") : self.testcases.index(
-                "testcase accessibility_settings_batch_contract:"
+                "testcase day3_share_honor_route_contract:"
             )
         ]
         self.assertEqual(12, day2_cases.count('keysym "K_RETURN"'))
@@ -139,9 +139,9 @@ class Day2ContentValidationTests(unittest.TestCase):
         self.assertIn('keysym "K_DOWN" repeat 2', focus_case)
         self.assertIn('assert eval _focused_day2_choice_id() == "day1_choice_2"', focus_case)
         self.assertIn('keysym "K_RETURN"', focus_case)
-        self.assertIn('choice_history == ["day2_assign_alias", "day2_spend_both_tokens"]', focus_case)
+        self.assertIn('current_choice_history() == ["day2_assign_alias", "day2_spend_both_tokens"]', focus_case)
         self.assertIn(
-            'choice_history == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]',
+            'current_choice_history() == ["day1_assume_food_consent", "day2_admit_alias_unknown", "day2_save_second_token"]',
             focus_case,
         )
 

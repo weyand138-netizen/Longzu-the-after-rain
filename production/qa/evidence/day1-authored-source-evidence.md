@@ -7,7 +7,7 @@
 
 ## Owner Source Record
 
-**Source SHA-256**: `7bcf51ae66b558703b453125bd7f804346895ce7d24757be3fd0b643dfdf8aa9`
+**Source SHA-256**: `8172d12c3676e5b55487ffe76dbb1eb2cbec7e7fd74994e0f9ffe61c1afb01ba`
 
 The record binds the Day 1 authored source to its required scene IDs, canonical
 Day 1 choice/reaction/payoff identities, and player-safe chapter/memory catalog

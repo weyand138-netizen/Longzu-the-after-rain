@@ -77,6 +77,17 @@ class RestoreSemanticsTests(unittest.TestCase):
         )
         return trace, calls
 
+    @staticmethod
+    def _detached_ending_snapshot(snapshot):
+        """Recreate the resolver's exact detached schema-2 input contract."""
+
+        state = snapshot.semantic_state
+        return {
+            "schema_version": state["schema_version"],
+            "axes": dict(state["axes"]),
+            "choice_history": tuple(state["choice_history"]),
+        }
+
     def test_before_choice_restore_starts_one_commit_and_reaction(self):
         trace, calls = self._trace(self._snapshot("before_choice"))
         self.assertEqual(calls, ["choice", "reaction"])
@@ -201,11 +212,22 @@ class RestoreSemanticsTests(unittest.TestCase):
             make_loaded_restore_session((mutable_snapshot,), current_index=0)
 
     def test_rollback_across_ending_entry_restores_active_snapshot_and_same_result(self):
+        rain_history = (
+            "prologue_read_note", "prologue_ask_destination",
+            "prologue_accept_destination", "prologue_notice_tracker",
+            "day1_accept_clothing", "day1_read_food_gesture",
+            "day2_accept_alias", "day2_save_second_token",
+            "day3_share_school_evidence", "day3_honor_pause",
+            "day4_buy_two_tickets_real_name",
+            "day4_register_independent_contact", "day5_share_full_archive",
+            "day5_include_self_in_truth", "day5_honor_erii_response",
+            "day6_burn_old_identity", "day6_commit_shared_escape",
+        )
         ended = self._snapshot(
             "after_payoff",
             lifecycle=ENDED_LIFECYCLE,
             pending="ending.rain_stops",
-            history=("choice.before",),
+            history=rain_history,
             axes={
                 "understanding": 3,
                 "autonomy": 3,
@@ -218,7 +240,7 @@ class RestoreSemanticsTests(unittest.TestCase):
             "after_payoff",
             lifecycle=ACTIVE_LIFECYCLE,
             pending=None,
-            history=("choice.before",),
+            history=rain_history,
             axes={
                 "understanding": 3,
                 "autonomy": 3,
@@ -233,11 +255,11 @@ class RestoreSemanticsTests(unittest.TestCase):
         self.assertIsNone(result.restored_snapshot.pending_ending_id)
         self.assertEqual(result.restored_snapshot.semantic_state, active.semantic_state)
         self.assertEqual(
-            resolve_ending(ended.semantic_state["axes"]),
-            resolve_ending(result.restored_snapshot.semantic_state["axes"]),
+            resolve_ending(self._detached_ending_snapshot(ended)),
+            resolve_ending(self._detached_ending_snapshot(result.restored_snapshot)),
         )
         self.assertEqual(
-            resolve_ending(result.restored_snapshot.semantic_state["axes"]),
+            resolve_ending(self._detached_ending_snapshot(result.restored_snapshot)),
             "rain_stops",
         )
         self.assertEqual(result.invocation_count, 1)

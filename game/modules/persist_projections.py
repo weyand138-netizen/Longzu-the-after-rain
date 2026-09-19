@@ -3,7 +3,6 @@
 from dataclasses import dataclass
 from typing import Any, Iterable
 
-from .persist_batch import APPLIED_FLUSHED, COMMIT_STATUS_UNKNOWN, PersistBatchResult
 from .persist_schema import PERSIST_CATALOG_GENERATION_ID, snapshot_persist_root, validate_persist_root
 
 
@@ -109,14 +108,14 @@ def evaluate_achievement_candidates(
 
 @dataclass(frozen=True)
 class AchievementProjectionResult:
-    """Durable-result record returned by the persistence adapter."""
+    """Detached achievement planning record used by non-runtime presentation tests."""
 
     status: str
     checkpoint_occurrence_id: str
     collection_epoch_id: int
     added_achievement_ids: tuple[str, ...]
     existing_achievement_ids: tuple[str, ...]
-    notification_group_id: str | None
+    notification_group_id: str
 
 
 def project_achievements(
@@ -124,9 +123,14 @@ def project_achievements(
     achievement_ids: Iterable[str],
     *,
     checkpoint_occurrence_id: str,
-    flush_result: str = APPLIED_FLUSHED,
 ) -> tuple[dict[str, Any], AchievementProjectionResult]:
-    """Project new memberships with idempotent duplicate handling."""
+    """Plan new achievements without claiming durable notification output.
+
+    This is retained as a detached planning helper for existing presentation
+    tests. It is not a persistence adapter: it performs no root replacement or
+    flush and therefore must never manufacture a raw notification identity.
+    Live callers use the session-owned 10_state coordinator instead.
+    """
 
     validate_persist_root(root)
     if type(checkpoint_occurrence_id) is not str or not checkpoint_occurrence_id:
@@ -139,9 +143,14 @@ def project_achievements(
     added = tuple(sorted(item for item in requested if item not in current))
     candidate = snapshot_persist_root(root)
     candidate["achievement_ids"] = sorted(current.union(added))
-    status = flush_result if flush_result in (APPLIED_FLUSHED, COMMIT_STATUS_UNKNOWN) else flush_result
-    group = f"notify:{checkpoint_occurrence_id}" if status == APPLIED_FLUSHED and added else None
-    result = AchievementProjectionResult(status, checkpoint_occurrence_id, root["collection_epoch_id"], added, existing, group)
+    result = AchievementProjectionResult(
+        "PLANNED",
+        checkpoint_occurrence_id,
+        root["collection_epoch_id"],
+        added,
+        existing,
+        "",
+    )
     return candidate, result
 
 

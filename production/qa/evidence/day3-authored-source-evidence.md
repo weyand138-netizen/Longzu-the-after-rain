@@ -7,7 +7,7 @@
 
 ## Owner Source Record
 
-**Source SHA-256**: `dc3626da59e5036c1c202f4f79f260bd6d0f1dd56cc35fd291efa0157cb3d6d5`
+**Source SHA-256**: `6bd6d5ed98983bf28027d96d5e61905a67053b2511ff9ca0a2d68cdedfddfb16`
 
 This record binds the Day 3 authored source to the empty-school trace, its
 three required scenes, the four canonical choice/reaction/payoff identities,

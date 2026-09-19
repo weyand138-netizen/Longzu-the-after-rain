@@ -10,6 +10,7 @@ from .persist_schema import snapshot_persist_root, validate_persist_root
 APPLIED_FLUSHED = "APPLIED_FLUSHED"
 PERSIST_FLUSH_FAILED_SAFE = "PERSIST_FLUSH_FAILED_SAFE"
 COMMIT_STATUS_UNKNOWN = "COMMIT_STATUS_UNKNOWN"
+REJECTED_REENTRANT = "REJECTED_REENTRANT"
 
 
 class PersistBatchError(ValueError):

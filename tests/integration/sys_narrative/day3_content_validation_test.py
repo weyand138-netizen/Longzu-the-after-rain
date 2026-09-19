@@ -66,7 +66,10 @@ class Day3ContentValidationTests(unittest.TestCase):
             expected_history = "[{}]".format(
                 ", ".join('"{}"'.format(choice_id) for choice_id in history)
             )
-            self.assertIn("choice_history == {}".format(expected_history), route_case)
+            self.assertIn(
+                "current_choice_history() == {}".format(expected_history),
+                route_case,
+            )
             self.assertIn('advance until screen "choice"', route_case)
             self.assertIn('assert eval current_chapter == "prologue"', route_case)
             self.assertIn('renpy.get_displayable("choice", "day1_choice_0") is not None', route_case)
@@ -92,7 +95,7 @@ class Day3ContentValidationTests(unittest.TestCase):
         self.assertIn('renpy.get_displayable("quick_menu", "quick_menu_root") is None', focus_case)
 
     def test_accessibility_baselines_capture_both_choice_surfaces_at_1280x720(self):
-        visual_case = self.testcases.split("testcase day3_accessibility_visual_baselines:", 1)[1].split("testcase accessibility_settings_batch_contract:", 1)[0]
+        visual_case = self.testcases.split("testcase day3_accessibility_visual_baselines:", 1)[1].split("testcase ", 1)[0]
         self.assertIn("renpy.set_physical_size, (1280, 720)", visual_case)
         self.assertIn('setattr, renpy.game.preferences, "self_voicing", False', visual_case)
         self.assertIn("apply_accessibility_settings, 1.0, False, True, False, False", visual_case)
@@ -102,7 +105,7 @@ class Day3ContentValidationTests(unittest.TestCase):
         for capture in EXPECTED_CAPTURES:
             self.assertIn(capture, visual_case)
         self.assertIn("default_focus (index == 0)", self.screens)
-        self.assertIn('text_hover_underline (current_chapter == "day3")', self.screens)
+        self.assertIn('text_hover_underline (current_chapter in ("day3", "day4", "day5", "day6"))', self.screens)
         self.assertIn("text_size int(32 * accessibility_scale)", self.screens)
         self.assertIn('background Solid(("#000000" if accessibility_high_contrast', self.screens)
 

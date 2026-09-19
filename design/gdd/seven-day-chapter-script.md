@@ -3,13 +3,15 @@
 > **Status**: Approved with provisional downstream gates
 > **System ID**: SYS-NARRATIVE
 > **Author**: Andwey + Codex
-> **Last Updated**: 2026-08-04
+> **Last Updated**: 2026-08-14
 > **Implements Pillar**: 看见未说出口的话；温柔必须被挣来；悲剧也是完整答案；用普通生活抵抗宏大命运
 > **Upstream Contracts**: SYS-CHOICE Approved with provisional downstream gates；SYS-ENDING Approved with provisional downstream gates
 > **Review Mode**: Full
 > **Design Self-Check**: 2026-07-29 — baseline v1.2；54 choices；9 agency transactions；5 formulas revised against second adversarial review；42 acceptance criteria；6 downstream open questions
 > **Creative Director Review (CD-GDD-ALIGN)**: 2026-07-29 — NEEDS REVISION；agency、payoff、qualification、terminal-class、CFG 与 oracle blockers revised, independent re-review required
 > **Journal Source Amendment**: 2026-08-04 — freezes `journal_chapter_catalog:v1` / `journal_memory_catalog:v1` ownership, 7×2 common-path truth approvals and no-history downstream boundary
+> **Design Change Amendment**: 2026-08-14 — baseline v1.3 extends only the existing `rain_stops` epilogue after lights-out with a short years-later tail; no new canonical unit or semantic contract
+> **Formal Prose Expansion Amendment**: 2026-08-14 — four prose-only delivery sprints expand existing units without changing stable IDs, mechanics, ending contracts, or asset scope
 
 ## Overview
 
@@ -32,7 +34,7 @@ SYS-NARRATIVE 不是额外玩法系统，而是七日视觉小说的章节、场
    - 叙事层：按序章、第一日至第七日、六个结局与尾声描述章节目标、场景顺序、人物行动和分支回收。
    - 记录层：用稳定 ID 冻结 chapter、scene、choice、reaction、payoff、event、resource、outcome、agency transaction、qualification source 与 ending witness records。
 
-   本 GDD 冻结系统合同；规范性配套文档 [七日内容基线](../narrative/seven-day-content-baseline.md) `narrative_content_baseline:v1.2` 冻结 15 个 production units、required scene beats、54 项正式玩家选择、9 项 agency transactions、7 项 repairable tokens、四项 route qualification bindings、六条完整 canonical ending histories 与 11 项 terminal cause-family production variants。Cause family 不是 SYS-ENDING equivalence-class identity；实际逐 class records 与 witnesses 必须由全图枚举生成。约 7–9 万字对白、旁白与具体演出脚本保留在 `game/chapters/` 的分章 `.rpy` 文件中。对白可以润色，但不得未经验证改变内容基线的稳定 ID、分支控制流、人物决定、registered outcome 或玩家安全核心含义。
+   本 GDD 冻结系统合同；规范性配套文档 [七日内容基线](../narrative/seven-day-content-baseline.md) `narrative_content_baseline:v1.4` 冻结 15 个 production units、required scene beats、54 项正式玩家选择、9 项 agency transactions、7 项 repairable tokens、四项 route qualification bindings、六条完整 canonical ending histories 与 11 项 terminal cause-family production variants。Cause family 不是 SYS-ENDING equivalence-class identity；实际逐 class records 与 witnesses 必须由全图枚举生成。约 7–9 万字对白、旁白与具体演出脚本保留在 `game/chapters/` 的分章 `.rpy` 文件中。对白可以润色，但不得未经验证改变内容基线的稳定 ID、分支控制流、人物决定、registered outcome 或玩家安全核心含义。
 
 2. **章节记录**
 
@@ -41,6 +43,42 @@ SYS-NARRATIVE 不是额外玩法系统，而是七日视觉小说的章节、场
    `chapter_id, title, entry_scene_id, terminal_scene_ids, required_scene_ids, optional_scene_ids, mandatory_responsibility_id, input_fact_ids, produced_event_ids, choice_ids, payoff_ids, next_chapter_or_ending_ids, chapter_summary_id, owner_system`
 
    Production source manifest 必须覆盖序章、第一日至第七日、六个结局及适用尾声。所有 expected units 都必须非空、可达且不存在悬空引用。
+
+### `rain_stops` Epilogue Extension Boundary
+
+`epilogue_rain_stops_arcade` remains the sole existing true epilogue unit. Its
+current first-guest and lights-out scenes remain in the same order, with their
+existing completion events and completion boundary unchanged. The unit may
+continue after lights-out into one short, non-interactive years-later tail.
+
+The tail is limited to two structural viewpoints: an unnamed neighborhood
+observer noticing the small arcade as an ordinary local business, and a clearly
+marked written note by 绘梨衣. The observer may mention only unnamed old
+friends and ordinary customers as background texture. The written note may
+carry complex content, but it is written material, not complete spoken
+dialogue; no `erii` speech line may carry that content. This boundary confirms
+no named extra character return, family conversion, pregnancy, twins, or other
+major world-state fact. It also adds no choice, reaction/payoff join, axis,
+token, resource, qualification, ending predicate, persistent field,
+achievement, Gallery record, canonical unit, or canonical completion event.
+
+The input source for this amendment is an unconfirmed fan-adaptation reference.
+Only high-level structure and theme may inform the implementation; the project
+must not copy its wording or rely on its named-character/world-state claims.
+
+### Formal Prose Expansion Boundary
+
+To close the remaining authored-length gap, production proceeds through four
+independent prose-only sprints in this order: Prologue/Day 1–2, Day 3–4, Day
+5–6, and Day 7/six endings/`rain_stops` tail. Each sprint may enrich existing
+scene description, physical action, observation, immediate reaction, and
+already-frozen payoff recall. It must not add or alter choice IDs, menus,
+labels, axes, tokens, resources, qualifications, route guards, ending
+predicates, completion events, persistent fields, hidden numeric rules,
+canonical units, active-character constraints, or assets. Each sprint refreshes
+the affected source identities and runs the full automated QA chain before a
+local close commit. Human playtest, SAPI/semantic, copyright, subjective
+readability, and final narrative sign-off remain deferred.
 
 ### Journal Source Catalogs
 

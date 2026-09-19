@@ -8,6 +8,59 @@
 
 ---
 
+## QA Cycle Update — Team QA Review
+
+**Review mode**: Solo
+**Updated**: 2026-08-11
+**Smoke gate**: **PASS** — `production/qa/smoke-2026-08-11.md`
+
+### Scope
+
+This cycle covers the three completed Sprint 002 Must Have stories: Day 3
+authored-source/causal-binding validation (S2-01), Day 3 runtime asset
+admission records (S2-02), and Day 3 route, accessibility, and evidence
+validation (S2-03). It validates the delivered Day 3 unit only through its
+defined handoff.
+
+### Out of Scope
+
+- Day 4–Day 7 content, endings, epilogue, release packaging, or full-manifest
+  validation.
+- Any Day 3 entry in the Day 1-only partial manifest, terminal witnesses,
+  ending-entry validation, or resolver/qualification work.
+- New final art, CGs, external images, audio, video, or UI information-
+  architecture redesign.
+
+### Entry Criteria
+
+- [x] A Smoke Check PASS or PASS WITH WARNINGS report exists at
+  `production/qa/smoke-2026-08-11.md` (PASS).
+- [x] The build launches without crash or traceback, as recorded by the smoke
+  report.
+- [x] All Must Have stories are `done` in `production/sprint-status.yaml`.
+- [x] Current-source hash-bound authoring, asset-admission, and route evidence
+  records exist for the reviewed content generation.
+
+### Exit Criteria
+
+- Every story has automated evidence reviewed and its applicable manual QA
+  result recorded as PASS, PASS WITH NOTES, FAIL, or BLOCKED.
+- Any failure has a formal bug report with severity and status.
+- No unresolved S1/S2 defect remains in the delivered Day 3 route.
+- The QA sign-off report records coverage, residual conditions, and a verdict.
+
+### Residual Observations
+
+- The smoke report retains a prior 25-test Python PASS; its current re-run
+  could not invoke standard Python from `PATH`. This is an environment
+  limitation, not a failed test.
+- CI test automation is not configured. Preserve this as a process observation
+  rather than changing the smoke verdict.
+- `production/sprints/sprint-002.md` still says no QA plan exists; this plan
+  predates the Team QA review and is the authoritative plan for this cycle.
+
+---
+
 ## Test Summary
 
 | Story / Sprint item | Type | Automated test required | Manual verification required |
