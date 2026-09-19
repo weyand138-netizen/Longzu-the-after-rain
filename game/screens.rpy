@@ -31,6 +31,18 @@ style settings_option_button is button:
 style settings_option_button_text is button_text:
     size 27
 
+style settings_volume_slider is slider:
+    ysize 34
+    left_gutter 11
+    right_gutter 11
+    thumb_offset 11
+    left_bar Frame(Composite((2, 34), (0, 12), Solid("#8dcbd6", xsize=2, ysize=10)), 0, 0, tile=True)
+    right_bar Frame(Composite((2, 34), (0, 12), Solid("#31485d", xsize=2, ysize=10)), 0, 0, tile=True)
+    thumb Composite((22, 34), (0, 6), Solid("#f4d7c0", xsize=22, ysize=22))
+    hover_left_bar Frame(Composite((2, 34), (0, 12), Solid("#b7e4ea", xsize=2, ysize=10)), 0, 0, tile=True)
+    hover_right_bar Frame(Composite((2, 34), (0, 12), Solid("#3f5d73", xsize=2, ysize=10)), 0, 0, tile=True)
+    hover_thumb Composite((22, 34), (0, 6), Solid("#ffffff", xsize=22, ysize=22))
+
 style window:
     background Solid("#0b1320dd")
     padding (54, 34)
@@ -58,6 +70,13 @@ init python:
             if abs(current_time - expected_time) < 0.02:
                 return speed
         return 2
+
+    def reset_auto_forward_speed_for_game_entry():
+        """Start every title-entry session at the slowest advertised rate."""
+
+        minimum_speed = min(AUTO_FORWARD_SPEEDS)
+        renpy.game.preferences.afm_time = _AUTO_FORWARD_TIME_BY_SPEED[minimum_speed]
+        return minimum_speed
 
     def toggle_auto_forward():
         preferences = renpy.game.preferences
@@ -145,7 +164,7 @@ screen say(who, what):
             for speed in AUTO_FORWARD_SPEEDS:
                 textbutton "[speed]X":
                     id "auto_speed_{}".format(speed)
-                    action Function(set_auto_forward_speed, speed)
+                    action audio_ui_feedback_action(Function(set_auto_forward_speed, speed))
                     selected (auto_forward_enabled and auto_forward_speed == speed)
                     background None
                     hover_background None
@@ -172,7 +191,7 @@ screen choice(items):
         for index, item in enumerate(items):
             textbutton item.caption:
                 id "day1_choice_{}".format(index)
-                action item.action
+                action audio_ui_feedback_action(item.action, "choice")
                 xfill True
                 text_align 0.5
                 key_events True
@@ -196,12 +215,12 @@ screen quick_menu():
         yalign 0.02
         spacing 8
 
-        textbutton "回退" action Rollback()
+        textbutton "回退" action audio_ui_feedback_action(Rollback())
         $ auto_forward_enabled = renpy.game.preferences.afm_enable
-        textbutton "自动：[('开' if auto_forward_enabled else '关')]" id "quick_auto_forward" action Function(toggle_auto_forward)
-        textbutton "保存" action ShowMenu("save")
-        textbutton "读取" action ShowMenu("load")
-        textbutton "设置" action ShowMenu("preferences")
+        textbutton "自动：[('开' if auto_forward_enabled else '关')]" id "quick_auto_forward" action audio_ui_feedback_action(Function(toggle_auto_forward))
+        textbutton "保存" action audio_ui_feedback_action(ShowMenu("save"))
+        textbutton "读取" action audio_ui_feedback_action(ShowMenu("load"))
+        textbutton "设置" action audio_ui_feedback_action(ShowMenu("preferences"))
 
 screen main_menu():
     tag menu
@@ -243,18 +262,18 @@ screen main_menu():
         # otherwise Ren'Py disables FileSave for the whole run. Launcher and
         # testcase entry can invoke this screen directly, where a normal Jump
         # is the safe equivalent because there is no menu context to leave.
-        textbutton "开始" id "main_start" action If(renpy.context()._main_menu, Start("begin_game"), Jump("begin_game"))
+        textbutton "开始" id "main_start" action audio_ui_feedback_action(If(renpy.context()._main_menu, Start("begin_game"), Jump("begin_game")))
         # The title page is a `call screen` route. Open a title-owned Load
         # surface so its Back action can replace this screen directly instead
         # of relying on Return()'s game-menu context inference.
-        textbutton "读取存档" id "main_load" action Show("title_load")
-        textbutton "制作说明" id "main_about" action Show("production_notes")
-        textbutton "设置" id "main_settings" action Show(
+        textbutton "读取存档" id "main_load" action audio_ui_feedback_action(Show("title_load"))
+        textbutton "制作说明" id "main_about" action audio_ui_feedback_action(Show("production_notes"))
+        textbutton "设置" id "main_settings" action audio_ui_feedback_action(Show(
             "preferences",
             return_action=Show("main_menu"),
             show_title_return=False,
-        )
-        textbutton "退出" id "main_quit" action Quit(confirm=True)
+        ))
+        textbutton "退出" id "main_quit" action audio_ui_feedback_action(Quit(confirm=True))
 
     frame:
         xalign 0.98
@@ -288,7 +307,7 @@ screen production_notes():
                 line_spacing 12
             textbutton "返回":
                 id "production_notes_close"
-                action Hide("production_notes")
+                action audio_ui_feedback_action(Hide("production_notes"))
                 xalign 1.0
 
 screen game_menu(title, show_return=True, return_action=Return()):
@@ -314,7 +333,7 @@ screen game_menu(title, show_return=True, return_action=Return()):
         textbutton "返回" id "game_menu_return":
             xalign 0.92
             yalign 0.90
-            action return_action
+            action audio_ui_feedback_action(return_action)
 
 screen save():
     tag menu
@@ -363,7 +382,7 @@ screen manual_slot_browser(mode, selected_slot, return_action):
                     id "{}_slot_{}".format(mode, slot)
                     # This writes the caller-owned screen variable above, so
                     # the selection remains after the pointer leaves this row.
-                    action SetScreenVariable("selected_slot", slot)
+                    action audio_ui_feedback_action(SetScreenVariable("selected_slot", slot))
                     sensitive (mode == "save" or slot_loadable)
                     selected slot_selected
                     default_focus (slot == 1 and (mode == "save" or slot_loadable))
@@ -407,7 +426,7 @@ screen manual_slot_browser(mode, selected_slot, return_action):
             if mode == "save":
                 textbutton "确认保存":
                     id "confirm_save"
-                    action FileSave(selected_slot, confirm=False, page="1")
+                    action audio_ui_feedback_action(FileSave(selected_slot, confirm=False, page="1"))
                     # Match the visual enabled state to Ren'Py's real save
                     # action. This prevents a click that silently does
                     # nothing if an invalid menu context ever leaks through.
@@ -415,11 +434,11 @@ screen manual_slot_browser(mode, selected_slot, return_action):
             else:
                 textbutton "确认读取":
                     id "confirm_load"
-                    action FileLoad(selected_slot, confirm=False, page="1")
+                    action audio_ui_feedback_action(FileLoad(selected_slot, confirm=False, page="1"))
                     sensitive selected_loadable
             textbutton "返回":
                 id "slot_browser_return"
-                action return_action
+                action audio_ui_feedback_action(return_action)
 
 screen ending_tree_progress(completed_endings):
     $ reduced_motion = persistent.sys_persist_state["settings"]["reduced_motion"]
@@ -472,38 +491,46 @@ screen preferences(return_action=Return(), show_title_return=True):
                 text "字体大小：[int(settings_font_scale * 100)]%"
                 hbox:
                     spacing 14
-                    textbutton "100%" style "settings_option_button" xsize 190 action SetScreenVariable("settings_font_scale", 1.0)
-                    textbutton "125%" style "settings_option_button" xsize 190 action SetScreenVariable("settings_font_scale", 1.25)
-                    textbutton "150%" style "settings_option_button" xsize 190 action SetScreenVariable("settings_font_scale", 1.5)
+                    textbutton "100%" style "settings_option_button" xsize 190 action audio_ui_feedback_action(SetScreenVariable("settings_font_scale", 1.0))
+                    textbutton "125%" style "settings_option_button" xsize 190 action audio_ui_feedback_action(SetScreenVariable("settings_font_scale", 1.25))
+                    textbutton "150%" style "settings_option_button" xsize 190 action audio_ui_feedback_action(SetScreenVariable("settings_font_scale", 1.5))
 
                 null height 8
                 text "显示模式" style "settings_section_title"
                 hbox:
                     spacing 14
-                    textbutton "窗口" style "settings_option_button" xsize 250 action Preference("display", "window")
-                    textbutton "全屏" style "settings_option_button" xsize 250 action Preference("display", "fullscreen")
+                    textbutton "窗口" style "settings_option_button" xsize 250 action audio_ui_feedback_action(Preference("display", "window"))
+                    textbutton "全屏" style "settings_option_button" xsize 250 action audio_ui_feedback_action(Preference("display", "fullscreen"))
 
                 null height 8
-                text "游戏主音量" style "settings_section_title"
                 hbox:
                     spacing 14
-                    bar value AudioGameVolumeValue() id "audio_game_volume" xsize 410 ysize 34
-                    textbutton "静音游戏音频" id "audio_game_mute" style "settings_option_button" xsize 260 action Function(audio_settings_toggle_game_mute) selected audio_settings_game_muted()
+                    fixed:
+                        xsize 200
+                        ysize 34
+                        text "主音量" yalign 0.5
+                    bar value AudioGameVolumeValue() id "audio_game_volume" style "settings_volume_slider" xsize 450 ysize 34
                 hbox:
                     spacing 14
-                    text "音乐" xsize 96
-                    bar value Preference("music volume") id "audio_music_volume" xsize 300 ysize 34
-                    textbutton "静音音乐" id "audio_music_mute" style "settings_option_button" xsize 260 action Preference("music mute", "toggle")
+                    fixed:
+                        xsize 200
+                        ysize 34
+                        text "音乐" yalign 0.5
+                    bar value AudioMixerVolumeValue("music") id "audio_music_volume" style "settings_volume_slider" xsize 450 ysize 34
                 hbox:
                     spacing 14
-                    text "环境" xsize 96
-                    bar value Preference("mixer ambience volume") id "audio_ambience_volume" xsize 300 ysize 34
-                    textbutton "静音环境" id "audio_ambience_mute" style "settings_option_button" xsize 260 action Preference("mixer ambience mute", "toggle")
+                    fixed:
+                        xsize 200
+                        ysize 34
+                        text "环境" yalign 0.5
+                    bar value AudioMixerVolumeValue("ambience") id "audio_ambience_volume" style "settings_volume_slider" xsize 450 ysize 34
                 hbox:
                     spacing 14
-                    text "音效" xsize 96
-                    bar value Preference("sound volume") id "audio_sfx_volume" xsize 300 ysize 34
-                    textbutton "静音音效" id "audio_sfx_mute" style "settings_option_button" xsize 260 action Preference("sound mute", "toggle")
+                    fixed:
+                        xsize 200
+                        ysize 34
+                        text "音效" yalign 0.5
+                    bar value AudioMixerVolumeValue("sfx") id "audio_sfx_volume" style "settings_volume_slider" xsize 450 ysize 34
 
             vbox:
                 xsize 700
@@ -512,39 +539,39 @@ screen preferences(return_action=Return(), show_title_return=True):
                 text "辅助功能" style "settings_section_title"
                 hbox:
                     spacing 14
-                    textbutton "高对比度：[('开' if settings_high_contrast else '关')]" style "settings_option_button" xsize 330 action SetScreenVariable(
+                    textbutton "高对比度：[('开' if settings_high_contrast else '关')]" style "settings_option_button" xsize 330 action audio_ui_feedback_action(SetScreenVariable(
                         "settings_high_contrast", not settings_high_contrast
-                    )
-                    textbutton "减弱动效：[('开' if settings_reduced_motion else '关')]" style "settings_option_button" xsize 330 action SetScreenVariable(
+                    ))
+                    textbutton "减弱动效：[('开' if settings_reduced_motion else '关')]" style "settings_option_button" xsize 330 action audio_ui_feedback_action(SetScreenVariable(
                         "settings_reduced_motion", not settings_reduced_motion
-                    )
+                    ))
                 hbox:
                     spacing 14
-                    textbutton "闪烁效果：[('开' if settings_flash_effects else '关')]" style "settings_option_button" xsize 330 action SetScreenVariable(
+                    textbutton "闪烁效果：[('开' if settings_flash_effects else '关')]" style "settings_option_button" xsize 330 action audio_ui_feedback_action(SetScreenVariable(
                         "settings_flash_effects", not settings_flash_effects
-                    )
-                    textbutton "屏幕震动：[('开' if settings_screen_shake else '关')]" style "settings_option_button" xsize 330 action SetScreenVariable(
+                    ))
+                    textbutton "屏幕震动：[('开' if settings_screen_shake else '关')]" style "settings_option_button" xsize 330 action audio_ui_feedback_action(SetScreenVariable(
                         "settings_screen_shake", not settings_screen_shake
-                    )
+                    ))
 
                 null height 8
                 text "文字速度" style "settings_section_title"
                 hbox:
                     spacing 14
-                    textbutton "慢" style "settings_option_button" xsize 150 action Preference("text speed", 20)
-                    textbutton "标准" style "settings_option_button" xsize 150 action Preference("text speed", 35)
-                    textbutton "即时" style "settings_option_button" xsize 150 action Preference("text speed", 0)
-                    textbutton "自发声" style "settings_option_button" xsize 170 action Preference("self voicing", "toggle")
+                    textbutton "慢" style "settings_option_button" xsize 150 action audio_ui_feedback_action(Preference("text speed", 20))
+                    textbutton "标准" style "settings_option_button" xsize 150 action audio_ui_feedback_action(Preference("text speed", 35))
+                    textbutton "即时" style "settings_option_button" xsize 150 action audio_ui_feedback_action(Preference("text speed", 0))
+                    textbutton "自发声" style "settings_option_button" xsize 170 action audio_ui_feedback_action(Preference("self voicing", "toggle"))
 
                 text "无障碍选项点击“应用”后保存；文字速度与自发声即时生效。" style "settings_status_text"
-                textbutton "应用无障碍设置" id "settings_apply" style "settings_option_button" xsize 310 action Function(
+                textbutton "应用无障碍设置" id "settings_apply" style "settings_option_button" xsize 310 action audio_ui_feedback_action(Function(
                     apply_accessibility_settings,
                     settings_font_scale,
                     settings_high_contrast,
                     settings_reduced_motion,
                     settings_flash_effects,
                     settings_screen_shake,
-                )
+                ))
 
     hbox:
         xalign 0.90
@@ -554,10 +581,10 @@ screen preferences(return_action=Return(), show_title_return=True):
         if show_title_return:
             textbutton "返回标题页" id "settings_return_to_title":
                 xsize 230
-                action MainMenu(confirm=True)
+                action audio_ui_feedback_action(MainMenu(confirm=True))
         textbutton "返回" id "settings_return":
             xsize 170
-            action return_action
+            action audio_ui_feedback_action(return_action)
 screen focus_graph_bindings(graph):
     key "focus_graph_next" action Function(graph.move, 1)
     key "focus_graph_previous" action Function(graph.move, -1)
@@ -601,7 +628,7 @@ screen chapter_complete(title, message):
                     xalign 0.5
             textbutton "继续旅程":
                 id "chapter_complete_continue"
-                action [Function(notification_clear_presentation_receipt), Return()]
+                action audio_ui_feedback_action([Function(notification_clear_presentation_receipt), Return()])
                 xalign 0.5
 
 screen ending_complete(title, message):
@@ -643,7 +670,7 @@ screen ending_complete(title, message):
                         xalign 0.5
             textbutton "回到标题":
                 id "ending_complete_return"
-                action [Function(notification_clear_presentation_receipt), MainMenu(confirm=False)]
+                action audio_ui_feedback_action([Function(notification_clear_presentation_receipt), MainMenu(confirm=False)])
                 xalign 1.0
                 yalign 1.0
 
@@ -660,8 +687,8 @@ screen confirm(message, yes_action, no_action):
             hbox:
                 spacing 20
                 xalign 0.5
-                textbutton "确定" action yes_action
-                textbutton "取消" action no_action
+                textbutton "确定" action audio_ui_feedback_action(yes_action)
+                textbutton "取消" action audio_ui_feedback_action(no_action)
 
 screen notify(message):
     zorder 300

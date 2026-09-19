@@ -71,3 +71,52 @@ init 30 python:
                 _audio_apply_output_gate_locked(record)
             # PLAY records an attempted dispatch, not a promise of audible success.
             return decision.disposition
+
+    _AUDIO_UI_FEEDBACK_CUES = {
+        "click": "audio.ui.click_soft",
+        "choice": "audio.ui.choice_confirm",
+    }
+
+    def audio_dispatch_ui_feedback(feedback_kind):
+        """Play one immediate UI confirmation outside narrative reconstruction."""
+        cue_id = _AUDIO_UI_FEEDBACK_CUES.get(feedback_kind)
+        if cue_id is None:
+            return None
+        cue = _AUDIO_ADMITTED_ONESHOT_CUES.get(cue_id)
+        if not isinstance(cue, OneShotCue):
+            return None
+        record = _notification_session_record()
+        with record["lock"]:
+            sequence = record.get("ui_feedback_sequence", 0) + 1
+            record["ui_feedback_sequence"] = sequence
+            eligible = (_AUDIO_ENGINE_GATE_SUPPORTED and _audio_engine.pcm_ok is True and
+                        _audio_lifecycle_locked(record)["phase"] == "LIVE" and
+                        not _audio_tts_suppressed() and not _notification_rollback_active() and
+                        _audio_oneshot_raw_enabled())
+            if not eligible:
+                return None
+            try:
+                # Use Ren'Py's standard unbuffered sound channel. It is the
+                # engine's device-tested UI/SFX path and is not part of the
+                # narrative channel set rebuilt by Start/MainMenu actions.
+                # Project master gain and the SFX mixer both still apply.
+                renpy.music.set_volume(
+                    audio_settings_game_output_multiplier(), delay=0.0,
+                    channel="sound",
+                )
+                renpy.music.play(
+                    cue.filename, channel="sound", loop=False,
+                    if_changed=False,
+                )
+                record["ui_feedback_last_play"] = (feedback_kind, sequence)
+            except Exception as exc:
+                # A UI cue must never block its button action.
+                record["ui_feedback_last_fault"] = type(exc).__name__
+        # Ren'Py Function actions treat a non-None value as an interaction
+        # result, which would prevent later actions in this button's list.
+        return None
+
+    def audio_ui_feedback_action(action, feedback_kind="click"):
+        """Prepend feedback to a successful button action, flattening lists."""
+        actions = list(action) if isinstance(action, (list, tuple)) else [action]
+        return [Function(audio_dispatch_ui_feedback, feedback_kind)] + actions

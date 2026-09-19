@@ -55,6 +55,13 @@ init 5 python:
         setattr(_preferences, _AUDIO_GAME_GAIN_PREFERENCE, min(1.0, max(0.0, float(value))))
         _audio_settings_refresh()
 
+    def audio_settings_set_visible_game_gain(value):
+        """Convert the legacy master-mute overlay into the visible slider value."""
+        if type(value) not in (int, float):
+            return
+        setattr(_preferences, _AUDIO_GAME_MUTE_PREFERENCE, False)
+        audio_settings_set_game_gain(value)
+
     def audio_settings_toggle_game_mute():
         # Keep the prior gain intact so unmute restores exactly that setting.
         setattr(_preferences, _AUDIO_GAME_MUTE_PREFERENCE, not audio_settings_game_muted())
@@ -67,14 +74,29 @@ init 5 python:
         def get_adjustment(self):
             return _audio_ui.adjustment(
                 range=1.0,
-                value=audio_settings_game_gain(),
-                changed=audio_settings_set_game_gain,
+                value=(0.0 if audio_settings_game_muted() else audio_settings_game_gain()),
+                changed=audio_settings_set_visible_game_gain,
                 step=0.05,
                 force_step=True,
             )
 
         def get_style(self):
             return "slider", "vslider"
+
+    class AudioMixerVolumeValue(MixerValue):
+        """A slider-only category control compatible with legacy mute fields."""
+
+        def __init__(self, mixer):
+            super(AudioMixerVolumeValue, self).__init__(mixer, force_step=False)
+
+        def get_volume(self):
+            if _preferences.get_mute(self.mixer):
+                return 0.0
+            return super(AudioMixerVolumeValue, self).get_volume()
+
+        def set_volume(self, volume):
+            _preferences.set_mute(self.mixer, False)
+            super(AudioMixerVolumeValue, self).set_volume(volume)
 
     if audio_settings_initialize not in config.start_callbacks:
         config.start_callbacks.append(audio_settings_initialize)

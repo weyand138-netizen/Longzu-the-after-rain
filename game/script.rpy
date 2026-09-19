@@ -62,6 +62,12 @@ label start:
 label launch_title_page:
     # Title entry is a high-level lifecycle boundary: it stops every prior
     # narrative layer before the separately admitted title context begins.
+    # A failed cross-device merge leaves an exact recovery marker in the
+    # persistent field. Consume it before audio or screen code reads settings.
+    $ ensure_startup_persistent_state()
+    # Ren'Py restores the timing preference independently from the live AFM
+    # timer. Reset both the displayed choice and the next active rate to 2X.
+    $ reset_auto_forward_speed_for_game_entry()
     $ audio_scene_enter_title()
     $ main_menu_weather = select_main_menu_weather()
     $ prepare_main_menu_weather(main_menu_weather)

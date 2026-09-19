@@ -33,6 +33,8 @@ RUNTIME_AUDIO_ASSETS = (
     AudioAssetRecord("sfx.interior_step", "assets/audio/sfx/s06_step_interior.wav", "cfb7e7e2a9db6ed8e4f7f9c23f93c95543bce193e2fee3bfa47cac2174d44dde"),
     AudioAssetRecord("sfx.two_coins", "assets/audio/sfx/s09_two_coins.wav", "afaa0bf95e190832ebb21776a262b5003de7878f14a28608dc80bbb7101b99cf"),
     AudioAssetRecord("sfx.keyboard", "assets/audio/sfx/s10_keyboard.wav", "4556a600f5fd4e154850fbfd75529cd13305de23c47f1b282764cf14d1ad585d"),
+    AudioAssetRecord("sfx.ui_click_soft", "assets/audio/sfx/ui_click_soft.wav", "ea3e085f926ae38a0f31d16ae661fcaf0589a1cad55dc9e464b3e8dab83324fe"),
+    AudioAssetRecord("sfx.ui_choice_confirm", "assets/audio/sfx/ui_choice_confirm.wav", "37db8cd1785631c80d8d00858b911acdf8c44ecb662dea7bd5a75181ca6271f3"),
 )
 
 
@@ -66,6 +68,8 @@ ONESHOT_CUES = (
     OneShotCue("audio.sfx.interior_step", "assets/audio/sfx/s06_step_interior.wav", "DECORATIVE"),
     OneShotCue("audio.sfx.two_coins", "assets/audio/sfx/s09_two_coins.wav", "DECORATIVE"),
     OneShotCue("audio.sfx.keyboard", "assets/audio/sfx/s10_keyboard.wav", "DECORATIVE"),
+    OneShotCue("audio.ui.click_soft", "assets/audio/sfx/ui_click_soft.wav", "OPTIONAL_UI_NOTIFICATION"),
+    OneShotCue("audio.ui.choice_confirm", "assets/audio/sfx/ui_choice_confirm.wav", "OPTIONAL_UI_NOTIFICATION"),
 )
 
 
@@ -77,10 +81,14 @@ RESTORE_CONTEXTS = {
     # Day 1 is explicitly the quiet rain-dampened shop described by the text;
     # its background filename is not used as a sound classification signal.
     "audio.context.day1.shop_rain": ("audio.music.daily_room", "audio.ambience.room_rain"),
+    "audio.context.day1.safehouse": ("audio.music.daily_room", "audio.ambience.room_rain"),
+    "audio.context.day1.departure": ("audio.music.daily_room", "audio.ambience.rain_platform"),
     "audio.context.day2.arcade": ("audio.music.city_pause", "audio.ambience.internet_cafe"),
+    "audio.context.day2.mall_exterior": ("audio.music.city_pause", "audio.ambience.rain_platform"),
     "audio.context.day3.classroom": ("audio.music.city_pause", "audio.ambience.empty_classroom"),
     "audio.context.day4.ticket_window": ("audio.music.visible_departure", "audio.ambience.rain_platform"),
     "audio.context.day4.seaside_station": ("audio.music.before_departure", "audio.ambience.seaside"),
+    "audio.context.day4.coastal_train": ("audio.music.before_departure", "audio.ambience.train_carriage"),
     "audio.context.day5.archive_quiet": ("audio.music.archive_space", "audio.ambience.intentional_silence"),
     "audio.context.day6.service_exit": ("audio.music.before_departure", "audio.ambience.service_exit"),
     "audio.context.day7.red_well": ("audio.music.before_departure", "audio.ambience.red_well"),
@@ -97,14 +105,14 @@ RESTORE_CONTEXTS = {
 
 
 _SOURCE_DIGESTS = {
-    "chapters/prologue.rpy": "ac5c72b564f0a8e1e61c10aa3481e6bbe90715c2c171e851299bd62f6d344716",
-    "chapters/day1.rpy": "4a063ca3817ea1c84bdc5a73f77d9a8fe8887e2ad24682c373d5bf3a472c6367",
-    "chapters/day2.rpy": "3ced10c0898368629a93b63fb07b1eaa408d6cc3f53836c0b38888e856f32a58",
-    "chapters/day3.rpy": "a9c4946ec07d695fbf62674e35f7b50b1bb9f8f69934515d5e8d6af131787500",
-    "chapters/day4.rpy": "2687ca4f5aedc1bd9f20279ceeb1cc601f60e1e994f95ffe304a42f98f8b448b",
-    "chapters/day5.rpy": "c6e1c9df741fa898f5d733389b023e7ddd3743048344065e9faf56a2457a004c",
-    "chapters/day6.rpy": "975025b25c7ccbf733696c09b4f980143a175efda2aa7e0bac6fa0772e40c6e2",
-    "chapters/day7.rpy": "f519ffdecf2f9fd4ccbfd7af711eee051079237d9015af2f1ac8713999b1f665",
+    "chapters/prologue.rpy": "38e03185fbd106473edb1b032930ea79d5fe9bb0df34acd02325f9d6042caa1a",
+    "chapters/day1.rpy": "ddc38bf97617fb8838391d728d1b5620d81f5e149d99ea26e3d98a5c27bb8d8e",
+    "chapters/day2.rpy": "2d17b86c69ec3f55526bd4c68335659b9903cd3019e3ba86e7c890a4aabc249c",
+    "chapters/day3.rpy": "fcb2b40ea399635c6180fb3c9a447c8570cc411dc4c7be956257b45af4aeb9ac",
+    "chapters/day4.rpy": "1b3f04a209ab4f37b357ff94ed81717bb5d9d2cf2971c21b8be633030b2737db",
+    "chapters/day5.rpy": "1dbe55d5cb7bd5a09291734d2a037fb85f16f60654bc07543c6c8ad98b33238f",
+    "chapters/day6.rpy": "7e13fdabd2fd9344fec9351f4a48fc67d100c25e4f497d5144dee04c3dff7722",
+    "chapters/day7.rpy": "1e837770ec5a821766684cf31605285e45364fbba1ae5781ed3d1fa609680d6b",
     "chapters/endings.rpy": "5a18aa693579d86ece69da6f4db3c6d0afac09abfb893d9e50ca118b93114c6a",
 }
 
@@ -114,14 +122,18 @@ def _range(source, first_line, last_line, context_id):
 
 
 CONTEXT_RANGES = (
-    _range("chapters/prologue.rpy", 1, 133, "audio.context.prologue.platform"),
-    _range("chapters/prologue.rpy", 134, 179, "audio.context.prologue.ticket_gate"),
-    _range("chapters/prologue.rpy", 180, 244, "audio.context.prologue.train"),
-    _range("chapters/day1.rpy", 1, 219, "audio.context.day1.shop_rain"),
-    _range("chapters/day2.rpy", 1, 228, "audio.context.day2.arcade"),
+    _range("chapters/prologue.rpy", 1, 112, "audio.context.prologue.platform"),
+    _range("chapters/prologue.rpy", 113, 149, "audio.context.prologue.ticket_gate"),
+    _range("chapters/prologue.rpy", 150, 182, "audio.context.prologue.train"),
+    _range("chapters/day1.rpy", 1, 62, "audio.context.day1.shop_rain"),
+    _range("chapters/day1.rpy", 63, 163, "audio.context.day1.safehouse"),
+    _range("chapters/day1.rpy", 164, 170, "audio.context.day1.departure"),
+    _range("chapters/day2.rpy", 1, 198, "audio.context.day2.arcade"),
+    _range("chapters/day2.rpy", 199, 237, "audio.context.day2.mall_exterior"),
     _range("chapters/day3.rpy", 1, 220, "audio.context.day3.classroom"),
     _range("chapters/day4.rpy", 1, 233, "audio.context.day4.ticket_window"),
-    _range("chapters/day4.rpy", 234, 293, "audio.context.day4.seaside_station"),
+    _range("chapters/day4.rpy", 234, 245, "audio.context.day4.seaside_station"),
+    _range("chapters/day4.rpy", 246, 294, "audio.context.day4.coastal_train"),
     _range("chapters/day5.rpy", 1, 349, "audio.context.day5.archive_quiet"),
     _range("chapters/day6.rpy", 1, 399, "audio.context.day6.service_exit"),
     _range("chapters/day7.rpy", 1, 111, "audio.context.day7.red_well"),
@@ -138,12 +150,12 @@ CONTEXT_RANGES = (
 
 
 ACTION_BINDINGS = (
-    AudioOneShotBinding("day1.cloth_shift", "chapters/day1.rpy", 66, "audio.sfx.cloth_shift"),
-    AudioOneShotBinding("day1.paper_fold", "chapters/day1.rpy", 173, "audio.sfx.paper_fold"),
-    AudioOneShotBinding("day1.wet_step", "chapters/day1.rpy", 186, "audio.sfx.wet_step"),
+    AudioOneShotBinding("day1.cloth_shift", "chapters/day1.rpy", 76, "audio.sfx.cloth_shift"),
+    AudioOneShotBinding("day1.paper_fold", "chapters/day1.rpy", 155, "audio.sfx.paper_fold"),
+    AudioOneShotBinding("day1.wet_step", "chapters/day1.rpy", 167, "audio.sfx.wet_step"),
     AudioOneShotBinding("day2.keyboard", "chapters/day2.rpy", 72, "audio.sfx.keyboard"),
-    AudioOneShotBinding("day2.two_coins", "chapters/day2.rpy", 132, "audio.sfx.two_coins"),
-    AudioOneShotBinding("day2.interior_step", "chapters/day2.rpy", 188, "audio.sfx.interior_step"),
+    AudioOneShotBinding("day2.two_coins", "chapters/day2.rpy", 134, "audio.sfx.two_coins"),
+    AudioOneShotBinding("day2.interior_step", "chapters/day2.rpy", 194, "audio.sfx.interior_step"),
     AudioOneShotBinding("day4.paper_unfold", "chapters/day4.rpy", 127, "audio.sfx.paper_unfold"),
 )
 
@@ -157,7 +169,9 @@ def validate_production_definition():
         raise ValueError("Duplicate cue admission")
     if len(assets) != len(RUNTIME_AUDIO_ASSETS):
         raise ValueError("Duplicate asset admission")
-    if len(ACTION_BINDINGS) != 7 or {item.cue_id for item in ACTION_BINDINGS} != set(oneshots):
+    action_cues = {item.cue_id for item in ACTION_BINDINGS}
+    ui_cues = {"audio.ui.click_soft", "audio.ui.choice_confirm"}
+    if len(ACTION_BINDINGS) != 7 or action_cues != set(oneshots) - ui_cues:
         raise ValueError("Action whitelist changed")
     for music_id, ambience_id in RESTORE_CONTEXTS.values():
         if continuous.get(music_id, None) is None or continuous[music_id].layer != "music":

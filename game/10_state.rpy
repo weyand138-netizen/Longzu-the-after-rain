@@ -49,6 +49,7 @@ init python:
         REJECTED_REENTRANT,
     )
     from modules.persist_merge import (
+        MERGE_SAFE_RECOVERY_MARKER,
         STARTUP_PERSIST_READY,
         classify_startup_persist_root,
     )
@@ -367,6 +368,27 @@ init python:
         validate_persist_root(candidate_root)
         persistent.sys_persist_state = candidate_root
         persistent.settings = candidate_root["settings"]
+
+    def ensure_startup_persistent_state():
+        """Replace a merge-recovery marker before any title UI reads it.
+
+        The registered merge callback deliberately returns an exact tuple when
+        it cannot safely combine incompatible persistent roots.  That marker
+        is not an ordinary root and therefore must be consumed at the startup
+        boundary, before screens or audio code read the settings mapping.
+        """
+
+        if classify_startup_persist_root(persistent.sys_persist_state) == STARTUP_PERSIST_READY:
+            return False
+        _replace_persistent_root(build_fresh_persist_root())
+        return True
+
+    # Ren'Py shows the project splashscreen before entering ``main_menu``.
+    # Normalise the registered persistent field at the engine startup boundary
+    # so the splashscreen's say screen cannot observe a merge-recovery marker.
+    # ``launch_title_page`` retains its call as a defensive title-entry guard.
+    if ensure_startup_persistent_state not in config.start_callbacks:
+        config.start_callbacks.insert(0, ensure_startup_persistent_state)
 
     def _notification_membership_session_record():
         """Return the one session-local serialisation record for root writes."""

@@ -1,6 +1,7 @@
 define config.name = _("雨停之后")
 define config.version = "0.1.0-internal-audio-rc1"
 define config.window_title = "雨停之后 — 《龙族》非官方同人视觉小说"
+define config.window_icon = "gui/window_icon.png"
 
 define config.screen_width = 1920
 define config.screen_height = 1080
@@ -40,6 +41,7 @@ init python:
     # Ren'Py applies classifications from first match to last match. Admit
     # each distribution document before excluding its source directory.
     build.classify("README.md", "all")
+    build.classify("README_EN.md", "all")
     build.classify("docs/legal/fan-work-notice.md", "all")
 
     # These workspace-only game subtrees must stop traversal before the
@@ -97,6 +99,7 @@ init python:
     build.classify("**", None)
 
     build.documentation("README.md")
+    build.documentation("README_EN.md")
     build.documentation("docs/legal/fan-work-notice.md")
     build.package("win", "zip", "windows renpy all")
 
