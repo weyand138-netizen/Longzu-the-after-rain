@@ -37,4 +37,4 @@ You can also run the project from the Ren'Py SDK directory. Replace `<project-di
 - Creator credit: Andwey
 - Rights to the game text, original UI, original visual assets, and original audio are reserved; commercial reuse is not permitted.
 - The general-purpose framework may be separated from the derivative content and released under the MIT License in the future.
-- Third-party assets must be recorded in `docs/legal/asset-register.md` before they are included in a release build.
+- Third-party material remains subject to its own terms.

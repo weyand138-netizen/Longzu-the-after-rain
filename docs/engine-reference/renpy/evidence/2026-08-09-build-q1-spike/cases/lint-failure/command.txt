@@ -1,9 +1,0 @@
-executable=E:\Longzu\.tools\renpy-8.5.3-sdk\renpy.exe
-working_directory=E:\Longzu\.tools\renpy-8.5.3-sdk
-arguments=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\fixtures\lint-failure | lint
-fixture=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\fixtures\lint-failure
-timeout_ms=120000
-termination_after_ms=0
-termination_kind=none
-environment.APPDATA=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\cases\lint-failure\appdata
-environment.RENPY_LOG_BASE=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\cases\lint-failure\logs

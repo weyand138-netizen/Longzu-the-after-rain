@@ -1,4 +1,0 @@
-# Raw engine evidence is hash-bound; preserve its byte-exact trailing spaces.
-production/qa/evidence/day4-content-validation-2026-08-11/run/stdout.txt -whitespace
-production/qa/evidence/day5-content-validation-2026-08-13-reviewed-verified/run-passed/stdout.txt -whitespace
-production/qa/evidence/day6-content-validation-2026-08-13-final-verified/run-passed/stdout.txt -whitespace

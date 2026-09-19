@@ -1,9 +1,0 @@
-usage: renpy.py [--savedir DIRECTORY] [--trace LEVEL] [--version] [--compile]
-                [--compile-python] [--keep-orphan-rpyc] [--errors-in-editor]
-                [--safe-mode] [--warp WARP] [--json-dump FILE]
-                [--json-dump-private] [--json-dump-common] [-h] [--enable-all]
-                [--overwrite-screenshots] [--hide-header]
-                [--hide-execution {no,hooks,testcases,all}] [--hide-summary]
-                [--report-detailed] [--report-skipped]
-                basedir command [testcase]
-renpy.py: error: unrecognized arguments: --overwrite_screenshots

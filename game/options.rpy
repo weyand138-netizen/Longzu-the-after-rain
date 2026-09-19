@@ -42,7 +42,6 @@ init python:
     # each distribution document before excluding its source directory.
     build.classify("README.md", "all")
     build.classify("README_EN.md", "all")
-    build.classify("docs/legal/fan-work-notice.md", "all")
 
     # These workspace-only game subtrees must stop traversal before the
     # broader game directory admission below.
@@ -58,8 +57,6 @@ init python:
     # final deny rule still determine what is distributed.
     build.classify("game/", "all")
     build.classify("game/**/", "all")
-    build.classify("docs/", "all")
-    build.classify("docs/**/", "all")
 
     # Keep the workspace, generated evidence, original masters, and local
     # saves out of the candidate. The final catch-all below is deliberately
@@ -100,7 +97,6 @@ init python:
 
     build.documentation("README.md")
     build.documentation("README_EN.md")
-    build.documentation("docs/legal/fan-work-notice.md")
     build.package("win", "zip", "windows renpy all")
 
     # P0 keyboard navigation: Tab/Shift+Tab are focus traversal, not skip.

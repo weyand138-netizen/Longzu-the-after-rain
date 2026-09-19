@@ -1,9 +1,0 @@
-executable=E:\Longzu\.tools\renpy-8.5.3-sdk\renpy.exe
-working_directory=E:\Longzu\.tools\renpy-8.5.3-sdk
-arguments=launcher | distribute | --destination | E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\cases\interrupted\artifacts | --package | win | --format | zip | --no-update | E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\fixtures\interrupt
-fixture=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\fixtures\interrupt
-timeout_ms=120000
-termination_after_ms=1500
-termination_kind=external-process-kill
-environment.APPDATA=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\cases\interrupted\appdata
-environment.RENPY_LOG_BASE=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\cases\interrupted\logs

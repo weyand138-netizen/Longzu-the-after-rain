@@ -1,5 +1,0 @@
-path: C:\Users\Andwey\Downloads\好结局剧本标注版.docx
-exists: false
-metadata: not available because the input file is absent
-sha256: not computed because the input file is absent
-owner rule: only fully rewritten high-level structure and themes may be used; this rule is not third-party legal authorization

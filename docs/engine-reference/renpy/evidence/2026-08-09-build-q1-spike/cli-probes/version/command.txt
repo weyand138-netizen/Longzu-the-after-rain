@@ -1,1 +1,0 @@
-executable=E:\Longzu\.tools\renpy-8.5.3-sdk\renpy.exe working_directory=E:\Longzu\.tools\renpy-8.5.3-sdk arguments=--version environment.APPDATA=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\cli-probes\version\appdata environment.RENPY_LOG_BASE=E:\Longzu\docs\engine-reference\renpy\evidence\2026-08-09-build-q1-spike-run12\cli-probes\version\logs
