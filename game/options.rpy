@@ -82,7 +82,9 @@ init python:
     build.classify("game/testcases.rpy", None)
     build.classify("game/testcases.rpyc", None)
 
-    build.classify("game/**.rpy", "all")
+    # Ship compiled game scripts only. Source remains in Git for continued
+    # development but is not needed by players at runtime.
+    build.classify("game/**.rpy", None)
     build.classify("game/**.rpyc", "all")
     build.classify("game/**.py", "all")
     build.classify("game/**.png", "archive")
