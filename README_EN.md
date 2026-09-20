@@ -4,7 +4,8 @@
 
 [![Download for Windows](https://img.shields.io/badge/Download-Windows%20v1--test--0.2.0-0078D4?logo=windows)](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.2.0/After-Rain-v1-test-0.2.0-win.zip)
 
-**[Download the standalone Windows build](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.2.0/After-Rain-v1-test-0.2.0-win.zip)** · [Release notes](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/tag/v1-test-0.2.0)  
+**[Download the standalone Windows build](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.2.0/After-Rain-v1-test-0.2.0-win.zip)** · [Release notes](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/tag/v1-test-0.2.0)
+
 Extract the complete archive, then run `After rain.exe`. Ren'Py and Python are not required.
 
 An unofficial *Dragon Raja* fan visual novel. From Lu Mingfei's limited point of view, the player accompanies Erii through seven days and changes the course of the story through understanding, respect, and preparation.

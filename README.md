@@ -4,7 +4,8 @@
 
 [![下载 Windows 版](https://img.shields.io/badge/Download-Windows%20v1--test--0.2.0-0078D4?logo=windows)](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.2.0/After-Rain-v1-test-0.2.0-win.zip)
 
-**[下载 Windows 独立版](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.2.0/After-Rain-v1-test-0.2.0-win.zip)** · [查看版本说明](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/tag/v1-test-0.2.0)  
+**[下载 Windows 独立版](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.2.0/After-Rain-v1-test-0.2.0-win.zip)** · [查看版本说明](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/tag/v1-test-0.2.0)
+
 下载后请完整解压，再运行 `After rain.exe`；无需安装 Ren'Py 或 Python。
 
 《龙族》非官方同人视觉小说。玩家以路明非的有限视角，陪绘梨衣度过七天，并通过持续的理解、尊重与准备改变故事走向。
