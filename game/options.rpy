@@ -1,5 +1,5 @@
 define config.name = _("雨停之后")
-define config.version = "0.1.0-internal-audio-rc1"
+define config.version = "1-test-0.2.0"
 define config.window_title = "雨停之后 — 《龙族》非官方同人视觉小说"
 define config.window_icon = "gui/window_icon.png"
 
@@ -24,7 +24,7 @@ define config.has_voice = True
 
 # This candidate writes to its own Ren'Py preference/save namespace, leaving
 # an existing player or development build's saves untouched.
-define config.save_directory = "rain-after-internal-audio-rc1-20260907"
+define config.save_directory = "after-rain-v1-test-0.2.0"
 
 init -999 python:
     # Keep the production virtual layout at 1920x1080, but render every
@@ -34,9 +34,9 @@ init -999 python:
         config.screen_height = 720
 
 init python:
-    build.name = "rain-after"
-    build.directory_name = "rain-after-0.1.0-internal-audio-rc1"
-    build.executable_name = "雨停之后"
+    build.name = "After-Rain"
+    build.directory_name = "After-Rain-v1-test-0.2.0"
+    build.executable_name = "After rain"
 
     # Ren'Py applies classifications from first match to last match. Admit
     # each distribution document before excluding its source directory.
