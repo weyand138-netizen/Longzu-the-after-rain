@@ -181,6 +181,12 @@ screen choice(items):
     $ accessibility_settings = persistent.sys_persist_state["settings"]
     $ accessibility_scale = accessibility_settings["font_scale"]
     $ accessibility_high_contrast = accessibility_settings["high_contrast"]
+    default choice_focus_graph = FocusAwareGraph(
+        "choice",
+        ["day1_choice_{}".format(index) for index in range(len(items))],
+    )
+    $ choice_focus_graph.activate()
+    use focus_graph_bindings(choice_focus_graph)
     modal True
     vbox:
         xalign 0.5
@@ -195,7 +201,6 @@ screen choice(items):
                 xfill True
                 text_align 0.5
                 key_events True
-                default_focus (index == 0)
                 background Solid(("#000000" if accessibility_high_contrast else "#24374cdd"))
                 hover_background Solid(("#ffffff" if accessibility_high_contrast else "#38566f"))
                 text_size int(32 * accessibility_scale)
@@ -589,8 +594,6 @@ screen focus_graph_bindings(graph):
     key "focus_graph_next" action Function(graph.move, 1)
     key "focus_graph_previous" action Function(graph.move, -1)
     timer 0.05 action Function(graph.ensure_initial_focus)
-    key "K_DOWN" action Function(graph.move, 1)
-    key "K_UP" action Function(graph.move, -1)
 
 screen chapter_complete(title, message):
     modal True

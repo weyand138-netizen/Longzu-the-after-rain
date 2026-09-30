@@ -9,7 +9,7 @@ moving focus or scrolling.
 
 import renpy
 from renpy.exports import get_widget
-from renpy.display.screen import get_displayable
+from renpy.display.screen import get_displayable, get_screen
 
 
 _active_graph = None
@@ -25,13 +25,22 @@ def _install_key_router():
 
     def routed_key_handler(event):
         graph = _active_graph
+        choice_screen = get_screen("choice")
+        if choice_screen is not None:
+            graph = choice_screen.scope.get("choice_focus_graph", graph)
         if graph is not None and graph.is_active():
             if renpy.display.behavior.map_event(event, "focus_graph_next") or renpy.display.behavior.map_event(event, "K_TAB"):
                 graph.move(1)
-                return True
+                raise renpy.display.core.IgnoreEvent()
             if renpy.display.behavior.map_event(event, "focus_graph_previous") or renpy.display.behavior.map_event(event, "shift_K_TAB"):
                 graph.move(-1)
-                return True
+                raise renpy.display.core.IgnoreEvent()
+            if renpy.display.behavior.map_event(event, "focus_down") or renpy.display.behavior.map_event(event, "K_DOWN"):
+                graph.move(1)
+                raise renpy.display.core.IgnoreEvent()
+            if renpy.display.behavior.map_event(event, "focus_up") or renpy.display.behavior.map_event(event, "K_UP"):
+                graph.move(-1)
+                raise renpy.display.core.IgnoreEvent()
         return original(event)
 
     renpy.display.focus.key_handler = routed_key_handler
@@ -174,13 +183,22 @@ class FocusAwareGraph(object):
         if not self.nodes:
             return
         self.activate()
-        if self.current_id() is not None:
+        current_id = self.current_id()
+        if current_id is not None:
+            widget = self._widget(current_id)
+            focus_item = self._focus_item(widget)
+            focused = renpy.display.focus.get_focused()
+            if focus_item is not None and (focused is not focus_item.widget or self.last_id is None):
+                renpy.display.focus.clear_focus()
+                renpy.display.focus.force_focus(focus_item.widget)
+                self.last_id = current_id
             return
         widget = self._widget(self.default_id)
         if widget is not None:
             self._scroll_target_into_view(self.default_id)
             self.last_id = self.default_id
-            renpy.display.focus.force_focus(widget)
+            focus_item = self._focus_item(widget)
+            renpy.display.focus.force_focus(focus_item.widget if focus_item is not None else widget)
 
     def move(self, delta):
         """Move within the graph; scrolling never activates a node."""
@@ -193,6 +211,8 @@ class FocusAwareGraph(object):
         ids = [node["id"] for node in self.nodes]
         if current in ids:
             index = ids.index(current) + delta
+        elif self.default_id in ids:
+            index = ids.index(self.default_id) + delta
         else:
             index = 0 if delta > 0 else len(ids) - 1
         index = max(0, min(index, len(ids) - 1))
@@ -203,7 +223,20 @@ class FocusAwareGraph(object):
 
         self._scroll_target_into_view(target_id)
         self.last_id = target_id
-        renpy.display.focus.force_focus(target)
+        focus_item = self._focus_item(target)
+        renpy.display.focus.force_focus(focus_item.widget if focus_item is not None else target)
+
+    def run_current(self, actions):
+        """Run the action for the semantic focus without changing selection."""
+
+        ids = [node["id"] for node in self.nodes]
+        current = self.current_id() or self.last_id or self.default_id
+        if current not in ids:
+            return None
+        index = ids.index(current)
+        if index >= len(actions):
+            return None
+        return renpy.display.behavior.run(actions[index])
 
     def is_fully_visible(self, semantic_id):
         viewport_data = self._viewport_rect()

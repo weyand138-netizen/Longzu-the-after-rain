@@ -1,3 +1,3 @@
 """Generated Day 7 authored-source generation identifier."""
 
-DAY7_SOURCE_SHA256 = "f519ffdecf2f9fd4ccbfd7af711eee051079237d9015af2f1ac8713999b1f665"
+DAY7_SOURCE_SHA256 = "29b91390f865ed1de57e51aa5a2c9c1d7ff0117470b93726ef93f3d3820f2076"

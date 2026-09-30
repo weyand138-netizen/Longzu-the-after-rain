@@ -143,6 +143,7 @@ label chapter_day5_family_lie:
     narrator "灯泡发出细微的嗡鸣，窗外的风把桌上的纸角吹起又落下。我把手掌从封面上挪开，免得自己一直压着它像在替她保管答案。她看得见原页的厚度，也看得见摘要的薄；我不再用“更安全”掩盖我删掉了什么。"
     narrator "原页最下面有一段被水渍糊住的备注，我昨夜看了很久也没完全读懂。摘要里没有写它，因为我不知道它意味着什么；可不写并不等于它不存在。我把那页翻到能看见的位置，先告诉她：\"这里我也不确定。\""
     narrator "绘梨衣没有马上看那段备注。她把票或卡放回夹层，先把夹层扣好。然后她才把指尖放到原页边缘，轻轻掀开一角。我没有抢着把纸推平，只等她自己决定要不要翻到那一页。"
+    show story erii_read_archive
     narrator "旧墨水在灯下显得很深。纸上有名字、日期、划掉的路线，还有一处没能核实的空白。她沿着字看，我不知道读到了哪句，便坐着等，没有出声代读。"
     narrator "我问：\"哪一行要我念？\""
     narrator "她把手指停在一个日期旁。那是我能看清的回答。我按着她指的那一行读，不往前也不往后。读到不确定的字时，我说不知道；读完后我把声音停住，等她决定还要不要看下一行。"
@@ -159,6 +160,7 @@ label chapter_day5_family_lie:
             narrator "我说：\"这一页我没有答案。那一页我也没有。\""
             narrator "她听完，手指停在被划去的日期旁。她没有逼我给出完整解释，也没有把纸还给我。我知道把不确定交出去不是把责任一并丢给她；我还得继续对自己隐瞒过的、没核对过的部分负责。"
             narrator "灯下的纸越来越多，桌面几乎被占满。她把票、卡或路线图移到最边上，给原页留出位置。我没有把这种让位说成她愿意承受全部，只承认她现在选择让这些纸仍然摆在眼前。"
+            hide story
             $ event_full_archive_shared = True
             $ cp_day5_full_archive_shared = True
             $ critical_choice_interaction = False
@@ -167,6 +169,7 @@ label chapter_day5_family_lie:
             $ apply_choice("day5_give_safe_summary", {})
             narrator "我收起原页，只留下一个听上去足够安全的结论。她没有接那张被折小的纸。"
             narrator "我把答案说出口时，纸页还压在掌心下面。她没有伸手来拿，我便知道这句结论没有替她看见来源，也不能把她的沉默算作接受。"
+            hide story
             narrator "结论只有几句话，原页却在我掌心里越压越厚。我讲完以后，教室里没有任何东西因此变轻。她的眼睛停在我没递出去的纸边，我能看见那条边，却还是没有把手松开。"
             narrator "我说“这样比较安全”时，自己先听见了这句话里的问题。安全的是我不必让她看见全部，还是她真的少受一点伤？我不能从她没有回应的脸上替自己选一个更好听的答案。"
             narrator "她没有接纸。我没有问她要不要原件，因为这个问题到了这里已经像是让她替我的隐瞒做裁决。我只是把纸继续放在手里，承认此刻没有交出去的来源仍然由我扣着。"
@@ -174,6 +177,7 @@ label chapter_day5_family_lie:
             $ critical_choice_interaction = False
 
     # scene_day5_response_answer
+    scene bg family_archive_evidence_sorted
     $ day5_daily_override_was_unresolved = has_unresolved_token("token_override_daily_choice")
     $ agency_day5_response_derivation_record = derive_route_answer_record(
         {
@@ -197,7 +201,7 @@ label chapter_day5_family_lie:
     else:
         narrator "手边的东西彼此对不上。绘梨衣没有把任何一张纸按成答案。"
     narrator "她看着这些物件之间留下的空隙，等我先承认眼前能做的事，而不是替空隙补上名字。"
-    narrator "两张靠窗票并排，座位号朝上；卡片收进夹层，风险说明露着一角；单人票合起时，只看得见出发时间。这些排列我都看见了，却还不能据此问她讨一个终点。"
+    narrator "她刚才摆出的那一种方案仍留在原处：票面、卡片或空路线图只说明眼前能执行到哪里，不能据此向她讨一个终点。"
     narrator "昨天的事又浮上来：实名带来的代价，卡片上写明的追查风险，单人票留下的出口。物件摆回桌上，也把此前的选择带回今天，没有替我们分出哪条路更对。"
     narrator "她把一张纸往前推一点，又停住。纸没有越过桌子的中线，也没有塞进我的手里。我看见这个距离，便把自己的椅子往后挪开，不让膝盖堵住她想拿回物件的方向。"
     narrator "我问：\"你要我先准备哪一个？\""

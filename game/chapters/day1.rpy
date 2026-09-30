@@ -60,7 +60,7 @@ label chapter_day1_her_own_name:
     hide shop_clerk
     narrator "经过早餐铺和药店时，我们又买了打包的热粥和备用药品。纸袋贴着手心发烫，我没有停下来拆开，沿来时记住的小巷赶往安全屋。"
 
-    scene bg ordinary_rental_room_rain_night
+    scene bg rain_stopped_morning_window
     if not persistent.sys_persist_state["settings"]["reduced_motion"]:
         with dissolve_slow
     narrator "进屋后，我锁好门，拉严临街的窗帘。屋里的桌椅虽然简陋，够我们换下湿衣服，吃完早饭，再商量下一段路。"
@@ -108,6 +108,8 @@ label chapter_day1_her_own_name:
             narrator "我问：\"那件也带着吗？\"她看了一眼，没有伸手。我把包放回她脚边，不再催她回答。"
             $ critical_choice_interaction = False
 
+    show char erii day1_corner as erii_day1
+    show char lu mingfei day1_corner as lu_mingfei_day1
     # scene_day1_food_gesture
     show prop hot_porridge as table_porridge
     show prop medicine_box_blister as table_medicine
@@ -130,6 +132,7 @@ label chapter_day1_her_own_name:
             narrator "我把药盒拿到靠墙的矮柜上，告诉她放在哪里。她喝了一小口粥，又伸手把水杯拉近。"
             narrator "她吃得很慢。我也拆开自己的早餐，坐在桌子的另一边，没有再提药。"
             hide table_porridge
+            show char lu mingfei clear_empty_bowl as lu_mingfei_day1
             narrator "粥见底时，我问还要不要添。她摇头，我才把空碗收到水槽里，用纸巾擦掉桌上的水。"
             $ critical_choice_interaction = False
 
@@ -144,6 +147,8 @@ label chapter_day1_her_own_name:
 
     hide table_porridge
     hide table_medicine
+    hide erii_day1
+    hide lu_mingfei_day1
     # scene_day1_receipt_name
     narrator "收拾纸袋时，路上留下的收据滑到桌边。绘梨衣先按住纸角，再用指尖点了点打印出的名字。"
     show prop receipt_name
@@ -161,7 +166,7 @@ label chapter_day1_her_own_name:
     narrator "临走前，我把药品装回单独的小袋，收进自己的背包。桌上的垃圾也一并带走，没把没吃的药混进她的东西。"
     narrator "绘梨衣重新扣好包带。我看了一眼椅背上留下的衣服，把窗帘拉回原处，确认门外没有人停留。"
     narrator "她拿起门边的伞，等我收好钥匙。我们不能一直待在这里，但出门后往哪边走，还可以一起看。"
-    scene bg black
+    scene bg japanese_residential_street_rain_morning
     if not persistent.sys_persist_state["settings"]["reduced_motion"]:
         with dissolve_slow
     narrator "我推开楼下的门，让她先看清雨里的台阶。她撑开伞，绕过门边的积水，我跟在后面，鞋底踩到水坑边缘，溅湿了裤脚。"

@@ -135,6 +135,7 @@ label chapter_day4_seaside_train:
 
     menu:
         "用真实姓名买两张靠窗票，交给她自己保管":
+            $ critical_choice_interaction = False
             $ apply_choice("day4_buy_two_tickets_real_name", {"preparation": 1, "sacrifice": 1})
             narrator "两张靠窗票落进她掌心。售票员核对姓名时停了一下，我知道这会留下被人找到的代价。"
             $ resource_two_tickets = True
@@ -142,7 +143,9 @@ label chapter_day4_seaside_train:
             $ event_two_window_tickets_acquired = True
             $ cp_day4_two_tickets_complete = True
             $ agency_day4_route_preparation_outcome = "outcome_shared_option_prepared"
+            show story lu_present_identity
             narrator "她先看票面上的姓名，再把两张票错开叠放，让靠窗的位置仍然清楚可见。售票员的停顿没有被解释成偶然，我把自己的证件收回，却没有把票也收回。"
+            show story erii_arrange_route
             narrator "她把票放进路线图折出的夹层，手指在夹层边缘停了一秒，确认两张票都在自己能够取到的位置。代价因此跟着票一起被保存，而不是被藏在售票窗后。"
             narrator "我听见打印机吐纸，也看见她没有把其中一张递还给我。那不保证我们会同行，只说明这两张票现在在她能够决定的位置。"
             narrator "售票员把证件推回来时，玻璃下留着一小块潮气。我把证件收进钱包，没有去碰她手里的票。我的名字已经被窗口看见，车次也被记录下来，这些代价先落在我身上；票留在她掌心，能不能使用却不能由我替她决定。"
@@ -150,14 +153,16 @@ label chapter_day4_seaside_train:
             narrator "我问：\"票要放哪里？\""
             narrator "她把路线图打开，在折痕内侧塞进两张票，又把夹层扣住。她没有把夹层交给我。我看见票已经在她手里有了位置，便把自己的钱包合上。玻璃窗后的售票员转向下一项工作，留下的姓名却不会因为窗口移开就没有代价。"
             narrator "站台广播开始报车次。她先拍了拍夹层，再看向站台方向。我没有把这解释成她决定同行。我只跟着她走到黄线外侧，等她下一次真正把票拿出来。"
-            $ critical_choice_interaction = False
+            hide story
 
         "买一张现金票，让她决定是否独自上车":
+            $ critical_choice_interaction = False
             $ apply_choice("day4_buy_single_ticket_cash", {"preparation": 1})
             narrator "她接过那张票，没有把它塞回我手里，只把路线图折到能一个人展开的那一页。"
             $ resource_single_ticket = True
             $ agency_day4_route_preparation_outcome = "outcome_solo_option_prepared"
             narrator "她把单人票翻到背面，看清开车时间和座位号，再把它夹在收据后面。这个位置让票不会被风吹走，也让她不用现在就宣布是否要使用。"
+            show story erii_arrange_route
             narrator "我把路线图剩下的折痕抚平。她没有把票交还，只用指尖沿着能够独自展开的那一页走了一遍。"
             narrator "我把手停在另一页外侧，没有替她补上一张同行的票。单人票在她指下，能说明的只有她已经看见一个由自己打开的方向。"
             narrator "现金找零落到金属槽里，她没有来拿。我把零钱收起，没有把它和票放在一起。票是她手里的方向，零钱只是我还没花掉的东西；把它们混在一起，反而像我还想用自己的钱替这张单人票附带一个她没要的安排。"
@@ -165,9 +170,10 @@ label chapter_day4_seaside_train:
             narrator "我说：\"你要走的时候，票在你这里。\""
             narrator "她把票压进收据后面，指尖停在写着我名字的那一折。我没有说那行名字意味着我该跟着她，也没有拿回收据。两张纸被她自己放在一起，能说明的只是在今天它们都由她保管。"
             narrator "她把路线图折到单人能看懂的一页。纸上没有第二张票，我也没有拿笔去补。她把那一页收好以后，先朝站台走；我落在半步后面，直到她回头或继续往前，都不替她把距离缩成同行。"
-            $ critical_choice_interaction = False
+            hide story
 
         "只按眼前的路线走，不再留下另一种准备":
+            $ critical_choice_interaction = False
             $ apply_choice("day4_follow_one_route_no_backup", {})
             narrator "路线图上只剩一条被折出来的线。她把联系人纸片收回袖口，没有替我补上空白。"
             $ agency_day4_route_preparation_outcome = "outcome_self_controlled_option_not_prepared"
@@ -178,7 +184,6 @@ label chapter_day4_seaside_train:
             narrator "我把路线图的正面朝她转过去，那里只剩下一条清楚的线。她没有立刻收走，也没有让我按住。她看了一会儿，才把折痕压得更深。我看见的是纸被她折好，不把这说成她赞同我让路线变窄。"
             narrator "我说：\"我没留别的。\""
             narrator "她没有回答。她把路线图放回夹层，纸片仍在袖口。我没有用一句以后再想办法安慰自己，因为没有准备的以后只会在真正需要时显得更空。站台风吹来时，我只帮她挡住飘起的纸角，没去碰她的袖口。"
-            $ critical_choice_interaction = False
 
     # scene_day4_contact_channel
     if (
@@ -201,6 +206,7 @@ label chapter_day4_seaside_train:
 
         menu:
             "用她保留的昵称和游戏币登记独立联系人":
+                $ critical_choice_interaction = False
                 $ apply_choice("day4_register_independent_contact", {"truth": 1})
                 narrator "她自己念出昵称的读法，把游戏币交给窗口后拿走联系人卡，也看完了背面写着的风险。"
                 $ resource_contact_card = True
@@ -213,9 +219,9 @@ label chapter_day4_seaside_train:
                 narrator "我没有替她补充别的称呼，也没有把收据上的名字递过去。昨天她输入的字、今天她念出的读法，都由她自己放到窗口前。我的位置只是在旁边确认她能看见风险，能在卡片滑走前把手收回来。"
                 narrator "卡片回到她掌心后，她没有立刻塞进口袋。她把背面的说明又看了一遍，才把它收进夹层。我问：\"要我记住哪一条？\"她用指尖点了点最下面的时限。我把那一条记下，没有替她决定什么时候使用。"
                 narrator "游戏币交出去时，金属在窗口里响了一声。她看着它消失，没有回头看我。我没有说它换来了一条更好的路。它换来的是一张她亲自看过风险、自己保管的卡；以后能不能用，仍在她手里。"
-                $ critical_choice_interaction = False
 
             "不登记联系人，让她把游戏币和纸片收回去":
+                $ critical_choice_interaction = False
                 $ apply_choice("day4_decline_independent_contact", {})
                 narrator "她把游戏币和写着昵称的纸片收回掌心。她保留了它们，也没有留下能继续联系的号码。"
                 $ event_contact_channel_declined = True
@@ -226,7 +232,6 @@ label chapter_day4_seaside_train:
                 narrator "我没有劝她再想一遍。窗口前的时间、追查的风险和她刚才收回的动作都已经足够清楚。要不要留下地址，她已经通过自己把纸和币收回去给出了能看见的回答；我不能因为自己害怕失去联系，就再把问题推给她。"
                 narrator "我说：\"它们在你这里。\""
                 narrator "她没有出声，只把口袋按平。售票员收走空白卡片，玻璃重新映出我们的影子。我把手从柜台上拿开，知道没有联系通道的路会更窄，却不能把窄说成她必须回头的理由。"
-                $ critical_choice_interaction = False
     else:
         narrator "联系人纸片没有可用的识别物。绘梨衣把它折好，没有假装空白已经能替她留下一条路。"
 

@@ -1,5 +1,5 @@
 define config.name = _("雨停之后")
-define config.version = "1-test-0.2.0"
+define config.version = "1-test-0.3.0"
 define config.window_title = "雨停之后 — 《龙族》非官方同人视觉小说"
 define config.window_icon = "gui/window_icon.png"
 
@@ -24,7 +24,7 @@ define config.has_voice = True
 
 # This candidate writes to its own Ren'Py preference/save namespace, leaving
 # an existing player or development build's saves untouched.
-define config.save_directory = "after-rain-v1-test-0.2.0"
+define config.save_directory = "after-rain-v1-test-0.3.0"
 
 init -999 python:
     # Keep the production virtual layout at 1920x1080, but render every
@@ -35,7 +35,7 @@ init -999 python:
 
 init python:
     build.name = "After-Rain"
-    build.directory_name = "After-Rain-v1-test-0.2.0"
+    build.directory_name = "After-Rain-v1-test-0.3.0"
     build.executable_name = "After rain"
 
     # Ren'Py applies classifications from first match to last match. Admit
@@ -51,6 +51,8 @@ init python:
     build.classify("game/saves/**", None)
     build.classify("game/assets/backgrounds/sources/", None)
     build.classify("game/assets/backgrounds/sources/**", None)
+    build.classify("game/assets/**/variants/", None)
+    build.classify("game/assets/**/variants/**", None)
 
     # Ren'Py decides whether to recurse before it classifies a nested file.
     # These rules permit traversal only; the file-level admissions below and
@@ -81,6 +83,43 @@ init python:
     build.classify("__pycache__/**", None)
     build.classify("game/testcases.rpy", None)
     build.classify("game/testcases.rpyc", None)
+
+    # Keep local QA helpers and visual candidates out of release archives.
+    # They remain in the workspace until their evidence and asset-gate review
+    # are complete.
+    _development_only_modules = (
+        "achievement_ui.py", "action_gates.py", "artifact_lifecycle.py",
+        "blocking_safe_flow.py", "build_evidence.py",
+        "ending_completion_restore.py", "evidence_bundle.py",
+        "external_evidence.py", "gate_execution.py", "journal_gate.py",
+        "load_classification.py", "narrative_partial_manifest.py",
+        "persist_performance.py", "persist_recovery.py",
+        "persistent_boundary.py", "production_closeout.py",
+        "restore_semantics.py", "save_operations.py", "save_performance.py",
+        "save_ui.py", "settings_flow.py", "test_manifest.py",
+        "toolchain_isolation.py",
+    )
+    for _module_name in _development_only_modules:
+        build.classify("game/modules/" + _module_name, None)
+
+    _unadmitted_visual_candidates = (
+        "game/assets/backgrounds/bg_main_menu_golden_hour.png",
+        "game/assets/backgrounds/bg_main_menu_rain_after_station.png",
+        "game/assets/ui/main_menu_golden_hour_tyndall_overlay.png",
+        "game/assets/characters/erii/char_erii_arcade_input.png",
+        "game/assets/characters/erii/char_erii_check_clothing_cuff.png",
+        "game/assets/characters/lu_mingfei/char_lu_mingfei_wait_with_ticket.png",
+        "game/assets/characters/npc/npc_ticket_clerk_check_card.png",
+        "game/assets/characters/npc/npc_ticket_clerk_return_card.png",
+        "game/assets/characters/npc/npc_train_attendant_passing.png",
+        "game/assets/props/prop_archive_original_pages.png",
+        "game/assets/props/prop_archive_summary_pages.png",
+        "game/assets/props/prop_contact_card_blank.png",
+        "game/assets/props/prop_folded_route_map.png",
+        "game/assets/props/prop_train_ticket_blank.png",
+    )
+    for _candidate_path in _unadmitted_visual_candidates:
+        build.classify(_candidate_path, None)
 
     # Ship compiled game scripts only. Source remains in Git for continued
     # development but is not needed by players at runtime.

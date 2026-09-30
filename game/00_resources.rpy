@@ -15,7 +15,11 @@ image bg ordinary_rental_room_rain_night = "assets/backgrounds/bg_ordinary_renta
 image bg clothing_shop_rain_morning = Transform("assets/backgrounds/bg_clothing_shop_rain_morning.png", xysize=(1920, 1080), fit="cover")
 image bg mall_entrance_rain_night = Transform("assets/backgrounds/bg_mall_entrance_rain_night.png", xysize=(1920, 1080), fit="cover")
 image bg quiet_arcade_corner = "assets/backgrounds/bg_quiet_arcade_corner.png"
-image bg station_ticket_window_interior = "assets/backgrounds/bg_station_ticket_window_interior.png"
+image bg station_ticket_window_interior = Transform(
+    "assets/backgrounds/bg_station_ticket_window_reference.png",
+    xysize=(1920, 1080)
+)
+image bg station_ticket_window_action = "assets/backgrounds/bg_station_ticket_window_interior.png"
 image bg rain_stopped_morning_window = "assets/backgrounds/bg_rain_stopped_morning_window.png"
 image bg empty_school_classroom_rain = "assets/backgrounds/bg_empty_school_classroom_rain.png"
 image bg seaside_station_window = "assets/backgrounds/bg_seaside_station_window.png"
@@ -23,6 +27,16 @@ image bg family_archive_table = "assets/backgrounds/bg_family_archive_table.png"
 image bg safehouse_service_exit = "assets/backgrounds/bg_safehouse_service_exit.png"
 image bg red_well_steps = "assets/backgrounds/bg_red_well_steps.png"
 image bg neighborhood_internet_cafe_rain = "assets/backgrounds/bg_neighborhood_internet_cafe_rain.png"
+image bg family_archive_evidence_sorted = Transform("assets/backgrounds/bg_family_archive_evidence_sorted.png", xysize=(1920, 1080))
+image bg safehouse_exit_route_ready = Transform("assets/backgrounds/bg_safehouse_exit_route_ready.png", xysize=(1920, 1080))
+image bg red_well_route_evidence = Transform("assets/backgrounds/bg_red_well_route_evidence.png", xysize=(1920, 1080))
+image bg internet_cafe_closing = Transform("assets/backgrounds/bg_internet_cafe_closing.png", xysize=(1920, 1080))
+image bg internet_cafe_first_guest = Transform("assets/backgrounds/bg_internet_cafe_first_guest.png", xysize=(1920, 1080))
+image bg internet_cafe_next_day = Transform("assets/backgrounds/bg_internet_cafe_later_years.png", xysize=(1920, 1080))
+image bg internet_cafe_later_years = Transform("assets/backgrounds/bg_internet_cafe_later_years_customers.png", xysize=(1920, 1080))
+image bg internet_cafe_written_note = Transform("assets/backgrounds/bg_internet_cafe_written_note.png", xysize=(1920, 1080))
+image bg old_order_closed_door = Transform("assets/backgrounds/bg_old_order_closed_door.png", xysize=(1920, 1080))
+image bg unsent_postcard_dawn = Transform("assets/backgrounds/bg_unsent_postcard_dawn.png", xysize=(1920, 1080))
 image bg coastal_train_dawn = "assets/backgrounds/bg_coastal_train_dawn.png"
 image bg empty_platform_departure = "assets/backgrounds/bg_empty_platform_departure.png"
 image bg old_order_waiting_room = "assets/backgrounds/bg_old_order_waiting_room.png"
@@ -44,7 +58,8 @@ image char lu mingfei inspect_wish_paper = Transform("assets/characters/lu_mingf
 image char lu mingfei offer_wish_paper = Transform("assets/characters/lu_mingfei/char_lu_mingfei_offer_wish_paper.png", xalign=0.68, yalign=1.0, xzoom=-0.60, yzoom=0.60)
 image prop wish_paper = Transform("assets/props/prop_wish_paper.png", xalign=0.53, yalign=0.39, zoom=0.20)
 image prop game_coin_pair = Transform("assets/props/prop_game_coin_pair.png", xalign=0.50, yalign=0.43, zoom=0.34)
-image prop receipt_name = Transform("assets/props/prop_receipt_name.png", xalign=0.78, yalign=0.06, zoom=0.55)
+image prop receipt_name = Transform("assets/props/prop_receipt_name.png", xalign=0.5, yalign=0.5, zoom=0.44)
 image ui life_tree = "assets/ui/life_tree.png"
 image bg warm_room = Solid("#4a3840")
 image bg black = Solid("#08090c")
+image bg japanese_residential_street_rain_morning = Transform("assets/backgrounds/bg_japanese_residential_street_rain_morning.png", xysize=(1920, 1080), fit="cover")
