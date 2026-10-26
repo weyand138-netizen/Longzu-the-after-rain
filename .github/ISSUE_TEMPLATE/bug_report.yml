@@ -1,0 +1,60 @@
+name: 游戏问题反馈
+description: 报告无法启动、流程、存读档、画面、声音或阅读问题。
+title: "[问题反馈] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。这个 Issue 将公开显示，请删除个人信息，并为结局内容标注剧透。
+        不便公开的材料可以先联系 weyand138@gmail.com，无需在这里填写个人邮箱。
+  - type: input
+    id: version
+    attributes:
+      label: 游戏版本或下载文件名
+      placeholder: 例如 v1-test-0.3.1；找不到版本号可填写文件名和下载日期
+    validations:
+      required: true
+  - type: dropdown
+    id: system
+    attributes:
+      label: 系统
+      options:
+        - Windows 11 x86-64
+        - Windows 10 x86-64
+        - 其他（请在复现步骤中说明）
+    validations:
+      required: true
+  - type: input
+    id: chapter
+    attributes:
+      label: 章节／路线及显示设置
+      description: 如知道，请填写章节、分辨率、缩放和游戏字体设置。
+    validations:
+      required: false
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      description: 请包括问题前的关键选择或操作，以及是否每次出现。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 截图或相关错误片段
+      description: 删除个人路径、姓名和邮箱；请勿公开上传完整私人存档。
+    validations:
+      required: false
+
