@@ -39,6 +39,7 @@ def compile_scene_anchors(anchors, read_source):
         if anchor.source not in sources:
             sources[anchor.source] = read_source(anchor.source)
         raw = sources[anchor.source]
+        raw = raw.replace(b"\r\n", b"\n")
         if hashlib.sha256(raw).hexdigest() != anchor.source_sha256 or anchor.line > len(raw.splitlines()):
             raise ValueError("Stale source anchor")
         result[key] = anchor

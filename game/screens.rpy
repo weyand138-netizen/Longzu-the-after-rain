@@ -44,12 +44,17 @@ style settings_volume_slider is slider:
     hover_thumb Composite((22, 34), (0, 6), Solid("#ffffff", xsize=22, ysize=22))
 
 style window:
-    background Solid("#0b1320dd")
+    background Solid("#0b1320")
     padding (54, 34)
 
 default critical_choice_interaction = False
 
 init python:
+    # One typography and geometry contract for every narrative surface.
+    NARRATIVE_FONT_SIZE = 26
+    NARRATIVE_PANEL_SIZE = (1320, 248)
+    NARRATIVE_CHOICE_HEIGHT = 96
+    NARRATIVE_FONT = "assets/fonts/SourceHanSansLite.ttf"
     AUTO_FORWARD_SPEEDS = (2, 3, 4)
     _AUTO_FORWARD_TIME_BY_SPEED = {
         2: 0.50,
@@ -135,31 +140,43 @@ screen say(who, what):
         id "window"
         xalign 0.5
         yalign 0.94
-        xsize 1760
-        yminimum 230
-        background Solid(("#000000f2" if accessibility_high_contrast else "#0b1320dd"))
+        xsize NARRATIVE_PANEL_SIZE[0]
+        ysize NARRATIVE_PANEL_SIZE[1]
+        padding (40, 25)
+        # The same opaque panel in every scene and contrast mode.
+        background Solid("#0b1320")
 
-        vbox:
-            spacing 14
-            if who is not None:
-                text who:
-                    id "who"
-                    size int(36 * accessibility_scale)
-                    color ("#ffffff" if accessibility_high_contrast else "#f2c6d3")
-            text what:
-                id "what"
-                size int(34 * accessibility_scale)
-                color ("#ffffff" if accessibility_high_contrast else "#f5f1e8")
-                line_spacing 10
+        # The fixed inner box prevents speaker/content length from resizing the panel.
+        fixed:
+            xsize 1240
+            ysize 198
+            vbox:
+                xfill True
+                spacing 10
+                if who is not None:
+                    text who:
+                        id "who"
+                        font NARRATIVE_FONT
+                        size int(NARRATIVE_FONT_SIZE * accessibility_scale)
+                        color ("#ffffff" if accessibility_high_contrast else "#f2c6d3")
+                text what:
+                    id "what"
+                    xsize 1240
+                    font NARRATIVE_FONT
+                    size int(NARRATIVE_FONT_SIZE * accessibility_scale)
+                    color ("#ffffff" if accessibility_high_contrast else "#f5f1e8")
+                    line_spacing 7
 
-    if not critical_choice_interaction:
+    # Only the visible decision surface suppresses narrative controls.
+    # A saved reaction can still carry an older critical-choice flag.
+    if not renpy.get_screen("choice"):
         use quick_menu
         $ auto_forward_enabled = renpy.game.preferences.afm_enable
         $ auto_forward_speed = _current_auto_forward_speed()
         hbox:
             id "auto_speed_controls"
-            xalign 0.93
-            yalign 0.91
+            xalign 0.82
+            yalign 0.955
             spacing 16
             for speed in AUTO_FORWARD_SPEEDS:
                 textbutton "[speed]X":
@@ -191,7 +208,8 @@ screen choice(items):
     vbox:
         xalign 0.5
         yalign 0.68
-        xsize 1260
+        id "choice_options"
+        xsize NARRATIVE_PANEL_SIZE[0]
         spacing 18
 
         for index, item in enumerate(items):
@@ -199,14 +217,23 @@ screen choice(items):
                 id "day1_choice_{}".format(index)
                 action audio_ui_feedback_action(item.action, "choice")
                 xfill True
-                text_align 0.5
+                ysize NARRATIVE_CHOICE_HEIGHT
+                padding (28, 16)
+                text_xalign 0.5
+                text_yalign 0.5
+                text_text_align 0.5
                 key_events True
-                background Solid(("#000000" if accessibility_high_contrast else "#24374cdd"))
-                hover_background Solid(("#ffffff" if accessibility_high_contrast else "#38566f"))
-                text_size int(32 * accessibility_scale)
+                background Solid("#24374cdd")
+                hover_background Solid("#38566fdd")
+                text_font NARRATIVE_FONT
+                text_size int(NARRATIVE_FONT_SIZE * accessibility_scale)
+                text_hover_size int(NARRATIVE_FONT_SIZE * accessibility_scale)
+                text_selected_size int(NARRATIVE_FONT_SIZE * accessibility_scale)
+                text_selected_hover_size int(NARRATIVE_FONT_SIZE * accessibility_scale)
+                text_line_spacing 7
                 text_color ("#ffffff" if accessibility_high_contrast else "#f7ead1")
-                text_hover_color ("#000000" if accessibility_high_contrast else "#ffffff")
-                text_hover_underline (current_chapter in ("day3", "day4", "day5", "day6"))
+                text_hover_color "#ffffff"
+                text_hover_underline True
 
 screen quick_menu():
     zorder 100
@@ -236,17 +263,16 @@ screen main_menu():
     )
     use focus_graph_bindings(main_menu_focus_graph)
 
-    if main_menu_high_contrast:
-        add Solid("#0b1826")
-    elif main_menu_weather == "heavy_rain":
-        add Transform("bg main_menu_rainy", xsize=config.screen_width, ysize=config.screen_height)
+    # Accessibility text settings retain the three title artworks.
+    if main_menu_weather == "heavy_rain":
+        add Transform("bg main_menu_rainy", xsize=config.screen_width, ysize=config.screen_height) id "title_weather_background"
     elif main_menu_weather == "overcast":
-        add Transform("bg main_menu_overcast", xsize=config.screen_width, ysize=config.screen_height)
+        add Transform("bg main_menu_overcast", xsize=config.screen_width, ysize=config.screen_height) id "title_weather_background"
     elif main_menu_weather == "dusk":
-        add Transform("bg main_menu_dusk", xsize=config.screen_width, ysize=config.screen_height)
+        add Transform("bg main_menu_dusk", xsize=config.screen_width, ysize=config.screen_height) id "title_weather_background"
     else:
         # A safe static fallback for an unknown persisted title state.
-        add Transform("bg main_menu_rainy", xsize=config.screen_width, ysize=config.screen_height)
+        add Transform("bg main_menu_rainy", xsize=config.screen_width, ysize=config.screen_height) id "title_weather_background"
 
     # Disabled by default while the title page uses only its three static
     # background artworks. Retaining the guarded branch keeps restoration to
@@ -566,9 +592,11 @@ screen preferences(return_action=Return(), show_title_return=True):
                     textbutton "慢" style "settings_option_button" xsize 150 action audio_ui_feedback_action(Preference("text speed", 20))
                     textbutton "标准" style "settings_option_button" xsize 150 action audio_ui_feedback_action(Preference("text speed", 35))
                     textbutton "即时" style "settings_option_button" xsize 150 action audio_ui_feedback_action(Preference("text speed", 0))
-                    textbutton "自发声" style "settings_option_button" xsize 170 action audio_ui_feedback_action(Preference("self voicing", "toggle"))
+                    textbutton audio_settings_self_voicing_label() id "settings_self_voicing" style "settings_option_button" xsize 200 alt audio_settings_self_voicing_alt() action audio_ui_feedback_action(Preference("self voicing", "toggle"))
 
-                text "无障碍选项点击“应用”后保存；文字速度与自发声即时生效。" style "settings_status_text"
+                text audio_settings_self_voicing_status() id "settings_self_voicing_status" style "settings_status_text"
+                text "系统朗读音量独立于游戏音量；音量滑杆调整立即生效，0% 为静音。" style "settings_status_text"
+                text "无障碍选项点击“应用”后保存；文字速度与自朗读即时生效。" style "settings_status_text"
                 textbutton "应用无障碍设置" id "settings_apply" style "settings_option_button" xsize 310 action audio_ui_feedback_action(Function(
                     apply_accessibility_settings,
                     settings_font_scale,
@@ -690,8 +718,8 @@ screen confirm(message, yes_action, no_action):
             hbox:
                 spacing 20
                 xalign 0.5
-                textbutton "确定" action audio_ui_feedback_action(yes_action)
-                textbutton "取消" action audio_ui_feedback_action(no_action)
+                textbutton "确定" id "confirm_yes" action audio_ui_feedback_action(yes_action)
+                textbutton "取消" id "confirm_no" default_focus True action audio_ui_feedback_action(no_action)
 
 screen notify(message):
     zorder 300

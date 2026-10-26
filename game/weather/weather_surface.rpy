@@ -27,12 +27,12 @@ init python:
                 vec2 local = fract(uv * grid) - 0.5;
                 float variation = weather_surface_hash(cell + seed);
                 float phase = fract(weather_time * (0.48 + variation * 0.72) + variation * 31.7);
-                float active = 1.0 - step(0.62, phase);
+                float ripple_active = 1.0 - step(0.62, phase);
                 float radius = (0.045 + phase * 0.31) * (0.70 + variation * 0.55) * scale;
                 vec2 ellipse = vec2(local.x * 0.66, local.y * 2.25);
                 float ring = 1.0 - smoothstep(0.014, 0.034, abs(length(ellipse) - radius));
                 float fade = (1.0 - phase / 0.62);
-                return ring * active * fade;
+                return ring * ripple_active * fade;
             }
         """,
         fragment_400="""

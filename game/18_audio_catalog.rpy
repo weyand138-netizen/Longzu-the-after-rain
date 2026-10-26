@@ -37,5 +37,6 @@ init 50 python:
         audio_scene_install((), ())
         _AUDIO_CATALOG_STATUS = "FAILED"
         _AUDIO_CATALOG_ERROR = type(exc).__name__
+        renpy.log("Audio catalogue admission failed: {}: {}".format(type(exc).__name__, exc))
     else:
         _AUDIO_CATALOG_STATUS = "READY"

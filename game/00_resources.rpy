@@ -31,7 +31,7 @@ image bg family_archive_evidence_sorted = Transform("assets/backgrounds/bg_famil
 image bg safehouse_exit_route_ready = Transform("assets/backgrounds/bg_safehouse_exit_route_ready.png", xysize=(1920, 1080))
 image bg red_well_route_evidence = Transform("assets/backgrounds/bg_red_well_route_evidence.png", xysize=(1920, 1080))
 image bg internet_cafe_closing = Transform("assets/backgrounds/bg_internet_cafe_closing.png", xysize=(1920, 1080))
-image bg internet_cafe_first_guest = Transform("assets/backgrounds/bg_internet_cafe_first_guest.png", xysize=(1920, 1080))
+image bg internet_cafe_first_guest = Transform("assets/backgrounds/bg_internet_cafe_first_guest_miko.png", xysize=(1920, 1080))
 image bg internet_cafe_next_day = Transform("assets/backgrounds/bg_internet_cafe_later_years.png", xysize=(1920, 1080))
 image bg internet_cafe_later_years = Transform("assets/backgrounds/bg_internet_cafe_later_years_customers.png", xysize=(1920, 1080))
 image bg internet_cafe_written_note = Transform("assets/backgrounds/bg_internet_cafe_written_note.png", xysize=(1920, 1080))
@@ -62,4 +62,27 @@ image prop receipt_name = Transform("assets/props/prop_receipt_name.png", xalign
 image ui life_tree = "assets/ui/life_tree.png"
 image bg warm_room = Solid("#4a3840")
 image bg black = Solid("#08090c")
+image bg school_exit_dusk = "assets/backgrounds/bg_school_exit_dusk.png"
+image bg residential_stairwell_night = "assets/backgrounds/bg_residential_stairwell_night.png"
+image bg residential_street_after_rain_night = "assets/backgrounds/bg_residential_street_after_rain_night.png"
 image bg japanese_residential_street_rain_morning = Transform("assets/backgrounds/bg_japanese_residential_street_rain_morning.png", xysize=(1920, 1080), fit="cover")
+
+# Owner-authorized ending CGs, 2026-10-22. Native scene state supports rollback/save/load.
+image bg cg_rain_stops_01 = "assets/backgrounds/cg_rain_stops_01.png"
+image bg cg_rain_stops_02 = "assets/backgrounds/cg_rain_stops_02.png"
+image bg cg_rain_stops_03 = "assets/backgrounds/cg_rain_stops_03.png"
+image bg cg_rain_stops_04 = "assets/backgrounds/cg_rain_stops_04.png"
+image bg cg_rain_stops_05 = "assets/backgrounds/cg_rain_stops_05.png"
+image bg cg_rain_stops_06 = "assets/backgrounds/cg_rain_stops_06.png"
+image bg cg_rain_stops_07 = "assets/backgrounds/cg_rain_stops_07.png"
+image bg cg_rain_stops_08 = "assets/backgrounds/cg_rain_stops_08.png"
+image bg cg_her_own_name_01 = "assets/backgrounds/cg_her_own_name_01.png"
+image bg cg_her_own_name_02 = "assets/backgrounds/cg_her_own_name_02.png"
+image bg cg_see_the_sea_01 = "assets/backgrounds/cg_see_the_sea_01.png"
+image bg cg_see_the_sea_02 = "assets/backgrounds/cg_see_the_sea_02.png"
+image bg cg_one_person_train_01 = "assets/backgrounds/cg_one_person_train_01.png"
+image bg cg_one_person_train_02 = "assets/backgrounds/cg_one_person_train_02.png"
+image bg cg_golden_cage_01 = "assets/backgrounds/cg_golden_cage_01.png"
+image bg cg_golden_cage_02 = "assets/backgrounds/cg_golden_cage_02.png"
+image bg cg_unsent_postcard_01 = "assets/backgrounds/cg_unsent_postcard_01.png"
+image bg cg_unsent_postcard_02 = "assets/backgrounds/cg_unsent_postcard_02.png"

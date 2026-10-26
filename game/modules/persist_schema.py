@@ -24,7 +24,7 @@ SETTING_FIELDS = (
     "screen_shake_enabled",
 )
 NORMATIVE_LEAF_COUNT = 12
-ALLOWED_FONT_SCALES = (0.8, 1.0, 1.2, 1.5, 2.0)
+ALLOWED_FONT_SCALES = (0.8, 1.0, 1.2, 1.25, 1.5, 2.0)
 
 
 class PersistSchemaError(ValueError):

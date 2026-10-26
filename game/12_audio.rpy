@@ -1,7 +1,6 @@
-# Session-only notification summary coordinator.  This Story intentionally
-# admits no authored cue, asset, native `renpy.music` call, device probe, or
-# player-facing audio setting.  It nevertheless makes the live durable-result
-# handoff and no-replay boundary real so a later admitted adapter has one owner.
+# Session-only notification summary coordinator. The summary identity has one
+# claim owner; the internally admitted neutral cue uses the shared SFX adapter.
+# The visual receipt and durable membership/save semantics remain unchanged.
 
 init python:
     import builtins
@@ -11,6 +10,7 @@ init python:
         LIVE_NOTIFICATION_SUMMARY,
         begin_new_game_reconstruction,
         clear_load_quarantine_after_validation,
+        claim_sealed_summary,
         dispatch_sealed_summary,
         enter_blocking_safe_exit,
         enter_load_quarantine,
@@ -29,14 +29,16 @@ init python:
     def _new_notification_session_record():
         """Build the exact mutable record stored only in ``renpy.session``."""
 
-        return {
-            "lock": threading.RLock(),
-            "snapshot": new_notification_session_snapshot(),
-            "generation": 0,
+        # Explicit builtins.dict avoids Ren'Py's RevertableDict rewriting.
+        # This session-only lock/snapshot must never join player rollback logs.
+        return builtins.dict(
+            lock=threading.RLock(),
+            snapshot=new_notification_session_snapshot(),
+            generation=0,
             # This is a transient visual receipt only. It carries no raw
             # membership, summary identity, claim, or retry information.
-            "presentation_receipt_pending": False,
-        }
+            presentation_receipt_pending=False,
+        )
 
     def _notification_session_record():
         """Return the sole mutable owner; never persist it in save/root state."""
@@ -185,25 +187,51 @@ init python:
         }
 
     def _dispatch_notification_summary(summary):
-        """The one central dispatcher callsite; no production output target exists yet."""
+        """Publish the sole claim before touching any real output input."""
 
         record = _notification_session_record()
         with record["lock"]:
+            claim = claim_sealed_summary(
+                record["snapshot"], summary, provenance=LIVE_NOTIFICATION_SUMMARY,
+            )
+            record["snapshot"] = claim.snapshot
+            record["generation"] += 1
+            if claim.reason != "CLAIMED_PRE_GATE":
+                return claim
+            # A reentrant presenter already sees a consumed occurrence here.
+            # Only now may the isolated test config or real preferences,
+            # device, lifecycle, asset and shared pool be inspected.
             test_config = _notification_test_dispatch_config()
+            plan = None
+            if test_config is None:
+                try:
+                    preferences, gates, plan = audio_notification_output_inputs_locked(
+                        record, claim.occurrence_id,
+                    )
+                except Exception:
+                    preferences, gates = None, None
+            else:
+                preferences, gates = test_config["preferences"], test_config["gates"]
             decision = dispatch_sealed_summary(
                 record["snapshot"],
                 summary,
                 provenance=LIVE_NOTIFICATION_SUMMARY,
-                preferences=None if test_config is None else test_config["preferences"],
-                gates=None if test_config is None else test_config["gates"],
+                preferences=preferences,
+                gates=gates,
                 test_sink_available=test_config is not None,
+                production_adapter_available=test_config is None,
+                preclaimed=claim,
             )
             record["snapshot"] = decision.snapshot
             record["generation"] += 1
             if decision.adapter_attempt_required:
-                # This is an ADR-0007-isolated test record, not a cue, asset,
-                # native audio call, device probe, or player-visible feature.
-                test_config["sink"].append(decision.occurrence_id)
+                if test_config is not None:
+                    # Keep the historical ADR-0007 test sink fully isolated.
+                    test_config["sink"].append(decision.occurrence_id)
+                else:
+                    audio_adapter_dispatch_notification_locked(
+                        record, decision.occurrence_id, plan,
+                    )
             return decision
 
     def notification_presentation_safe_boundary_dispatch():

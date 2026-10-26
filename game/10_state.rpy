@@ -54,6 +54,7 @@ init python:
         classify_startup_persist_root,
     )
     from modules.persist_schema import (
+        ALLOWED_FONT_SCALES,
         build_fresh_persist_root,
         snapshot_persist_root,
         validate_persist_root,
@@ -399,18 +400,21 @@ init python:
             record = renpy.session.get(_NOTIFICATION_MEMBERSHIP_SESSION_KEY)
             if record is None:
                 operation_lock = threading.RLock()
-                record = {
-                    "operation_lock": operation_lock,
-                    "coordinator": NotificationMembershipOperationCoordinator(
+                # A session owner must not enter Ren'Py's rollback mutation
+                # log. A literal here becomes a RevertableDict and can retain
+                # its RLocks in save serialization after notification activity.
+                record = builtins.dict(
+                    operation_lock=operation_lock,
+                    coordinator=NotificationMembershipOperationCoordinator(
                         lambda: persistent.sys_persist_state,
                         _replace_persistent_root,
                         _durable_flush_bridge,
                         operation_lock=operation_lock,
                     ),
-                }
+                )
                 renpy.session[_NOTIFICATION_MEMBERSHIP_SESSION_KEY] = record
             if (
-                type(record) is not dict
+                type(record) is not builtins.dict
                 or tuple(record.keys()) != ("operation_lock", "coordinator")
                 or not isinstance(record["coordinator"], NotificationMembershipOperationCoordinator)
             ):
@@ -563,7 +567,7 @@ init python:
     ):
         """Commit the five project accessibility settings as one batch."""
 
-        allowed_scales = (0.8, 1.0, 1.2, 1.5, 2.0)
+        allowed_scales = ALLOWED_FONT_SCALES
         if font_scale not in allowed_scales:
             raise ValueError("Unsupported font scale: {!r}".format(font_scale))
         record = _notification_membership_session_record()
@@ -688,6 +692,9 @@ label after_load:
     if not _after_load_terminal_state_valid:
         jump ending_resolution_safe_boundary
     $ notification_after_load_semantic_validation_succeeded()
+    # Repair the removed Day 3 black departure scene in older saves.
+    if current_chapter == "day3" and renpy.showing("bg black"):
+        scene bg residential_stairwell_night
     return
 
 label ending_resolution_safe_boundary:

@@ -1,27 +1,29 @@
 # 雨停之后
 
-[English](README_EN.md)
+《龙族》免费、非商业、非官方同人视觉小说。制作：Andwey。
 
-[![下载 Windows 版](https://img.shields.io/badge/Download-Windows%20v1--test--0.3.0-0078D4?logo=windows)](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.3.0/After-Rain-v1-test-0.3.0-win.zip)
+## 下载与游玩
 
-**[下载 Windows 独立版](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.3.0/After-Rain-v1-test-0.3.0-win.zip)** · [查看全部版本](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases)
+[下载 Windows RC.1 游戏包](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/tag/v1-rc.1-local-20261024) · [全部版本](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases)
 
-下载后请完整解压，再运行 `After rain.exe`；无需安装 Ren'Py 或 Python。
+完整解压 Release 的 Windows ZIP，双击 `雨停之后.exe`。无需另外安装 Python 或 Ren’Py，并请保留同目录的运行文件。目标平台为 Windows 10/11 x86-64，本轮实际启动验证在 Windows 11 完成。
 
-《龙族》非官方同人视觉小说。玩家以路明非的有限视角，陪绘梨衣度过七天，并通过持续的理解、尊重与准备改变故事走向。
+当前内容包含序章至 Day 7、六个结局及 18 张结局 CG。当前版本为 `1-rc.1-local-20261024`；修复说明、已知问题和文件校验值见对应 Release。原存档格式和目录标识继续沿用。
 
-当前版本包含可玩的序章至 Day 7、六个确定性结局、原创图像与音频资源，以及存档和无障碍支持。
+## 从源码构建
 
-> 本项目为免费、非商业、非官方同人作品，与原作者、出版社及任何官方授权方无关。项目不复制原著段落，不使用官方插画、音乐、Logo 或游戏素材。
+使用 [Ren’Py 8.5.3 官方 SDK](https://www.renpy.org/release/8.5.3)打开本项目并构建 Windows ZIP，再用公开打包脚本生成玩家包：
 
-## v1-test-0.3.0 更新
+```console
+python scripts/package-player-windows.py --input After-Rain-v1-rc.1-local-20261024-win.zip --sdk-zip renpy-8.5.3-sdk.zip --output 雨停之后-Windows.zip
+```
 
-- 补充 Day 1–Day 7 与结局阶段的场景画面和角色动作。
-- 优化部分叙事衔接、跨日回响与结局余波。
-- 改进键盘选择焦点、无障碍操作和发行包内容过滤。
+脚本会核验官方 SDK ZIP 的 SHA-256，使用原始官方启动器，将入口命名为 `雨停之后.exe`，并移除随包说明和测试材料。游戏代码与资源保持构建产物身份；运行所需引擎、字体许可证继续保留。
 
-## 内容与授权
+## 问题反馈与许可
 
-- 制作人署名：Andwey
-- 游戏文本、原创 UI、原创图像与音频：权利保留，未授予商业复用许可。
-- 第三方素材仍受各自权利条款约束。
+请在 [Issues](https://github.com/weyand138-netizen/Longzu-the-after-rain/issues) 记录版本、章节或路线、复现步骤、设备信息和截图或错误信息。
+
+当前为 RC 候选。完整人工体验、中文自朗读实听和目标硬件验证仍有待完成；本轮跳过长时间稳定性测试。软件测试结果不代表这些项目已经获得人工验收。
+
+本作与原作者、出版社及任何官方授权方无关联。项目原创内容的使用条件见 `LICENSE`；第三方软件及字体遵循其各自许可证。

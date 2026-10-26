@@ -1,27 +1,29 @@
 # After the Rain
 
-[简体中文](README.md)
+A free, non-commercial, unofficial Dragon Raja fan visual novel by Andwey.
 
-[![Download for Windows](https://img.shields.io/badge/Download-Windows%20v1--test--0.3.0-0078D4?logo=windows)](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.3.0/After-Rain-v1-test-0.3.0-win.zip)
+## Download and play
 
-**[Download the standalone Windows build](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/download/v1-test-0.3.0/After-Rain-v1-test-0.3.0-win.zip)** · [All releases](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases)
+[Download the Windows RC.1 build](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases/tag/v1-rc.1-local-20261024) · [All releases](https://github.com/weyand138-netizen/Longzu-the-after-rain/releases)
 
-Extract the complete archive, then run `After rain.exe`. Ren'Py and Python are not required.
+Fully extract the Windows ZIP from the Release, then run `雨停之后.exe`. No separate Python or Ren’Py installation is needed. Keep the remaining runtime files alongside it. Windows 10/11 x86-64 is the target; this build's startup was verified on Windows 11.
 
-An unofficial *Dragon Raja* fan visual novel. From Lu Mingfei's limited point of view, the player accompanies Erii through seven days and changes the course of the story through understanding, respect, and preparation.
+The game contains the prologue, Days 1–7, six endings and 18 ending CGs. Build: `1-rc.1-local-20261024`. See the Release for changes, known issues and checksums. The existing save format and save-directory identifier are retained.
 
-The current version includes a playable prologue through Day 7, six deterministic endings, original visual and audio assets, save support, and accessibility options.
+## Build from source
 
-> This is a free, non-commercial, unofficial fan work. It is not affiliated with or endorsed by the original author, publisher, or any official rights holder. It does not reproduce passages from the original novels or use official illustrations, music, logos, or game assets.
+Build a Windows ZIP with the [official Ren’Py 8.5.3 SDK](https://www.renpy.org/release/8.5.3), then run:
 
-## v1-test-0.3.0 Update
+```console
+python scripts/package-player-windows.py --input After-Rain-v1-rc.1-local-20261024-win.zip --sdk-zip renpy-8.5.3-sdk.zip --output 雨停之后-Windows.zip
+```
 
-- Adds new scene artwork and character actions across Days 1–7 and the endings.
-- Refines narrative transitions, cross-day echoes, and ending aftermaths.
-- Improves keyboard choice focus, accessibility behavior, and release-package filtering.
+The script checks the official SDK ZIP SHA-256, uses stock official launchers, renames the entry point to `雨停之后.exe`, and excludes root readmes/review materials. Game code and assets are preserved; required runtime and font licenses remain included.
 
-## Content and Rights
+## Feedback and license
 
-- Creator credit: Andwey
-- Rights to the game text, original UI, original visual assets, and original audio are reserved; commercial reuse is not permitted.
-- Third-party material remains subject to its own terms.
+Report issues through [Issues](https://github.com/weyand138-netizen/Longzu-the-after-rain/issues) with the version, chapter or route, reproduction steps, device details and screenshots or errors.
+
+This is an RC candidate. Complete human playthroughs, audible Chinese self-voicing and target-hardware verification remain pending. Extended soak testing was skipped. Automated results do not imply human acceptance of those items.
+
+This project is not endorsed by any official rights holder. Original project content is governed by `LICENSE`; third-party components retain their respective licenses.

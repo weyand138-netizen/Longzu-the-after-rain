@@ -35,7 +35,7 @@ init python:
 label splashscreen:
     scene bg black
     with dissolve
-    centered "{size=38}非官方 · 免费 · 非商业同人作品{/size}\n\n本作不代表原作者、出版社或任何官方授权方。\n请勿将本作内容视为原作正典。"
+    centered "{size=38}非官方 / 免费 / 非商业同人作品{/size}\n\n本作不代表原作者、出版社或任何官方授权方。\n请勿将本作内容视为原作正典。"
     pause 1.5
     return
 

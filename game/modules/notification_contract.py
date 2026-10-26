@@ -105,7 +105,7 @@ class NotificationSessionSnapshot:
 
 @dataclass(frozen=True)
 class NotificationDispatchDecision:
-    """A claimed terminal decision; the caller may invoke a test sink for PLAY."""
+    """A claim/terminal decision; PLAY permits one isolated output attempt."""
 
     snapshot: NotificationSessionSnapshot
     occurrence_id: str
@@ -551,16 +551,13 @@ def seal_pending_live_summary(
     ), summary
 
 
-def dispatch_sealed_summary(
+def claim_sealed_summary(
     snapshot: NotificationSessionSnapshot,
     summary: NotificationSummary,
     *,
     provenance: str,
-    preferences: Mapping[str, Any] | None,
-    gates: Mapping[str, Any] | None,
-    test_sink_available: bool,
 ) -> NotificationDispatchDecision:
-    """Claim before all gates and return one legal terminal disposition."""
+    """Claim without reading output inputs; the runtime installs this first."""
 
     if type(snapshot) is not NotificationSessionSnapshot:
         raise NotificationContractError("notification session snapshot has an invalid type")
@@ -591,6 +588,51 @@ def dispatch_sealed_summary(
         "CLAIMED_PRE_GATE",
     )
     claimed_snapshot = replace(snapshot, claims=snapshot.claims + (provisional_claim,))
+    return NotificationDispatchDecision(
+        claimed_snapshot, occurrence, provisional_claim.disposition,
+        provisional_claim.reason, False, True,
+    )
+
+
+def dispatch_sealed_summary(
+    snapshot: NotificationSessionSnapshot,
+    summary: NotificationSummary,
+    *,
+    provenance: str,
+    preferences: Mapping[str, Any] | None,
+    gates: Mapping[str, Any] | None,
+    test_sink_available: bool,
+    production_adapter_available: bool = False,
+    preclaimed: NotificationDispatchDecision | None = None,
+) -> NotificationDispatchDecision:
+    """Finalize the sole claim; legacy test-sink callers can still claim here.
+
+    Runtime callers must publish ``claim_sealed_summary(...).snapshot`` before
+    obtaining preferences or gates, then pass that claim as ``preclaimed``.
+    No second occurrence identity or authored-SFX claim is created.
+    """
+    claim_decision = preclaimed
+    if claim_decision is None:
+        claim_decision = claim_sealed_summary(snapshot, summary, provenance=provenance)
+    else:
+        # A reentrant duplicate may append diagnostics while output inputs are
+        # inspected. Preserve the latest snapshot, but require this occurrence's
+        # original provisional claim to remain present and unfinalized.
+        if (type(claim_decision) is not NotificationDispatchDecision
+                or claim_decision.reason != "CLAIMED_PRE_GATE"
+                or type(snapshot) is not NotificationSessionSnapshot):
+            raise NotificationContractError("invalid provisional notification claim")
+        current = tuple(c for c in snapshot.claims if c.occurrence_id == claim_decision.occurrence_id)
+        if (len(current) != 1 or current[0].reason != "CLAIMED_PRE_GATE"
+                or current[0].summary_id != summary.notification_summary_id
+                or current[0].provenance != provenance
+                or current[0] not in claim_decision.snapshot.claims):
+            raise NotificationContractError("invalid provisional notification claim")
+    if claim_decision.reason != "CLAIMED_PRE_GATE":
+        return claim_decision
+    claimed_snapshot = claim_decision.snapshot if preclaimed is None else snapshot
+    occurrence = claim_decision.occurrence_id
+    sealed = summary
     disposition = "SUPPRESSED_CONSUMED"
     reason = "NONLIVE_PROVENANCE"
     attempt = False
@@ -624,14 +666,17 @@ def dispatch_sealed_summary(
                 elif not gate_values["pool_admitted"]:
                     disposition = "DROPPED_CONSUMED"
                     reason = "POOL_DROP"
-                elif not test_sink_available:
+                elif not test_sink_available and not production_adapter_available:
                     disposition = "INVALID"
                     reason = "NO_ADMITTED_OUTPUT_TARGET"
                 else:
                     disposition = "PLAY"
-                    reason = "TEST_SINK_DISPATCH"
+                    reason = "TEST_SINK_DISPATCH" if test_sink_available else "PRODUCTION_ADAPTER_DISPATCH"
                     attempt = True
     claim = NotificationClaim(occurrence, sealed.notification_summary_id, provenance, disposition, reason)
-    updated = replace(claimed_snapshot, claims=claimed_snapshot.claims[:-1] + (claim,))
+    updated = replace(claimed_snapshot, claims=tuple(
+        claim if prior.occurrence_id == occurrence else prior
+        for prior in claimed_snapshot.claims
+    ))
     updated = _diagnose(updated, occurrence, provenance, disposition, reason)
     return NotificationDispatchDecision(updated, occurrence, disposition, reason, attempt, True)

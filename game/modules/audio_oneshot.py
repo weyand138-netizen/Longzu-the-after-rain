@@ -64,6 +64,17 @@ def retire_oneshots(pool):
 def dispatch_claimed_oneshot(pool, cue, occurrence, eligible):
     if occurrence not in pool.claimed or not isinstance(cue, OneShotCue):
         raise ValueError("Dispatcher requires one previously claimed valid request")
+    return allocate_oneshot_voice(pool, cue, occurrence, eligible)
+
+
+def allocate_oneshot_voice(pool, cue, occurrence, eligible):
+    """Allocate only; the calling owner must already have consumed its claim.
+
+    Authored cues use ``pool.claimed``; notification summaries use their sole
+    session snapshot claim instead. Sharing voices never merges those ledgers.
+    """
+    if not isinstance(cue, OneShotCue) or not isinstance(occurrence, str) or not occurrence:
+        raise ValueError("Allocator requires a valid cue and an owner-claimed occurrence")
     if not eligible:
         return OneShotDecision(pool, "SUPPRESSED_CONSUMED")
     voices = list(pool.voices)

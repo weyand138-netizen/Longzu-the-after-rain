@@ -1,5 +1,5 @@
 define config.name = _("雨停之后")
-define config.version = "1-test-0.3.0"
+define config.version = "1-rc.1-local-20261024"
 define config.window_title = "雨停之后 — 《龙族》非官方同人视觉小说"
 define config.window_icon = "gui/window_icon.png"
 
@@ -29,19 +29,21 @@ define config.save_directory = "after-rain-v1-test-0.3.0"
 init -999 python:
     # Keep the production virtual layout at 1920x1080, but render every
     # engine-hosted testcase at the Sprint 1 720p accessibility baseline.
-    if renpy.game.args.command == "test":
+    if renpy.game.args.command == "test" and not __import__("os").environ.get("LONGZU_PRODUCTION_LAYOUT"):
         config.screen_width = 1280
         config.screen_height = 720
 
 init python:
     build.name = "After-Rain"
-    build.directory_name = "After-Rain-v1-test-0.3.0"
+    build.directory_name = "After-Rain-v1-rc.1-local-20261024"
     build.executable_name = "After rain"
 
     # Ren'Py applies classifications from first match to last match. Admit
     # each distribution document before excluding its source directory.
     build.classify("README.md", "all")
     build.classify("README_EN.md", "all")
+    build.classify("THIRD_PARTY_NOTICES.md", "all")
+    build.classify("game/assets/fonts/SourceHanSansLite-OFL-1.1.txt", "all")
 
     # These workspace-only game subtrees must stop traversal before the
     # broader game directory admission below.
@@ -121,8 +123,13 @@ init python:
     for _candidate_path in _unadmitted_visual_candidates:
         build.classify(_candidate_path, None)
 
-    # Ship compiled game scripts only. Source remains in Git for continued
-    # development but is not needed by players at runtime.
+    # Audio admission verifies chapter bytes and statement locations at init.
+    # Archive precisely those runtime inputs before the general source exclusion.
+    for _audio_chapter in ("prologue", "day1", "day2", "day3", "day4",
+                          "day5", "day6", "day7", "endings"):
+        build.classify("game/chapters/" + _audio_chapter + ".rpy", "archive")
+
+    # Other scripts need only their compiled form at runtime.
     build.classify("game/**.rpy", None)
     build.classify("game/**.rpyc", "all")
     build.classify("game/**.py", "all")

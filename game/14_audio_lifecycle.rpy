@@ -8,7 +8,9 @@ init 20 python:
     _AUDIO_RESTORE_CONTEXTS = {}
     _AUDIO_GATED_CHANNELS = tuple(
         channel for pair in _AUDIO_CONTINUOUS_CHANNELS.values() for channel in pair
-    ) + tuple("audio_oneshot_{}".format(i) for i in range(4))
+    ) + tuple("audio_oneshot_{}".format(i) for i in range(4)) + (
+        "sound", "audio_role_voice",
+    )
 
     def _audio_engine_gate_supported():
         try:
@@ -32,6 +34,14 @@ init 20 python:
         except Exception:
             return True
 
+    def _audio_role_voice_raw_enabled():
+        try:
+            gain = _preferences.volumes.get("role_voice", 1.0)
+            return (type(gain) in (int, float) and 0 < gain <= 1 and
+                    _preferences.mute.get("role_voice", False) is False)
+        except Exception:
+            return False
+
     def _audio_stop_authored_locked(record):
         stopped = True
         for name in _AUDIO_GATED_CHANNELS:
@@ -44,6 +54,8 @@ init 20 python:
             _audio_lifecycle_locked(record)["phase"] = "STOP_FAILED"
         else:
             record["oneshot_faulted"] = False
+            record["ui_feedback_faulted"] = False
+            record["role_voice_faulted"] = False
             record["oneshot_pool"] = retire_oneshots(_audio_oneshot_pool_locked(record))
         return stopped
 
@@ -74,6 +86,32 @@ init 20 python:
             if not oneshot_open and record.get("oneshot_gate_open") is not False:
                 _audio_stop_oneshots_locked(record)
             record["oneshot_gate_open"] = oneshot_open
+            # UI feedback is immediate on the stock sound channel, but owns no
+            # resume queue. Close it on the same project/TTS/lifecycle boundary
+            # as authored one-shots so a click cannot leak into self-voicing or
+            # survive a load quarantine. The physical coefficient is the only
+            # project-gain multiplier; secondary_volume stays at unity.
+            ui_open = bool(gate and _audio_oneshot_raw_enabled() and
+                           not record.get("ui_feedback_faulted", False))
+            if not ui_open and record.get("ui_feedback_gate_open") is not False:
+                try:
+                    renpy.music.stop(channel="sound", fadeout=0)
+                except Exception as exc:
+                    record["ui_feedback_faulted"] = True
+                    record["ui_feedback_last_fault"] = type(exc).__name__
+            record["ui_feedback_gate_open"] = ui_open
+            # No role-voice catalogue or dispatcher is admitted. Its reserved
+            # channel nevertheless participates in every stop/gate now, with
+            # a mixer independent from Ren'Py/SAPI's voice preference.
+            role_open = bool(gate and _audio_role_voice_raw_enabled() and
+                             not record.get("role_voice_faulted", False))
+            if not role_open and record.get("role_voice_gate_open") is not False:
+                try:
+                    renpy.music.stop(channel="audio_role_voice", fadeout=0)
+                except Exception as exc:
+                    record["role_voice_faulted"] = True
+                    record.setdefault("continuous_faults", {})["audio_role_voice"] = type(exc).__name__
+            record["role_voice_gate_open"] = role_open
             for name in _AUDIO_GATED_CHANNELS:
                 channel = None
                 layer = next((key for key, pair in _AUDIO_CONTINUOUS_CHANNELS.items() if name in pair), None)
@@ -82,6 +120,10 @@ init 20 python:
                     channel = _audio_engine.get_channel(name)
                     channel_gate = 0.0 if layer and states[layer].status == "FAULT_SILENT" else gate
                     if name in _AUDIO_ONESHOT_CHANNELS and not oneshot_open:
+                        channel_gate = 0.0
+                    if name == "sound" and not ui_open:
+                        channel_gate = 0.0
+                    if name == "audio_role_voice" and not role_open:
                         channel_gate = 0.0
                     channel.set_volume(channel_gate)
                     if _audio_engine.pcm_ok:
@@ -94,6 +136,10 @@ init 20 python:
                     except Exception:
                         pass
                     record.setdefault("continuous_faults", {})[name] = type(exc).__name__
+                    if name == "sound":
+                        record["ui_feedback_faulted"] = True
+                    elif name == "audio_role_voice":
+                        record["role_voice_faulted"] = True
                     affected = _AUDIO_CONTINUOUS_CHANNELS[layer] if layer else (name,)
                     if layer:
                         states[layer] = fault_continuous(states[layer])

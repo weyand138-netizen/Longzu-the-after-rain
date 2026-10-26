@@ -1,8 +1,10 @@
-"""The reviewed production admission list for the internal audio test build.
+"""The explicit admission list for the internal audio scene-audition build.
 
 This data is intentionally explicit.  It is based on the narrated setting and
 the named action at each source position, never on a background asset name.
-No entry carries an output gain: the original approved bytes are played as-is.
+No entry carries an output gain. Existing assets retain their reviewed bytes;
+the six 2026-10-24 additions reuse original drafts for internal scene audition,
+not a claim of physical-device listening or release approval.
 """
 from .audio_catalog import AudioAssetRecord, AudioContextRange, AudioOneShotBinding
 from .audio_continuous import ContinuousCue
@@ -33,6 +35,12 @@ RUNTIME_AUDIO_ASSETS = (
     AudioAssetRecord("sfx.interior_step", "assets/audio/sfx/s06_step_interior.wav", "cfb7e7e2a9db6ed8e4f7f9c23f93c95543bce193e2fee3bfa47cac2174d44dde"),
     AudioAssetRecord("sfx.two_coins", "assets/audio/sfx/s09_two_coins.wav", "afaa0bf95e190832ebb21776a262b5003de7878f14a28608dc80bbb7101b99cf"),
     AudioAssetRecord("sfx.keyboard", "assets/audio/sfx/s10_keyboard.wav", "4556a600f5fd4e154850fbfd75529cd13305de23c47f1b282764cf14d1ad585d"),
+    AudioAssetRecord("sfx.pencil_write", "assets/audio/sfx/s03_pencil_write.wav", "ec2605b49e51945e41d13742fb4feef3d787234802792c957a0c99cfbd6d6d3b"),
+    AudioAssetRecord("sfx.door_soft", "assets/audio/sfx/s07_door_soft.wav", "1c56abf856efc99e9925f218cdb2313f283f6cdb1f912197f6993adaf77ec7ac"),
+    AudioAssetRecord("sfx.ticket_handle", "assets/audio/sfx/s12_ticket_take.wav", "0fbf35c5e175e5d226a02708e6f0baa95459d3c20e212cd93565d30a33ab3751"),
+    AudioAssetRecord("sfx.train_latch", "assets/audio/sfx/s13_train_latch.wav", "ce82360e70e0e18a57db2e672aa8923b0fa9fcbb1d3401b5ebab85ca7508e3e0"),
+    AudioAssetRecord("sfx.object_place", "assets/audio/sfx/s14_object_place.wav", "6cad43a3d58577bcad072028552f6c81e4cda431dd2f05f35af186edde854f08"),
+    AudioAssetRecord("notification.neutral_contact", "assets/audio/sfx/n01_neutral_contact.wav", "f6f458d4d220725c6adb38b7442640876b705acaa785aaa5b88023eb00fc7ecd"),
     AudioAssetRecord("sfx.ui_click_soft", "assets/audio/sfx/ui_click_soft.wav", "ea3e085f926ae38a0f31d16ae661fcaf0589a1cad55dc9e464b3e8dab83324fe"),
     AudioAssetRecord("sfx.ui_choice_confirm", "assets/audio/sfx/ui_choice_confirm.wav", "37db8cd1785631c80d8d00858b911acdf8c44ecb662dea7bd5a75181ca6271f3"),
 )
@@ -68,8 +76,16 @@ ONESHOT_CUES = (
     OneShotCue("audio.sfx.interior_step", "assets/audio/sfx/s06_step_interior.wav", "DECORATIVE"),
     OneShotCue("audio.sfx.two_coins", "assets/audio/sfx/s09_two_coins.wav", "DECORATIVE"),
     OneShotCue("audio.sfx.keyboard", "assets/audio/sfx/s10_keyboard.wav", "DECORATIVE"),
+    OneShotCue("audio.sfx.pencil_write", "assets/audio/sfx/s03_pencil_write.wav", "DECORATIVE"),
+    OneShotCue("audio.sfx.door_soft", "assets/audio/sfx/s07_door_soft.wav", "DECORATIVE"),
+    OneShotCue("audio.sfx.ticket_handle", "assets/audio/sfx/s12_ticket_take.wav", "DECORATIVE"),
+    OneShotCue("audio.sfx.train_latch", "assets/audio/sfx/s13_train_latch.wav", "DECORATIVE"),
+    OneShotCue("audio.sfx.object_place", "assets/audio/sfx/s14_object_place.wav", "DECORATIVE"),
     OneShotCue("audio.ui.click_soft", "assets/audio/sfx/ui_click_soft.wav", "OPTIONAL_UI_NOTIFICATION"),
     OneShotCue("audio.ui.choice_confirm", "assets/audio/sfx/ui_choice_confirm.wav", "OPTIONAL_UI_NOTIFICATION"),
+    # Only the sealed notification-summary owner may dispatch this cue. It is
+    # never a narrative action or a choice/outcome reward.
+    OneShotCue("audio.notification.neutral_contact", "assets/audio/sfx/n01_neutral_contact.wav", "OPTIONAL_UI_NOTIFICATION"),
 )
 
 
@@ -86,35 +102,44 @@ RESTORE_CONTEXTS = {
     "audio.context.day2.arcade": ("audio.music.city_pause", "audio.ambience.internet_cafe"),
     "audio.context.day2.mall_exterior": ("audio.music.city_pause", "audio.ambience.rain_platform"),
     "audio.context.day3.classroom": ("audio.music.city_pause", "audio.ambience.empty_classroom"),
+    "audio.context.day3.departure": ("audio.music.city_pause", "audio.ambience.intentional_silence"),
     "audio.context.day4.ticket_window": ("audio.music.visible_departure", "audio.ambience.rain_platform"),
     "audio.context.day4.seaside_station": ("audio.music.before_departure", "audio.ambience.seaside"),
     "audio.context.day4.coastal_train": ("audio.music.before_departure", "audio.ambience.train_carriage"),
     "audio.context.day5.archive_quiet": ("audio.music.archive_space", "audio.ambience.intentional_silence"),
+    "audio.context.day5.departure": ("audio.music.archive_space", "audio.ambience.intentional_silence"),
     "audio.context.day6.service_exit": ("audio.music.before_departure", "audio.ambience.service_exit"),
+    "audio.context.day6.departure": ("audio.music.before_departure", "audio.ambience.intentional_silence"),
     "audio.context.day7.red_well": ("audio.music.before_departure", "audio.ambience.red_well"),
     # Ending contexts keep their gains and one-shot policy identical: none is
     # sonically framed as a reward or as a worse outcome.
     "audio.context.ending.rain_stops": ("audio.music.after_rain", "audio.ambience.intentional_silence"),
     "audio.context.ending.her_own_name": ("audio.music.life_continues", "audio.ambience.rain_platform"),
     "audio.context.ending.her_own_name.train": ("audio.music.life_continues", "audio.ambience.train_carriage"),
+    "audio.context.ending.see_the_sea.train": ("audio.music.after_rain", "audio.ambience.train_carriage"),
     "audio.context.ending.see_the_sea": ("audio.music.after_rain", "audio.ambience.seaside"),
     "audio.context.ending.one_person_train": ("audio.music.before_departure", "audio.ambience.rain_platform"),
+    "audio.context.ending.one_person_train.train": ("audio.music.before_departure", "audio.ambience.train_carriage"),
+    # The epilogue cuts to a departed observer / a paper-covered table and
+    # finally a summary. No rain or room sound is established in those views.
+    "audio.context.ending.one_person_train.quiet": ("audio.music.before_departure", "audio.ambience.intentional_silence"),
     "audio.context.ending.golden_cage": ("audio.music.archive_space", "audio.ambience.intentional_silence"),
     "audio.context.ending.unsent_postcard": ("audio.music.archive_space", "audio.ambience.room_rain"),
     "audio.context.epilogue.arcade": ("audio.music.life_continues", "audio.ambience.internet_cafe"),
+    "audio.context.epilogue.closed": ("audio.music.life_continues", "audio.ambience.intentional_silence"),
 }
 
 
 _SOURCE_DIGESTS = {
     "chapters/prologue.rpy": "38e03185fbd106473edb1b032930ea79d5fe9bb0df34acd02325f9d6042caa1a",
-    "chapters/day1.rpy": "4e0dbf6b4df686a48eeb0928799ccf358cb384e0b74e2bd0807931948688f4a4",
-    "chapters/day2.rpy": "85391936167163fecc9f3628b0f63ac43991241d96e69be94dfa327bc79718fa",
-    "chapters/day3.rpy": "4f751c9b6b6c224ed1eb2dd7321b2b0431680718a422b57f5e91092a4d4e2b7d",
-    "chapters/day4.rpy": "b97048b0a32271fd5d815b49f0937a1de4c963c84f660d40e6ebae1fcb246b9c",
-    "chapters/day5.rpy": "176bf434c21709f64ee93f34e62af18e733cc45f56692ab1ce3f93b235cc1171",
-    "chapters/day6.rpy": "718f86fc013550615ffc13c517e978a0ce6ca09ad97e8f9df45e75cb35c0ce0b",
-    "chapters/day7.rpy": "29b91390f865ed1de57e51aa5a2c9c1d7ff0117470b93726ef93f3d3820f2076",
-    "chapters/endings.rpy": "4fe54c86d483a366e55ecaaf833de8e7dd96e47a8fb9ca5984edc99d8d8b7e3a",
+    "chapters/day1.rpy": "ec75a288458d11b87858938f0d9351b75725c07bf8bffb8ef94bb50d046d6b6a",
+    "chapters/day2.rpy": "e2344f7e413ef5a06000cbcdd3c09e72f8cbb5bd84f498e44675c718dfa495c8",
+    "chapters/day3.rpy": "252f3f8bd9b79af67e1d7c52f7d953068be1226360314d03ace22e2e76bbc45a",
+    "chapters/day4.rpy": "fc5d8b8a8fb45eb2d64d314a9a50e53119d92d73946afca0a25f3872edb4d13b",
+    "chapters/day5.rpy": "48248d5e2fab5a549204f592d94087a5c117eaec31ce56e31986209cbc2b4ce7",
+    "chapters/day6.rpy": "75d002a86f9e9d0dbc1dbc3927ef0ee88b39bc00aa984fb887d6f82860bbfd96",
+    "chapters/day7.rpy": "69da9fcf9e20f3f9300fcecc01166d8782d0ce0977b86b402f66ccdc645d515c",
+    "chapters/endings.rpy": "1fcdf7e670cc5a8f21a4cc56dc28165b081ca758eb4b12a4065d2d21ed904382",
 }
 
 
@@ -127,38 +152,74 @@ CONTEXT_RANGES = (
     _range("chapters/prologue.rpy", 113, 149, "audio.context.prologue.ticket_gate"),
     _range("chapters/prologue.rpy", 150, 182, "audio.context.prologue.train"),
     _range("chapters/day1.rpy", 1, 62, "audio.context.day1.shop_rain"),
-    _range("chapters/day1.rpy", 63, 168, "audio.context.day1.safehouse"),
-    _range("chapters/day1.rpy", 169, 175, "audio.context.day1.departure"),
-    _range("chapters/day2.rpy", 1, 198, "audio.context.day2.arcade"),
-    _range("chapters/day2.rpy", 199, 243, "audio.context.day2.mall_exterior"),
-    _range("chapters/day3.rpy", 1, 227, "audio.context.day3.classroom"),
-    _range("chapters/day4.rpy", 1, 238, "audio.context.day4.ticket_window"),
-    _range("chapters/day4.rpy", 239, 250, "audio.context.day4.seaside_station"),
-    _range("chapters/day4.rpy", 251, 299, "audio.context.day4.coastal_train"),
-    _range("chapters/day5.rpy", 1, 353, "audio.context.day5.archive_quiet"),
-    _range("chapters/day6.rpy", 1, 405, "audio.context.day6.service_exit"),
-    _range("chapters/day7.rpy", 1, 116, "audio.context.day7.red_well"),
-    _range("chapters/endings.rpy", 1, 35, "audio.context.ending.rain_stops"),
-    # Each non-rain epilogue deliberately continues its ending context.  No
-    # tail adds a one-shot, gain override, or outcome-specific reward cue.
-    _range("chapters/endings.rpy", 36, 62, "audio.context.ending.her_own_name"),
-    _range("chapters/endings.rpy", 63, 85, "audio.context.ending.her_own_name.train"),
-    _range("chapters/endings.rpy", 86, 132, "audio.context.ending.see_the_sea"),
-    _range("chapters/endings.rpy", 133, 180, "audio.context.ending.one_person_train"),
-    _range("chapters/endings.rpy", 181, 227, "audio.context.ending.golden_cage"),
-    _range("chapters/endings.rpy", 228, 275, "audio.context.ending.unsent_postcard"),
-    _range("chapters/endings.rpy", 276, 316, "audio.context.epilogue.arcade"),
+    _range("chapters/day1.rpy", 63, 163, "audio.context.day1.safehouse"),
+    _range("chapters/day1.rpy", 164, 169, "audio.context.day1.departure"),
+    _range("chapters/day2.rpy", 1, 182, "audio.context.day2.arcade"),
+    _range("chapters/day2.rpy", 183, 207, "audio.context.day2.mall_exterior"),
+    _range("chapters/day3.rpy", 1, 159, "audio.context.day3.classroom"),
+    _range("chapters/day3.rpy", 160, 173, "audio.context.day3.departure"),
+    _range("chapters/day4.rpy", 1, 214, "audio.context.day4.ticket_window"),
+    _range("chapters/day4.rpy", 215, 219, "audio.context.day4.seaside_station"),
+    _range("chapters/day4.rpy", 220, 243, "audio.context.day4.coastal_train"),
+    _range("chapters/day5.rpy", 1, 308, "audio.context.day5.archive_quiet"),
+    _range("chapters/day5.rpy", 309, 316, "audio.context.day5.departure"),
+    _range("chapters/day6.rpy", 1, 351, "audio.context.day6.service_exit"),
+    _range("chapters/day6.rpy", 352, 364, "audio.context.day6.departure"),
+    _range("chapters/day7.rpy", 1, 87, "audio.context.day7.red_well"),
+    _range("chapters/endings.rpy", 1, 43, "audio.context.ending.rain_stops"),
+    # Epilogues follow the currently narrated space without adding a one-shot,
+    # gain override, or outcome-specific reward cue. Brief references to an
+    # absent person do not change the space; an explicit focal cut does.
+    _range("chapters/endings.rpy", 44, 75, "audio.context.ending.her_own_name"),
+    _range("chapters/endings.rpy", 76, 101, "audio.context.ending.her_own_name.train"),
+    # Seeing the sea through a moving train window is still a carriage. The
+    # actual alighting scene starts at 124, after the doors open in line 123.
+    _range("chapters/endings.rpy", 102, 123, "audio.context.ending.see_the_sea.train"),
+    _range("chapters/endings.rpy", 124, 157, "audio.context.ending.see_the_sea"),
+    _range("chapters/endings.rpy", 158, 189, "audio.context.ending.one_person_train"),
+    # Coherent focal paragraphs, not every passing mention of a train or a
+    # platform. The off-train cuts never infer an unestablished rain bed.
+    _range("chapters/endings.rpy", 190, 199, "audio.context.ending.one_person_train.train"),
+    _range("chapters/endings.rpy", 200, 201, "audio.context.ending.one_person_train.quiet"),
+    _range("chapters/endings.rpy", 202, 203, "audio.context.ending.one_person_train.train"),
+    _range("chapters/endings.rpy", 204, 206, "audio.context.ending.one_person_train.quiet"),
+    _range("chapters/endings.rpy", 207, 207, "audio.context.ending.one_person_train.train"),
+    _range("chapters/endings.rpy", 208, 214, "audio.context.ending.one_person_train.quiet"),
+    _range("chapters/endings.rpy", 215, 270, "audio.context.ending.golden_cage"),
+    _range("chapters/endings.rpy", 271, 326, "audio.context.ending.unsent_postcard"),
+    _range("chapters/endings.rpy", 327, 349, "audio.context.epilogue.arcade"),
+    _range("chapters/endings.rpy", 350, 360, "audio.context.epilogue.closed"),
+    _range("chapters/endings.rpy", 361, 364, "audio.context.epilogue.closed"),
+    _range("chapters/endings.rpy", 365, 372, "audio.context.epilogue.arcade"),
+    _range("chapters/endings.rpy", 373, 377, "audio.context.epilogue.closed"),
+    _range("chapters/endings.rpy", 378, 384, "audio.context.epilogue.arcade"),
+    _range("chapters/endings.rpy", 385, 393, "audio.context.epilogue.closed"),
 )
 
 
 ACTION_BINDINGS = (
     AudioOneShotBinding("day1.cloth_shift", "chapters/day1.rpy", 76, "audio.sfx.cloth_shift"),
-    AudioOneShotBinding("day1.paper_fold", "chapters/day1.rpy", 160, "audio.sfx.paper_fold"),
-    AudioOneShotBinding("day1.wet_step", "chapters/day1.rpy", 172, "audio.sfx.wet_step"),
+    AudioOneShotBinding("day1.paper_fold", "chapters/day1.rpy", 158, "audio.sfx.paper_fold"),
+    AudioOneShotBinding("day1.wet_step", "chapters/day1.rpy", 167, "audio.sfx.wet_step"),
     AudioOneShotBinding("day2.keyboard", "chapters/day2.rpy", 72, "audio.sfx.keyboard"),
-    AudioOneShotBinding("day2.two_coins", "chapters/day2.rpy", 134, "audio.sfx.two_coins"),
-    AudioOneShotBinding("day2.interior_step", "chapters/day2.rpy", 194, "audio.sfx.interior_step"),
-    AudioOneShotBinding("day4.paper_unfold", "chapters/day4.rpy", 127, "audio.sfx.paper_unfold"),
+    AudioOneShotBinding("day2.two_coins", "chapters/day2.rpy", 121, "audio.sfx.two_coins"),
+    AudioOneShotBinding("day2.interior_step", "chapters/day2.rpy", 175, "audio.sfx.interior_step"),
+    AudioOneShotBinding("day4.paper_unfold", "chapters/day4.rpy", 118, "audio.sfx.paper_unfold"),
+    # One event per selected visible physical action, not a keyword mapper.
+    # The source only says "pen"; the historical asset name does not establish
+    # pencil material. These two shared scenes perform actual writing.
+    AudioOneShotBinding("day3.write_note", "chapters/day3.rpy", 76, "audio.sfx.pencil_write"),
+    AudioOneShotBinding("day5.write_plan", "chapters/day5.rpy", 199, "audio.sfx.pencil_write"),
+    AudioOneShotBinding("day6.door_soft", "chapters/day6.rpy", 349, "audio.sfx.door_soft"),
+    # Single and double tickets receive the same one-time paper sound when
+    # finally put away, without a gain, priority, or quality distinction.
+    AudioOneShotBinding("day4.ticket_handle_two", "chapters/day4.rpy", 140, "audio.sfx.ticket_handle"),
+    AudioOneShotBinding("day4.ticket_handle_single", "chapters/day4.rpy", 156, "audio.sfx.ticket_handle"),
+    AudioOneShotBinding("prologue.train_latch", "chapters/prologue.rpy", 153, "audio.sfx.train_latch"),
+    AudioOneShotBinding("day4.train_latch", "chapters/day4.rpy", 237, "audio.sfx.train_latch"),
+    # Medicine-box contact only. Do not reuse this generic draft for bowls,
+    # water glasses, metal boxes, paper, or clothing.
+    AudioOneShotBinding("day1.object_place", "chapters/day1.rpy", 119, "audio.sfx.object_place"),
 )
 
 
@@ -172,9 +233,19 @@ def validate_production_definition():
     if len(assets) != len(RUNTIME_AUDIO_ASSETS):
         raise ValueError("Duplicate asset admission")
     action_cues = {item.cue_id for item in ACTION_BINDINGS}
-    ui_cues = {"audio.ui.click_soft", "audio.ui.choice_confirm"}
-    if len(ACTION_BINDINGS) != 7 or action_cues != set(oneshots) - ui_cues:
+    non_action_cues = {"audio.ui.click_soft", "audio.ui.choice_confirm", "audio.notification.neutral_contact"}
+    if (
+        len(ACTION_BINDINGS) != 15
+        or len(oneshots) != 15
+        or len(RUNTIME_AUDIO_ASSETS) != 31
+        or not non_action_cues.issubset(oneshots)
+        or action_cues != set(oneshots) - non_action_cues
+    ):
         raise ValueError("Action whitelist changed")
+    if any(oneshots[cue_id].priority != "DECORATIVE" for cue_id in action_cues):
+        raise ValueError("Narrative actions must remain decorative")
+    if any(oneshots[cue_id].priority != "OPTIONAL_UI_NOTIFICATION" for cue_id in non_action_cues):
+        raise ValueError("UI and notification priorities changed")
     for music_id, ambience_id in RESTORE_CONTEXTS.values():
         if continuous.get(music_id, None) is None or continuous[music_id].layer != "music":
             raise ValueError("Invalid music context")

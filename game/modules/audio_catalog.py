@@ -112,7 +112,7 @@ def _source_bytes(read_source, source):
     raw = read_source(source)
     if not isinstance(raw, bytes):
         raise ValueError("Source reader must return bytes")
-    return raw
+    return raw.replace(b"\r\n", b"\n")
 
 
 def _say_lines(raw):

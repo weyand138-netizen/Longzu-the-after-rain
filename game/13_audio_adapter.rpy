@@ -25,7 +25,7 @@ init 10 python:
             stop_on_mute=False, tight=False, buffer_queue=True, synchro_start=False,
         )
     renpy.music.register_channel(
-        "audio_role_voice", mixer="voice", loop=False,
+        "audio_role_voice", mixer="role_voice", loop=False,
         stop_on_mute=False, tight=False, buffer_queue=True, synchro_start=False,
     )
 
